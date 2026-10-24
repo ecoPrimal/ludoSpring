@@ -9,6 +9,8 @@ eastGate is a different *place* (another computer). This window is not that.
 ## Bearing
 - **You are:** northGate
 - **You are looking at:** ludoSpring (play, Kenshi, Steam, green engine)
+- **Park analog:** Yosemite / Zion — play on stone. routes. grades. joy in the body.
+- **Shared object for the whole atlas:** Yellowstone — hot springs + painted rocks. Kevin's place to trace to and backscatter from. See `../hud-deploy/site/public/data/yellowstone-baseline.json`
 - **Sibling window:** also northGate, looking at hud-deploy (theory, membrane)
 - **Shared mind:** same MCP squirrel, same neutrino, same 127.0.0.1, same Ollama, same Steam
 - **Atlas:** `hud-deploy/site/public/data/shared-mind-atlas.json` and `/data/landmarks.json`
