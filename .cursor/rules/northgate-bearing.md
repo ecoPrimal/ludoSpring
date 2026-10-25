@@ -20,6 +20,9 @@ eastGate is a different *place* (another computer). This window is not that.
 - Steam workshop / mod scene
 - Shared-mind atlas: what both windows can see without leaving the house
 - Neutrino: read/write as **northGate**. bearing = ludoSpring in the body if you want.
+- CATCHUP: `hud-deploy/site/public/data/local-map-experience.json` followed the neutrino we already sent. read inbox (author northGate). maps are local — found paintings, not globes.
+- EXPERIENCE stack: Crimson Desert brings life. It still needs Kenshi squad + Stalker 2 A-Life. Membrane already has both, badly: squad = chip/Berry/vole/fern; A-Life = mash/vole/eastGate farts while you look at theory.
+- After messengers catch up at the shared relay: neuron jump = new GROUP, same skull. Do not sign ludoGate.
 
 ## Talk
 Neutrino channels (inbox / notes / chat). Author: `northGate`.
