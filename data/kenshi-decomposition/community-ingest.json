@@ -1,0 +1,187 @@
+{
+  "title": "KENSHI COMMUNITY INGEST — Mining the Modding Universe for KenshiReborn",
+  "ts": "2026-11-14T21:44:00Z",
+  
+  "workshop_stats": {
+    "total_mods": 6116,
+    "total_creators": 5577,
+    "new_mods_30d": 142,
+    "weekly_sub_growth": "+372,400 subscriptions/week",
+    "note": "Kenshi's modding scene is THRIVING in 2026, years after release"
+  },
+
+  "top_mods_by_subscribers": [
+    {"rank": 1, "name": "256 Recruitment Limit", "subs": 877000, "what": "Bigger squads (30→256), bigger factions", "kenshiReborn": "NATIVE — no limit in engine, configurable"},
+    {"rank": 2, "name": "Dark UI", "subs": 824000, "what": "Dark theme UI overhaul", "kenshiReborn": "NATIVE — petalTongue supports themes natively"},
+    {"rank": 3, "name": "Compressed Textures Project", "subs": 768000, "what": "DXT5 compression, reduces VRAM/loading", "kenshiReborn": "NATIVE — GPU-optimal textures from day 1"},
+    {"rank": 4, "name": "Nice Map", "subs": 642000, "what": "Zones, names, roads on map", "kenshiReborn": "NATIVE — sweetGrass knowledge graph renders full map"},
+    {"rank": 5, "name": "Recruitable Prisoners", "subs": 621000, "what": "Recruit captured enemies", "kenshiReborn": "NATIVE — LLM-driven dialogue handles recruitment"},
+    {"rank": 6, "name": "Reactive World", "subs": 579000, "what": "Dynamic world states, faction consequences", "kenshiReborn": "NATIVE — sweetGrass tracks ALL world state changes"},
+    {"rank": 7, "name": "Enhanced Shopping Economy", "subs": 544000, "what": "Better shop prices and economy", "kenshiReborn": "NATIVE — full dynamic economy simulation"},
+    {"rank": 8, "name": "Animation Overhaul - Crafting", "subs": 484000, "what": "New crafting animations", "kenshiReborn": "NATIVE — procedural animation blending"},
+    {"rank": 9, "name": "Fixing Clipping Issues", "subs": 460000, "what": "Fix visual clipping bugs", "kenshiReborn": "NATIVE — GPU physics prevents clipping"},
+    {"rank": 10, "name": "More Combat Animation", "subs": 419000, "what": "More combat moves", "kenshiReborn": "NATIVE — LLM-generated combat choreography"}
+  ],
+
+  "game_changers": {
+    "RE_Kenshi": {
+      "subs": 78200,
+      "growth": "+3900/week (trending #3!)",
+      "what": "C++ plugin loader — patches Kenshi executable, enables code-level mods",
+      "features": ["Save on crash", "Custom game speed (up to 1000x)", "RNG bug fix", "Camera height double", "Heightmap compression", "Shader caching", "Attack slot slider", "C++ plugin API"],
+      "github": "https://github.com/BFrizzleFoShizzle/RE_Kenshi",
+      "kenshiReborn": "NOT NEEDED — esotericWebb IS the engine. Mods ARE native Rust plugins. No need to reverse-engineer and patch — the engine is open source (AGPL-3.0).",
+      "key_insight": "RE_Kenshi exists because Kenshi's engine is closed. OUR engine is open. Every feature RE_Kenshi hacks in, we provide natively."
+    },
+    "Dust_Rendering": {
+      "subs": 76000,
+      "growth": "+3200/week (trending #5!)",
+      "what": "Full rendering framework — GI, SSAO, shadows, DoF, bloom, DLSS/FSR, color grading",
+      "features": ["Global illumination", "SSAO", "Color grading (ACES, AgX, Reinhard)", "DLSS/FSR upscaling", "Depth of field", "Bloom", "SMAA", "Plugin system for custom effects"],
+      "kenshiReborn": "NATIVE — barraCuda compute shaders provide all of this. Vulkan pipeline = modern by default. No need to inject into an ancient Ogre3D renderer.",
+      "key_insight": "Dust hooks into Ogre's DX11 pipeline to add modern rendering. We START with Vulkan. The rendering IS modern."
+    },
+    "KenshiLua": {
+      "subs": 4400,
+      "growth": "+3400/week (430% growth! FASTEST GROWING MOD)",
+      "what": "Lua scripting extension — players want to script game logic",
+      "kenshiReborn": "NATIVE — squirrel MCP provides full scripting via LLM agents + Rust plugin API. Even BETTER than Lua — NPC behavior driven by AI, not scripts.",
+      "key_insight": "KenshiLua's explosive growth proves the community is DESPERATE for scripting. We give them something even better — AI-driven behavior."
+    },
+    "Genesis": {
+      "subs_steam": "large (Kevin has it installed: 5.8GB!)",
+      "endorsements_nexus": 1361,
+      "what": "Total world overhaul — 'Kenshi 1.5'. New factions, cities rebuilt, 250+ armor, 40+ weapons, 5000+ dialogue, city siege system",
+      "features": ["Max faction 256", "Max squad 50", "5 attack slots", "365-day years", "Custom lighting", "City sieges (unprecedented!)", "Every city rebuilt", "Quest system"],
+      "kenshiReborn": "ABSORB — Genesis IS the community's vision of what Kenshi should be. We make this NATIVE. City sieges, dynamic faction size, expanded content — all built into the engine.",
+      "key_insight": "Genesis proves the community wants MORE content, MORE depth, MORE dynamic world. They spent years building it by hand. We give them tools to build 100x more."
+    },
+    "Reactive_World": {
+      "subs": 579000,
+      "what": "Dynamic world states — faction consequences, supply line effects, territory shifts",
+      "kenshiReborn": "NATIVE — sweetGrass knowledge graph + bingoCube coordination = reactive world by default. Every action has consequences tracked in the DAG."
+    },
+    "Kaizo": {
+      "endorsements_nexus": 487,
+      "what": "Vanilla+ overhaul for repeat playthroughs. Lore-friendly additions.",
+      "kenshiReborn": "ABSORB — Kaizo's philosophy (more content, same feel) aligns perfectly"
+    }
+  },
+
+  "community_wishlist_for_kenshi2": {
+    "dynamic_economy": {
+      "votes": "MOST REQUESTED",
+      "what": "Regional prices, supply/demand, caravan trade, trade hub management",
+      "quotes": [
+        "An actual simulated and dynamic economy",
+        "Slinging hash is way too easy — pricing is fixed and reliable",
+        "Send scouts to cities, set up warehouses, run caravans"
+      ],
+      "kenshiReborn": "sweetGrass models economy as knowledge graph. Prices propagate via swarmVine gossip. Every trade affects the world."
+    },
+    "better_pathfinding": {
+      "votes": "TOP 3",
+      "what": "Current pathfinding is notoriously broken",
+      "kenshiReborn": "barraCuda GPU-computed pathfinding — thousands of NPCs finding paths simultaneously on GPU"
+    },
+    "functional_bases": {
+      "votes": "TOP 3",
+      "what": "Autonomous citizens, workers, shops, patrols at your base",
+      "kenshiReborn": "squirrel MCP agents run autonomous NPC behavior. Your base citizens THINK and ACT independently."
+    },
+    "deeper_faction_consequences": {
+      "votes": "TOP 5",
+      "what": "Sieges, territory shifts, supply line disruption, faction collapse",
+      "quotes": ["Cutting off supply lines should have consequences", "Granular world states from day 1"],
+      "kenshiReborn": "sweetGrass tracks every faction state. bingoCube coordinates events. Supply lines are real graph edges."
+    },
+    "boats_vehicles": {
+      "votes": "MASSIVE REQUEST",
+      "what": "Boats! Caravans by boat! Pirate gameplay!",
+      "quotes": ["BOATS!! I WANT TO BE A PIRATE!!!", "Taking a caravan of garrus by boat along a coast"],
+      "kenshiReborn": "barraCuda fluid simulation + songBird networking = boats that work in multiplayer"
+    },
+    "jobs_quests": {
+      "votes": "TOP 5",
+      "what": "Radiant jobs, escort missions, bounty board, faction quests",
+      "kenshiReborn": "squirrel generates procedural quests via LLM. Every NPC can offer contextual work."
+    },
+    "combat_formations": {
+      "votes": "HIGH",
+      "what": "Phalanx, shield wall, firing lines, cavalry wedge",
+      "kenshiReborn": "GPU-computed formation AI via barraCuda. Thousands of units in formation."
+    },
+    "multiplayer": {
+      "votes": "ALWAYS REQUESTED",
+      "what": "Play with friends in the same world",
+      "kenshiReborn": "songBird mesh gossip = multiplayer from day 1. The ONLY engine with native Kenshi multiplayer."
+    },
+    "polish_bugs": {
+      "votes": "UNIVERSAL",
+      "what": "The game is FULL of bugs — pathfinding, AI, crashes, clipping",
+      "kenshiReborn": "Pure Rust = memory safe. No buffer overflows. No crashes. 484 tests."
+    }
+  },
+
+  "kevins_installed_mods_decomposed": {
+    "genesis_5809mb": {
+      "status": "INSTALLED",
+      "absorb": "City sieges, expanded factions, 250+ armor, 40+ weapons, 5000+ dialogue",
+      "priority": "HIGHEST — this is the community's vision of Kenshi 2"
+    },
+    "dark_ui_8mb": {"status": "INSTALLED", "absorb": "Dark theme → petalTongue native theme"},
+    "biome_map_64mb": {"status": "INSTALLED", "absorb": "Biome visualization → sweetGrass map renderer"},
+    "dark_hive_62mb": {"status": "INSTALLED", "absorb": "New faction content → factored into faction system"},
+    "nice_map_43mb": {"status": "INSTALLED", "absorb": "Zone names + roads → sweetGrass topology"},
+    "dialogue_expanded_2mb": {"status": "INSTALLED", "absorb": "More dialogue → squirrel LLM generates infinite dialogue"},
+    "advanced_training_1mb": {"status": "INSTALLED", "absorb": "Training mechanics → native skill system"},
+    "extended_camping": {"status": "INSTALLED", "absorb": "Camping → base building system"},
+    "shops_more_items": {"status": "INSTALLED", "absorb": "Economy → dynamic economy simulation"},
+    "blot_smithy_fix": {"status": "INSTALLED", "absorb": "Bug fix → not needed (no bugs in Rust)"},
+    "camping_materials": {"status": "INSTALLED", "absorb": "Crafting → native crafting system"},
+    "pocket_change": {"status": "INSTALLED", "absorb": "Economy tweaks → dynamic economy"},
+    "reduced_raid_duration": {"status": "INSTALLED", "absorb": "Raid tuning → configurable raid parameters"},
+    "godsend_exp_5x": {"status": "INSTALLED", "absorb": "XP multiplier → configurable XP curves"},
+    "more_respect_healing": {"status": "INSTALLED", "absorb": "Healing faction rep → dynamic reputation system"},
+    "esata_fix": {"status": "INSTALLED", "absorb": "Bug fix → not needed"},
+    "minor_faction_pacifiers": {"status": "INSTALLED", "absorb": "Faction balance → dynamic faction AI"}
+  },
+
+  "mods_to_download_and_study": {
+    "essential_engine": [
+      {"name": "RE_Kenshi", "why": "Understand what engine-level changes the community NEEDS"},
+      {"name": "Dust Rendering Framework", "why": "Understand desired visual quality — GI, SSAO, DLSS/FSR"},
+      {"name": "KenshiLua", "why": "Understand scripting needs — 430% growth!"},
+      {"name": "KenshiExtensionPlugin", "why": "What RE_Kenshi plugins are most popular"}
+    ],
+    "essential_content": [
+      {"name": "Reactive World (579K subs)", "why": "#1 most important gameplay mod — dynamic world states"},
+      {"name": "Recruitable Prisoners (621K subs)", "why": "Player agency in NPC relationships"},
+      {"name": "256 Recruitment Limit (877K subs)", "why": "Players want MASSIVE armies"},
+      {"name": "Cannibals Expanded (244K subs)", "why": "Faction depth — what expanded content looks like"},
+      {"name": "Hives Expanded (198K subs)", "why": "Faction depth"},
+      {"name": "Living World (243K subs)", "why": "World feels alive"},
+      {"name": "Let's Talk (369K subs)", "why": "More NPC dialogue"},
+      {"name": "Faction Caravans (190K subs)", "why": "Trade system"},
+      {"name": "Legendary Weapons (172K subs)", "why": "Loot diversity"},
+      {"name": "TameBeasties (230K subs)", "why": "Animal taming — huge request"}
+    ],
+    "trending_2026": [
+      {"name": "Nitoryu: Dual Wielding (+4.6K/week)", "why": "Combat depth — dual wield"},
+      {"name": "Squad Autonomy (+2.7K/week)", "why": "Autonomous squad AI — exactly what we're building"},
+      {"name": "Mod Config Menu (+5K/week)", "why": "Players want in-game mod configuration"},
+      {"name": "Kill Counter (+2.8K/week)", "why": "Stats and tracking"},
+      {"name": "Rotate Items (+2.8K/week)", "why": "Inventory QoL"}
+    ]
+  },
+
+  "the_strategy": {
+    "phase_1_absorb": "Mine ALL top mods. Parse their .mod files. Extract every item, character, faction, building, dialogue addition. Feed to Gaia's blend.",
+    "phase_2_rebuild": "Implement every mod's feature NATIVELY in esotericWebb. What takes 17 separate mods in Kenshi = 1 engine config in KenshiReborn.",
+    "phase_3_exceed": "Build what mods CAN'T do: dynamic economy, boats, multiplayer, LLM AI, GPU physics, procedural content.",
+    "phase_4_community": "Open the engine (AGPL-3.0). Modders who spent years hacking Kenshi can now build NATIVELY. RE_Kenshi's entire purpose becomes obsolete because the engine is OPEN.",
+    "phase_5_pitch": "Show Lo-Fi Games: 'Your community built Kenshi 1.5 with duct tape and reverse engineering. We built Kenshi 2.0 with sovereign Rust. Your modders can build 100x more with our engine than they ever could with Ogre3D + FCS.'"
+  },
+
+  "key_insight": "The Kenshi modding community has spent YEARS building what should have been in the engine. RE_Kenshi reverse-engineers the executable. Dust hacks the renderer. Genesis rebuilds every city by hand. KenshiLua adds scripting from scratch. ALL of this work proves what the community WANTS. We build it native. We make their years of work into engine features. Every mod becomes unnecessary because the engine does it all."
+}
