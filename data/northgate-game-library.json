@@ -1,0 +1,660 @@
+[
+    {
+        "AppId":  "3990420",
+        "Name":  "Steam Frame Wireless Adapter Driver",
+        "SizeGB":  0.03,
+        "SizeMB":  30,
+        "InstallDir":  "Steam Frame Wireless Adapter Driver"
+    },
+    {
+        "AppId":  "435120",
+        "Name":  "Rusty Lake Hotel",
+        "SizeGB":  0.05,
+        "SizeMB":  56,
+        "InstallDir":  "Rusty Lake Hotel"
+    },
+    {
+        "AppId":  "2379780",
+        "Name":  "Balatro",
+        "SizeGB":  0.06,
+        "SizeMB":  64,
+        "InstallDir":  "Balatro"
+    },
+    {
+        "AppId":  "532110",
+        "Name":  "Rusty Lake: Roots",
+        "SizeGB":  0.08,
+        "SizeMB":  84,
+        "InstallDir":  "Rusty Lake Roots"
+    },
+    {
+        "AppId":  "3472550",
+        "Name":  "The Mr. Rabbit Magic Show",
+        "SizeGB":  0.11,
+        "SizeMB":  111,
+        "InstallDir":  "The Mr. Rabbit Magic Show"
+    },
+    {
+        "AppId":  "3372980",
+        "Name":  "Tower Wizard",
+        "SizeGB":  0.11,
+        "SizeMB":  108,
+        "InstallDir":  "Tower Wizard"
+    },
+    {
+        "AppId":  "3361470",
+        "Name":  "Digseum",
+        "SizeGB":  0.11,
+        "SizeMB":  116,
+        "InstallDir":  "Digseum"
+    },
+    {
+        "AppId":  "744190",
+        "Name":  "Rusty Lake Paradise",
+        "SizeGB":  0.11,
+        "SizeMB":  110,
+        "InstallDir":  "Rusty Lake Paradise"
+    },
+    {
+        "AppId":  "1145960",
+        "Name":  "The White Door",
+        "SizeGB":  0.11,
+        "SizeMB":  113,
+        "InstallDir":  "The White Door"
+    },
+    {
+        "AppId":  "1292940",
+        "Name":  "Cube Escape Collection",
+        "SizeGB":  0.12,
+        "SizeMB":  118,
+        "InstallDir":  "Cube Escape Collection"
+    },
+    {
+        "AppId":  "1433990",
+        "Name":  "NGU INDUSTRIES",
+        "SizeGB":  0.13,
+        "SizeMB":  130,
+        "InstallDir":  "NGU INDUSTRIES"
+    },
+    {
+        "AppId":  "2291850",
+        "Name":  "Underground Blossom",
+        "SizeGB":  0.17,
+        "SizeMB":  169,
+        "InstallDir":  "Underground Blossom"
+    },
+    {
+        "AppId":  "1877960",
+        "Name":  "Trimps",
+        "SizeGB":  0.19,
+        "SizeMB":  193,
+        "InstallDir":  "Trimps"
+    },
+    {
+        "AppId":  "4519130",
+        "Name":  "MOLDRISE",
+        "SizeGB":  0.45,
+        "SizeMB":  459,
+        "InstallDir":  "MOLDRISE"
+    },
+    {
+        "AppId":  "228980",
+        "Name":  "Steamworks Common Redistributables",
+        "SizeGB":  0.49,
+        "SizeMB":  502,
+        "InstallDir":  "Steamworks Shared"
+    },
+    {
+        "AppId":  "3405340",
+        "Name":  "Megabonk",
+        "SizeGB":  0.49,
+        "SizeMB":  499,
+        "InstallDir":  "Megabonk"
+    },
+    {
+        "AppId":  "1515210",
+        "Name":  "The Past Within",
+        "SizeGB":  0.54,
+        "SizeMB":  552,
+        "InstallDir":  "The Past Within"
+    },
+    {
+        "AppId":  "2497920",
+        "Name":  "A Difficult Game About Climbing",
+        "SizeGB":  0.56,
+        "SizeMB":  569,
+        "InstallDir":  "A Difficult Game About Climbing"
+    },
+    {
+        "AppId":  "1031460",
+        "Name":  "Sail Forth",
+        "SizeGB":  0.56,
+        "SizeMB":  576,
+        "InstallDir":  "Sail Forth"
+    },
+    {
+        "AppId":  "848480",
+        "Name":  "Creeper World 4",
+        "SizeGB":  0.58,
+        "SizeMB":  591,
+        "InstallDir":  "Creeper World 4"
+    },
+    {
+        "AppId":  "413150",
+        "Name":  "Stardew Valley",
+        "SizeGB":  0.64,
+        "SizeMB":  660,
+        "InstallDir":  "Stardew Valley"
+    },
+    {
+        "AppId":  "1574580",
+        "Name":  "Strange Horticulture",
+        "SizeGB":  0.67,
+        "SizeMB":  683,
+        "InstallDir":  "Strange Horticulture"
+    },
+    {
+        "AppId":  "452070",
+        "Name":  "Oblivion Soundtrack",
+        "SizeGB":  0.71,
+        "SizeMB":  727,
+        "InstallDir":  "Oblivion Soundtrack"
+    },
+    {
+        "AppId":  "1562430",
+        "Name":  "DREDGE",
+        "SizeGB":  0.74,
+        "SizeMB":  759,
+        "InstallDir":  "DREDGE"
+    },
+    {
+        "AppId":  "3838370",
+        "Name":  "TR-49",
+        "SizeGB":  0.97,
+        "SizeMB":  996,
+        "InstallDir":  "TR-49"
+    },
+    {
+        "AppId":  "3812600",
+        "Name":  "ReStory: Chill Electronics Repairs",
+        "SizeGB":  1.01,
+        "SizeMB":  1034,
+        "InstallDir":  "Restory"
+    },
+    {
+        "AppId":  "2124120",
+        "Name":  "SULFUR",
+        "SizeGB":  1.05,
+        "SizeMB":  1077,
+        "InstallDir":  "SULFUR"
+    },
+    {
+        "AppId":  "4197610",
+        "Name":  "Librarian: Tidy Up the Arcane Library!",
+        "SizeGB":  1.13,
+        "SizeMB":  1153,
+        "InstallDir":  "Librarian Tidy Up the Arcane Library!"
+    },
+    {
+        "AppId":  "3373660",
+        "Name":  "Look Outside",
+        "SizeGB":  1.19,
+        "SizeMB":  1217,
+        "InstallDir":  "Look Outside"
+    },
+    {
+        "AppId":  "333640",
+        "Name":  "Caves of Qud",
+        "SizeGB":  1.31,
+        "SizeMB":  1345,
+        "InstallDir":  "Caves of Qud"
+    },
+    {
+        "AppId":  "881100",
+        "Name":  "Noita",
+        "SizeGB":  1.53,
+        "SizeMB":  1563,
+        "InstallDir":  "Noita"
+    },
+    {
+        "AppId":  "2285550",
+        "Name":  "Doloc Town",
+        "SizeGB":  1.74,
+        "SizeMB":  1783,
+        "InstallDir":  "Doloc Town"
+    },
+    {
+        "AppId":  "1649950",
+        "Name":  "News Tower",
+        "SizeGB":  1.76,
+        "SizeMB":  1800,
+        "InstallDir":  "News Tower"
+    },
+    {
+        "AppId":  "3641000",
+        "Name":  "The Incident at Galley House",
+        "SizeGB":  1.77,
+        "SizeMB":  1813,
+        "InstallDir":  "The Incident at Galley House"
+    },
+    {
+        "AppId":  "3244220",
+        "Name":  "A Game About Digging A Hole™",
+        "SizeGB":  2.16,
+        "SizeMB":  2207,
+        "InstallDir":  "A Game About Digging A Hole"
+    },
+    {
+        "AppId":  "2135150",
+        "Name":  "Elin",
+        "SizeGB":  2.18,
+        "SizeMB":  2234,
+        "InstallDir":  "Elin"
+    },
+    {
+        "AppId":  "2897610",
+        "Name":  "Egging On",
+        "SizeGB":  2.23,
+        "SizeMB":  2285,
+        "InstallDir":  "Egging On"
+    },
+    {
+        "AppId":  "4992070",
+        "Name":  "Sort Them Ducks",
+        "SizeGB":  2.77,
+        "SizeMB":  2832,
+        "InstallDir":  "Sort Them Ducks"
+    },
+    {
+        "AppId":  "1592280",
+        "Name":  "Selaco",
+        "SizeGB":  3.13,
+        "SizeMB":  3203,
+        "InstallDir":  "Selaco"
+    },
+    {
+        "AppId":  "2321470",
+        "Name":  "Deep Rock Galactic: Survivor",
+        "SizeGB":  3.2,
+        "SizeMB":  3272,
+        "InstallDir":  "Deep Rock Survivor"
+    },
+    {
+        "AppId":  "2950790",
+        "Name":  "IRON NEST: Heavy Turret Simulator",
+        "SizeGB":  3.37,
+        "SizeMB":  3451,
+        "InstallDir":  "Iron Nest Heavy Turret Simulator"
+    },
+    {
+        "AppId":  "2956680",
+        "Name":  "LORT",
+        "SizeGB":  3.38,
+        "SizeMB":  3466,
+        "InstallDir":  "LORT"
+    },
+    {
+        "AppId":  "2026000",
+        "Name":  "Our Adventurer Guild",
+        "SizeGB":  3.57,
+        "SizeMB":  3656,
+        "InstallDir":  "Our Adventurer Guild"
+    },
+    {
+        "AppId":  "1657630",
+        "Name":  "Slime Rancher 2",
+        "SizeGB":  3.7,
+        "SizeMB":  3793,
+        "InstallDir":  "Slime Rancher 2"
+    },
+    {
+        "AppId":  "1569580",
+        "Name":  "Blue Prince",
+        "SizeGB":  3.95,
+        "SizeMB":  4045,
+        "InstallDir":  "Blue Prince"
+    },
+    {
+        "AppId":  "686060",
+        "Name":  "Mewgenics",
+        "SizeGB":  4.8,
+        "SizeMB":  4918,
+        "InstallDir":  "Mewgenics"
+    },
+    {
+        "AppId":  "2350790",
+        "Name":  "Moonlighter 2: The Endless Vault",
+        "SizeGB":  5.21,
+        "SizeMB":  5334,
+        "InstallDir":  "Moonlighter 2 The Endless Vault"
+    },
+    {
+        "AppId":  "250820",
+        "Name":  "SteamVR",
+        "SizeGB":  5.42,
+        "SizeMB":  5552,
+        "InstallDir":  "SteamVR"
+    },
+    {
+        "AppId":  "431240",
+        "Name":  "Golf With Your Friends",
+        "SizeGB":  5.6,
+        "SizeMB":  5739,
+        "InstallDir":  "Golf With Your Friends"
+    },
+    {
+        "AppId":  "1963610",
+        "Name":  "Road to Vostok",
+        "SizeGB":  5.75,
+        "SizeMB":  5892,
+        "InstallDir":  "Road to Vostok"
+    },
+    {
+        "AppId":  "2585830",
+        "Name":  "Promise Mascot Agency",
+        "SizeGB":  6.17,
+        "SizeMB":  6321,
+        "InstallDir":  "Promise Mascot Agency"
+    },
+    {
+        "AppId":  "3024040",
+        "Name":  "Stronghold Crusader: Definitive Edition",
+        "SizeGB":  6.27,
+        "SizeMB":  6419,
+        "InstallDir":  "Stronghold Crusader Definitive Edition"
+    },
+    {
+        "AppId":  "2057760",
+        "Name":  "Esoteric Ebb",
+        "SizeGB":  6.67,
+        "SizeMB":  6828,
+        "InstallDir":  "Esoteric Ebb"
+    },
+    {
+        "AppId":  "2524850",
+        "Name":  "Denshattack!",
+        "SizeGB":  7.49,
+        "SizeMB":  7665,
+        "InstallDir":  "Denshattack"
+    },
+    {
+        "AppId":  "1887840",
+        "Name":  "Another Crab\u0027s Treasure",
+        "SizeGB":  7.73,
+        "SizeMB":  7913,
+        "InstallDir":  "Another Crab\u0027s Treasure"
+    },
+    {
+        "AppId":  "362490",
+        "Name":  "Exanima",
+        "SizeGB":  7.78,
+        "SizeMB":  7970,
+        "InstallDir":  "Exanima"
+    },
+    {
+        "AppId":  "482400",
+        "Name":  "System Shock",
+        "SizeGB":  7.91,
+        "SizeMB":  8100,
+        "InstallDir":  "System Shock Remake"
+    },
+    {
+        "AppId":  "674140",
+        "Name":  "Bugsnax",
+        "SizeGB":  8.94,
+        "SizeMB":  9150,
+        "InstallDir":  "Bugsnax"
+    },
+    {
+        "AppId":  "108600",
+        "Name":  "Project Zomboid",
+        "SizeGB":  9.63,
+        "SizeMB":  9857,
+        "InstallDir":  "ProjectZomboid"
+    },
+    {
+        "AppId":  "233860",
+        "Name":  "Kenshi",
+        "SizeGB":  11.47,
+        "SizeMB":  11747,
+        "InstallDir":  "Kenshi"
+    },
+    {
+        "AppId":  "1588550",
+        "Name":  "Cairn",
+        "SizeGB":  11.88,
+        "SizeMB":  12166,
+        "InstallDir":  "Cairn"
+    },
+    {
+        "AppId":  "3407390",
+        "Name":  "ENDLESS Legend™ 2",
+        "SizeGB":  12.47,
+        "SizeMB":  12770,
+        "InstallDir":  "ENDLESS Legend 2"
+    },
+    {
+        "AppId":  "1762930",
+        "Name":  "Goat Simulator: Remastered",
+        "SizeGB":  12.84,
+        "SizeMB":  13149,
+        "InstallDir":  "Goat Simulator Remastered"
+    },
+    {
+        "AppId":  "1962700",
+        "Name":  "Subnautica 2",
+        "SizeGB":  15.3,
+        "SizeMB":  15665,
+        "InstallDir":  "Subnautica2"
+    },
+    {
+        "AppId":  "3527290",
+        "Name":  "PEAK",
+        "SizeGB":  15.31,
+        "SizeMB":  15679,
+        "InstallDir":  "PEAK"
+    },
+    {
+        "AppId":  "1944430",
+        "Name":  "Amnesia: The Bunker",
+        "SizeGB":  16.64,
+        "SizeMB":  17040,
+        "InstallDir":  "Amnesia The Bunker"
+    },
+    {
+        "AppId":  "480490",
+        "Name":  "Prey",
+        "SizeGB":  18.82,
+        "SizeMB":  19268,
+        "InstallDir":  "Prey"
+    },
+    {
+        "AppId":  "305620",
+        "Name":  "The Long Dark",
+        "SizeGB":  19.62,
+        "SizeMB":  20090,
+        "InstallDir":  "TheLongDark"
+    },
+    {
+        "AppId":  "794260",
+        "Name":  "Outward",
+        "SizeGB":  24.77,
+        "SizeMB":  25364,
+        "InstallDir":  "Outward"
+    },
+    {
+        "AppId":  "1295660",
+        "Name":  "Sid Meier\u0027s Civilization VII",
+        "SizeGB":  24.79,
+        "SizeMB":  25381,
+        "InstallDir":  "Sid Meier\u0027s Civilization VII"
+    },
+    {
+        "AppId":  "1458140",
+        "Name":  "Pacific Drive",
+        "SizeGB":  25.03,
+        "SizeMB":  25633,
+        "InstallDir":  "Pacific Drive"
+    },
+    {
+        "AppId":  "1640820",
+        "Name":  "Chinese Frontiers",
+        "SizeGB":  25.84,
+        "SizeMB":  26460,
+        "InstallDir":  "Chinese Frontiers"
+    },
+    {
+        "AppId":  "2622380",
+        "Name":  "ELDEN RING NIGHTREIGN",
+        "SizeGB":  26.34,
+        "SizeMB":  26973,
+        "InstallDir":  "ELDEN RING NIGHTREIGN"
+    },
+    {
+        "AppId":  "1368140",
+        "Name":  "Corsair Cove",
+        "SizeGB":  27.81,
+        "SizeMB":  28478,
+        "InstallDir":  "CorsairCove"
+    },
+    {
+        "AppId":  "526870",
+        "Name":  "Satisfactory",
+        "SizeGB":  28.29,
+        "SizeMB":  28971,
+        "InstallDir":  "Satisfactory"
+    },
+    {
+        "AppId":  "3357650",
+        "Name":  "PRAGMATA",
+        "SizeGB":  34.41,
+        "SizeMB":  35238,
+        "InstallDir":  "PRAGMATA"
+    },
+    {
+        "AppId":  "1422450",
+        "Name":  "Deadlock",
+        "SizeGB":  36.36,
+        "SizeMB":  37229,
+        "InstallDir":  "Deadlock"
+    },
+    {
+        "AppId":  "2186680",
+        "Name":  "Warhammer 40,000: Rogue Trader",
+        "SizeGB":  36.51,
+        "SizeMB":  37387,
+        "InstallDir":  "Warhammer 40,000 Rogue Trader"
+    },
+    {
+        "AppId":  "1084600",
+        "Name":  "My Time at Sandrock",
+        "SizeGB":  36.93,
+        "SizeMB":  37812,
+        "InstallDir":  "My Time at Sandrock"
+    },
+    {
+        "AppId":  "1466060",
+        "Name":  "Tainted Grail: The Fall of Avalon",
+        "SizeGB":  39.57,
+        "SizeMB":  40517,
+        "InstallDir":  "Tainted Grail FoA"
+    },
+    {
+        "AppId":  "2186990",
+        "Name":  "Fatekeeper",
+        "SizeGB":  39.87,
+        "SizeMB":  40826,
+        "InstallDir":  "Fatekeeper"
+    },
+    {
+        "AppId":  "3199650",
+        "Name":  "Pathologic 3",
+        "SizeGB":  40.73,
+        "SizeMB":  41711,
+        "InstallDir":  "Pathologic 3"
+    },
+    {
+        "AppId":  "1371980",
+        "Name":  "No Rest for the Wicked",
+        "SizeGB":  45.1,
+        "SizeMB":  46185,
+        "InstallDir":  "NoRestForTheWicked"
+    },
+    {
+        "AppId":  "4711740",
+        "Name":  "Mortal Shell II - Open Beta",
+        "SizeGB":  55.85,
+        "SizeMB":  57187,
+        "InstallDir":  "Mortal Shell II Demo"
+    },
+    {
+        "AppId":  "1627720",
+        "Name":  "Lies of P",
+        "SizeGB":  59.25,
+        "SizeMB":  60673,
+        "InstallDir":  "Lies of P"
+    },
+    {
+        "AppId":  "546560",
+        "Name":  "Half-Life: Alyx",
+        "SizeGB":  68.43,
+        "SizeMB":  70073,
+        "InstallDir":  "Half-Life Alyx"
+    },
+    {
+        "AppId":  "1449110",
+        "Name":  "The Outer Worlds 2",
+        "SizeGB":  76.85,
+        "SizeMB":  78694,
+        "InstallDir":  "TheOuterWorlds2"
+    },
+    {
+        "AppId":  "1771300",
+        "Name":  "Kingdom Come: Deliverance II",
+        "SizeGB":  89.8,
+        "SizeMB":  91955,
+        "InstallDir":  "KingdomComeDeliverance2"
+    },
+    {
+        "AppId":  "835960",
+        "Name":  "The Talos Principle 2",
+        "SizeGB":  106.78,
+        "SizeMB":  109344,
+        "InstallDir":  "The Talos Principle 2"
+    },
+    {
+        "AppId":  "3280350",
+        "Name":  "DEATH STRANDING 2: ON THE BEACH",
+        "SizeGB":  112.46,
+        "SizeMB":  115155,
+        "InstallDir":  "DEATH STRANDING 2 - ON THE BEACH"
+    },
+    {
+        "AppId":  "3681010",
+        "Name":  "Nioh 3",
+        "SizeGB":  126.49,
+        "SizeMB":  129523,
+        "InstallDir":  "Nioh3"
+    },
+    {
+        "AppId":  "2358720",
+        "Name":  "Black Myth: Wukong",
+        "SizeGB":  139.57,
+        "SizeMB":  142922,
+        "InstallDir":  "BlackMythWukong"
+    },
+    {
+        "AppId":  "3321460",
+        "Name":  "Crimson Desert Enhanced",
+        "SizeGB":  168.9,
+        "SizeMB":  172955,
+        "InstallDir":  "Crimson Desert"
+    },
+    {
+        "AppId":  "1643320",
+        "Name":  "S.T.A.L.K.E.R. 2: Heart of Chornobyl",
+        "SizeGB":  193.04,
+        "SizeMB":  197672,
+        "InstallDir":  "S.T.A.L.K.E.R. 2 Heart of Chornobyl"
+    }
+]

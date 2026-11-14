@@ -1,0 +1,118 @@
+{
+  "gate": "northGate",
+  "steamId": "76561198002558137",
+  "steamName": "Tamison (gw_kevinmok)",
+  "totalGames": 94,
+  "totalSizeGB": 1974,
+  "driveM": { "usedGB": 3452, "freeGB": 274, "totalGB": 3726 },
+  "driveC": { "usedGB": 196, "freeGB": 292, "totalGB": 488 },
+  
+  "tier1_quickBlender": {
+    "label": "Quick Blender — <1GB, light GPU, ~5 min each",
+    "purpose": "Pure baseline. What does the RTX look like when games barely touch it?",
+    "games": [
+      { "name": "Balatro", "sizeMB": 64, "genre": "Card roguelike" },
+      { "name": "Rusty Lake Hotel", "sizeMB": 56, "genre": "Point-and-click puzzle" },
+      { "name": "Rusty Lake: Roots", "sizeMB": 84, "genre": "Point-and-click puzzle" },
+      { "name": "Tower Wizard", "sizeMB": 108, "genre": "Tower defense" },
+      { "name": "Cube Escape Collection", "sizeMB": 118, "genre": "Escape room" },
+      { "name": "Underground Blossom", "sizeMB": 169, "genre": "Adventure" },
+      { "name": "MOLDRISE", "sizeMB": 459, "genre": "Roguelike" },
+      { "name": "The Past Within", "sizeMB": 552, "genre": "Puzzle co-op" },
+      { "name": "A Difficult Game About Climbing", "sizeMB": 569, "genre": "Physics platformer" },
+      { "name": "Sail Forth", "sizeMB": 576, "genre": "Sailing adventure" },
+      { "name": "Creeper World 4", "sizeMB": 591, "genre": "Strategy sim" },
+      { "name": "Stardew Valley", "sizeMB": 660, "genre": "Farming RPG" },
+      { "name": "Strange Horticulture", "sizeMB": 683, "genre": "Botanical puzzle" },
+      { "name": "DREDGE", "sizeMB": 759, "genre": "Fishing horror" },
+      { "name": "TR-49", "sizeMB": 996, "genre": "Sci-fi" }
+    ]
+  },
+
+  "tier2_mediumLearn": {
+    "label": "Medium GPU Learn — 1-12GB, CPU+GPU mix, ~15 min each",
+    "purpose": "Where the GPU starts to reveal character. Different engines, different patterns.",
+    "games": [
+      { "name": "Caves of Qud", "sizeGB": 1.3, "genre": "Roguelike sim", "note": "CPU-bound, ASCII-style" },
+      { "name": "Noita", "sizeGB": 1.5, "genre": "Physics pixel sim", "note": "CPU-heavy pixel physics" },
+      { "name": "Selaco", "sizeGB": 3.1, "genre": "Retro FPS", "note": "GZDoom engine — unique GPU sig" },
+      { "name": "Slime Rancher 2", "sizeGB": 3.7, "genre": "Farm sim 3D" },
+      { "name": "Blue Prince", "sizeGB": 4.0, "genre": "Puzzle adventure" },
+      { "name": "Esoteric Ebb", "sizeGB": 6.7, "genre": "Action RPG", "note": "Gaia's own game ref??" },
+      { "name": "Exanima", "sizeGB": 7.8, "genre": "Physics combat", "note": "Unique physics engine" },
+      { "name": "System Shock", "sizeGB": 7.9, "genre": "Immersive sim" },
+      { "name": "Bugsnax", "sizeGB": 8.9, "genre": "Adventure" },
+      { "name": "Project Zomboid", "sizeGB": 9.6, "genre": "Isometric survival", "note": "CPU-heavy sim" },
+      { "name": "Kenshi", "sizeGB": 11.5, "genre": "Open-world squad sim", "note": "THE KENSHI REBORN TARGET" }
+    ]
+  },
+
+  "tier3_gpuWorkout": {
+    "label": "GPU Workout — 12-45GB, real GPU load, toggle Medium↔Epic",
+    "purpose": "GPU sweats. Settings matter. Toggle Protocol pays off.",
+    "games": [
+      { "name": "Subnautica 2", "sizeGB": 15.3, "genre": "Underwater survival" },
+      { "name": "Amnesia: The Bunker", "sizeGB": 16.6, "genre": "Horror" },
+      { "name": "Prey", "sizeGB": 18.8, "genre": "Immersive sim" },
+      { "name": "Outward", "sizeGB": 24.8, "genre": "Open-world RPG" },
+      { "name": "Civ VII", "sizeGB": 24.8, "genre": "4X Strategy", "note": "Late-game GPU stress" },
+      { "name": "Pacific Drive", "sizeGB": 25.0, "genre": "UE5 driving", "note": "UE5 engine" },
+      { "name": "Elden Ring NIGHTREIGN", "sizeGB": 26.3, "genre": "From Software", "note": "New From engine" },
+      { "name": "Satisfactory", "sizeGB": 28.3, "genre": "Factory builder", "note": "GPU scales with factory size" },
+      { "name": "Deadlock", "sizeGB": 36.4, "genre": "MOBA shooter", "note": "Valve Source 2!" },
+      { "name": "Pathologic 3", "sizeGB": 40.7, "genre": "Survival horror", "note": "Atmospheric unique engine" },
+      { "name": "Tainted Grail", "sizeGB": 39.6, "genre": "Open-world RPG" }
+    ]
+  },
+
+  "tier4_rtxFullBurn": {
+    "label": "RTX Full Burn — 55-200GB, max settings, every ray traced",
+    "purpose": "Push the 5090 to its limits. Find the thermal ceiling. Shadow Cast stress test.",
+    "games": [
+      { "name": "Lies of P", "sizeGB": 59.3, "genre": "Soulslike", "note": "RT reflections" },
+      { "name": "Mortal Shell II", "sizeGB": 55.9, "genre": "Soulslike beta" },
+      { "name": "The Outer Worlds 2", "sizeGB": 76.9, "genre": "RPG shooter" },
+      { "name": "Kingdom Come II", "sizeGB": 89.8, "genre": "Medieval RPG", "note": "CryEngine heavy" },
+      { "name": "Talos Principle 2", "sizeGB": 106.8, "genre": "Puzzle/philosophical", "note": "UE5 RT showcase" },
+      { "name": "Death Stranding 2", "sizeGB": 112.5, "genre": "Kojima open-world", "note": "DLSS showcase" },
+      { "name": "Nioh 3", "sizeGB": 126.5, "genre": "Action RPG" },
+      { "name": "Black Myth: Wukong", "sizeGB": 139.6, "genre": "Action RPG", "note": "UE5 RT masterpiece" },
+      { "name": "Crimson Desert", "sizeGB": 168.9, "genre": "Open-world RPG", "note": "Pearl Abyss. MASSIVE." }
+    ]
+  },
+
+  "tier5_theGoal": {
+    "label": "THE GOAL — VR Shadow Cast + A-Life evolution",
+    "games": [
+      { "name": "Half-Life: Alyx", "sizeGB": 68.4, "genre": "VR", "note": "Shadow Cast to Steam Frame. Tomorrow night." },
+      { "name": "S.T.A.L.K.E.R. 2", "sizeGB": 193.0, "genre": "Open-world shooter", "note": "ALREADY PROFILED. A-Life 2.0 = esotericWebb." }
+    ]
+  },
+
+  "lanDistribution": {
+    "concept": "BitTorrent for self — each game played gets 20% cached to LAN nodes",
+    "targets": {
+      "ironGate": { "ip": ".237", "storage": "3.6TB NVMe + 12.7TB ext", "role": "Primary game cache" },
+      "sporeGate": { "ip": ".3", "storage": "929GB NVMe", "role": "Secondary cache + webcam eye" },
+      "graftGate": { "ip": ".107", "storage": "228GB", "role": "Small game cache only" }
+    },
+    "protocol": "After each session, rsync 20% of game data to ironGate. Over time, full games exist across the LAN. New installs pull from local cache first."
+  },
+
+  "compressionPlan": {
+    "tool": "compact.exe /C /S /EXE:LZX",
+    "targets": "Top 10 games (193GB→48GB savings each)",
+    "estimatedSavings": "~285GB freed from M: drive",
+    "note": "NTFS transparent compression. Games still launch normally. CPU decompresses on-the-fly."
+  },
+
+  "steamDeveloperPlan": {
+    "steps": [
+      "Create Steam developer account from Gaia's email (ops@primals.eco)",
+      "Pay $100 Steamworks fee",
+      "Set up Family Sharing from Kevin's account (gw_kevinmok) to Gaia",
+      "Gaia can now see Kevin's full library and launch games for profiling",
+      "Long term: publish ludoSpring tools on Steam as developer"
+    ]
+  }
+}
