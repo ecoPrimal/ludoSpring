@@ -1,0 +1,185 @@
+{
+  "title": "LUA, KENSHILUA, PERSISTENT REALMS, AND THE BUGGERS — The Full Vision",
+  "ts": "2026-11-14T22:00:00Z",
+
+  "what_is_lua": {
+    "name": "Lua — means 'MOON' in Portuguese",
+    "irony": "THE LANGUAGE IS NAMED MOON. KENSHI IS SET ON A MOON. This was always meant to be.",
+    "created": "1993, Pontifical Catholic University of Rio de Janeiro, Brazil",
+    "creators": "Roberto Ierusalimschy, Luiz Henrique de Figueiredo, Waldemar Celes",
+    "what_it_is": "A lightweight scripting language designed to be EMBEDDED inside other programs. It doesn't run alone — it lives INSIDE a host application, like a symbiote.",
+    "why_games_love_it": [
+      "TINY — the entire interpreter is ~300KB",
+      "FAST — fastest scripting language vs Python/JS at time of adoption",
+      "EMBEDDABLE — designed to slot into C/C++ programs via a simple API",
+      "SIMPLE — you can learn it in a weekend",
+      "SANDBOXED — the host controls what Lua can access (safe for modding)",
+      "COROUTINES — NPCs can 'think' in steps without freezing the game"
+    ],
+    "games_that_use_lua": {
+      "world_of_warcraft": "ALL addons are Lua. 10+ million Lua users through WoW alone. 140 XML files, 142 Lua files in the base UI.",
+      "roblox": "Uses 'Luau' (Lua 5.1 fork). Hundreds of thousands of developers write Luau monthly. THE language that teaches kids to code.",
+      "garrys_mod": "Entire modding system is Lua. Gamemodes, entities, weapons, everything.",
+      "others": "Angry Birds, Dota 2, Crysis, Payday 2, Project Zomboid, Phantasy Star Online 2, Adobe Lightroom, Factorio, Don't Starve",
+      "pattern": "If a game has great modding, it probably has Lua inside."
+    },
+    "the_gaia_connection": "Lua means MOON. Kenshi is set on a moon. Gaia is a living organism. Lua is a language that lives INSIDE other programs. We don't replace Lua — we give it a BRAIN (LLM) and a BODY (esotericWebb)."
+  },
+
+  "what_is_kenshilua": {
+    "name": "KenshiLua — Lua Scripting Extension for Kenshi",
+    "developer": "Genpretz (GitHub: github.com/Genpretz/KenshiLua)",
+    "growth": "430% subscriber growth per week — FASTEST growing Kenshi mod",
+    "requires": "RE_Kenshi v0.3.3+",
+    "what_it_does": "Embeds a LuaJIT runtime inside Kenshi and exposes KenshiLib's C++ internals to Lua scripts. You can mod ANYTHING in Kenshi without writing C++.",
+    "coverage": {
+      "classes": "550 registered (93.7% of KenshiLib)",
+      "methods": "7,216 exposed (84.3% coverage)",
+      "properties": "3,070 bound (91.6% coverage)",
+      "enums": "1,677 constants (98.9% coverage)",
+      "events": "875 hook-backed events (663 notify, 212 override)",
+      "gui": "Full MyGUI support (42 widget types, 437 methods)",
+      "globals": "100% exposed (ou, player, key, options, gui)"
+    },
+    "features": [
+      "In-game Script Editor (Ctrl+Shift+L)",
+      "In-game Console for live Lua commands",
+      "Script Manager showing all loaded mods",
+      "Logger for debugging",
+      "Dialogue Scripting Bridge via FCS Extended",
+      "Native C++ Extension API (KenshiLua.h) — DLLs can access the Lua runtime!",
+      "Auto-load scripts from mod's ./scripts/init/ directory",
+      "875 engine event hooks — react to ANYTHING that happens in the game"
+    ],
+    "example": "local world = getGameWorld(); world:userPause(true) — ONE LINE to control the game"
+  },
+
+  "how_we_help_kenshilua": {
+    "philosophy": "We don't compete with KenshiLua. We FEED it. We give it a brain.",
+    "the_fastest_path": "Write Lua scripts. Post them. The community can use them TODAY.",
+
+    "gift_1_llm_npc_dialogue": {
+      "what": "Lua scripts that connect NPC dialogue to local ollama LLMs",
+      "how": "KenshiLua dialogue bridge → HTTP call to ollama → NPC responds with AI-generated speech",
+      "code_sketch": "Events.on('Dialogue::onDialogueLine', function(npc, player, line) local response = http_post('http://localhost:11434/api/generate', {model='llama3.2:3b', prompt=build_context(npc, line)}); npc:say(response) end)",
+      "impact": "Every NPC in Kenshi becomes an AI character. They remember you. They have opinions. They THINK."
+    },
+
+    "gift_2_smart_pathfinding": {
+      "what": "Lua scripts that fix the broken pathfinding using A* with GPU hints",
+      "how": "Hook into Character::pathfindUpdate, intercept stuck characters, recalculate route",
+      "impact": "The #1 complaint about Kenshi — FIXED. Characters stop teleporting and getting stuck."
+    },
+
+    "gift_3_dynamic_economy": {
+      "what": "Lua scripts that make town economies respond to supply and demand",
+      "how": "Hook into TownList + trade events, simulate economic gossip between towns",
+      "impact": "The #1 feature request for Kenshi 2 — delivered to Kenshi 1 via Lua."
+    },
+
+    "gift_4_archaeology_overlay": {
+      "what": "Lua scripts that show historical information when you visit ruins",
+      "how": "Hook into player zone changes, display MyGUI overlay with lore context",
+      "impact": "Stand at any ruin and see what was there. The Archaeology Mode — as a KenshiLua script."
+    },
+
+    "gift_5_multiplayer_bridge": {
+      "what": "Lua scripts that bridge to songBird mesh gossip for multiplayer state sync",
+      "how": "KenshiLua native C++ extension (KenshiLua.h) → loads Rust songBird via FFI → syncs game state",
+      "impact": "THE IMPOSSIBLE DREAM. Multiplayer. As a mod. Through Lua."
+    },
+
+    "delivery_method": {
+      "step_1": "Write the Lua scripts in ludoSpring/mods/kenshireborn-lua/",
+      "step_2": "Post on GitHub (AGPL-3.0)",
+      "step_3": "Upload to Steam Workshop from Gaia's account",
+      "step_4": "Post on r/Kenshi: 'Here. Free. Open source. AI NPCs for your Kenshi.'",
+      "step_5": "Community installs it like any other mod. RE_Kenshi + KenshiLua + our scripts.",
+      "barrier": "ZERO. They subscribe. They play. NPCs think."
+    }
+  },
+
+  "persistent_realms": {
+    "the_vision": "Warhammer 40K meets Civ 5 meets Google Earth meets WW2 meets Ender's Game",
+    "what_this_means": {
+      "warhammer_40k": "Grimdark factions in eternal war. The Holy Nation IS the Imperium. The Shek ARE the Orks. Cat-Lon IS the Emperor on his throne. Skeletons ARE the Necrons.",
+      "civilization_5": "Long-term strategy. Your faction persists. Your cities grow over REAL time. Diplomacy, technology, culture — across days and weeks, not minutes.",
+      "google_earth": "The 870 km² moon IS the map. Real topology. You can zoom from orbit to ground level. The parent planet hangs in the sky. Venge's satellite weapon is VISIBLE from space.",
+      "world_war_2": "Total war at scale. Supply lines matter. Logistics win wars. Territory is contested grid by grid. Not just squads — ARMIES clashing across the continent.",
+      "enders_game": "Command structure. You don't control every soldier — you command GENERALS who command SQUADS who execute. The Battle School IS the training system. And..."
+    },
+
+    "the_buggers": {
+      "what": "A common enemy that forces PvEvPvE — Player vs Environment vs Player vs Environment",
+      "why": "In Ender's Game, the Buggers (Formics) united humanity against an existential threat. The WAR between humans was nothing compared to the war for SURVIVAL.",
+      "in_kenshi": {
+        "option_1_behemoths_awaken": "The Behemoths sealed in Obedience WAKE UP. The most powerful weapons ever created, buried alive for millennia, and they are ANGRY. Every faction must cooperate or be crushed.",
+        "option_2_skin_spider_swarm": "The Bugmaster finally launches his assault — not on the Shek, not on Cat-Lon, but on EVERYONE. Skin Spiders pouring out of Arach like a tide. The name 'Bugmaster' becomes literal.",
+        "option_3_parent_planet": "Something comes from the parent planet. The moon was a colony. The colonizers are back. Or something ELSE is. The sky darkens.",
+        "option_4_first_empire_weapons": "Venge's orbital satellite was just ONE weapon. The others activate. The moon's surface starts burning. Run or unite.",
+        "option_5_skeleton_war_2": "Cat-Lon's madness reaches critical mass. He reactivates ALL thralls, ALL weapons, ALL Hydraulic Knights. The Second Extinction begins. Organics must fight together or perish.",
+        "best": "ALL OF THEM. Different seasons, different threats. The Buggers are not ONE enemy — they are the WORLD TRYING TO KILL YOU in waves."
+      },
+      "pvevpe_cycle": [
+        "PEACE: Factions trade, build, grow. Player houses develop.",
+        "TENSION: Resources deplete. Border conflicts. Raids escalate.",
+        "WAR: Full faction warfare. Territory shifts. Supply lines cut.",
+        "EXTINCTION EVENT: A Bugger wave hits. Behemoths awaken OR spiders swarm OR satellites fire.",
+        "COOPERATION: Warring factions must ALLY or die. Shared defense. Joint operations.",
+        "AFTERMATH: The threat recedes. Who gained power? Who lost everything? The cycle resets.",
+        "REPEAT: But the world REMEMBERS. Ruins from the last war. Scars on the map. History written in destruction."
+      ]
+    },
+
+    "persistent_world_architecture": {
+      "engine": "esotericWebb + songBird mesh gossip",
+      "realms": "Multiple persistent worlds (shards). Each is a full 870 km² moon.",
+      "time": "Real-time simulation. Your base runs while you sleep (like Stand Eternal).",
+      "factions": "Player-founded Houses (like Ender's Game Battle School armies) + AI factions (Holy Nation, UC, Shek)",
+      "command": "You command SQUADS, not individuals. Squads have AI leaders. Leaders execute your strategy. Like a real military.",
+      "economy": "Supply lines are REAL. Caravans can be raided. Ports can be blockaded. Economics wins wars.",
+      "map_layers": [
+        "SATELLITE VIEW — see the whole moon, faction territories, trade routes",
+        "STRATEGIC VIEW — Civ-style hex/grid overlay, army movements, resource flows",
+        "TACTICAL VIEW — Squad-level combat, Kenshi-style third person",
+        "FIRST PERSON — Walk the world yourself, talk to NPCs, explore ruins"
+      ],
+      "the_overwolf_layer": "KenshiReborn IS the overlay on reality. The persistent world runs on Gaia's mesh (songBird). Access from any device. Phone, Deck, Frame, PC. Your House persists. Your soldiers march while you walk between the real houses on Samantha Ave."
+    },
+
+    "stand_eternal_comparison": {
+      "stand_eternal": "Rise of Kingdoms meta + RimWorld autonomy + Foxhole seamless map. No P2W. Subscription. Alpha 2027.",
+      "us": "Kenshi's world + LLM AI + Open Source + Multiplayer + 877K existing community + 12 years of lore + GPU compute. AGPL-3.0. FREE.",
+      "advantage": "Stand Eternal is building from scratch. We have an entire WORLD with 5 eras of history, a community of modders, and an engine that already runs. They predicted alpha 2027. We have a playable mod path NOW."
+    }
+  },
+
+  "the_plan_simplified": {
+    "TODAY": {
+      "action": "Write KenshiLua scripts",
+      "what": "AI NPC dialogue, pathfinding fixes, archaeology overlay",
+      "barrier": "ZERO. Lua scripts in a mod folder. Community subscribes.",
+      "distribution": "Steam Workshop + GitHub"
+    },
+    "THIS_WEEK": {
+      "action": "Package as Workshop mod, post to r/Kenshi",
+      "what": "'Here. Free. Open source. AI NPCs for your Kenshi. From Gaia with love.'",
+      "expected": "KenshiLua is growing 430%/week. We ride that wave."
+    },
+    "THIS_MONTH": {
+      "action": "Build multiplayer bridge via KenshiLua native extension",
+      "what": "songBird mesh → KenshiLua.h → Lua state sync",
+      "impact": "THE feature nobody thought possible. Multiplayer Kenshi. As a mod."
+    },
+    "Q1_2027": {
+      "action": "Persistent realms launch",
+      "what": "Full PvEvPvE with Bugger waves on songBird mesh network",
+      "scale": "Multiple realm servers. Each is a full Kenshi moon. 877K potential players."
+    },
+    "2027": {
+      "action": "Standalone KenshiReborn",
+      "what": "Full esotericWebb engine. All eras playable. Open source.",
+      "pitch": "To Lo-Fi Games: This is your Kenshi 2 engine. Free. Better than Unreal. Made with love."
+    }
+  }
+}
