@@ -1,0 +1,143 @@
+{
+  "game": "S.T.A.L.K.E.R. 2",
+  "toggle_num": 8,
+  "ts": "2026-11-14T15:42:59.609520",
+  "before": {
+    "avg_temp_c": 48,
+    "avg_power_w": 56.6,
+    "peak_power_w": 63.9,
+    "avg_gpu_pct": 19,
+    "avg_vram_mb": 1837,
+    "avg_core_mhz": 1382,
+    "avg_fan_pct": 30,
+    "samples": 10
+  },
+  "after": {
+    "avg_temp_c": 45.2,
+    "avg_power_w": 48.6,
+    "peak_power_w": 49.3,
+    "avg_gpu_pct": 4.1,
+    "avg_vram_mb": 1832,
+    "avg_core_mhz": 695,
+    "avg_fan_pct": 30,
+    "samples": 10
+  },
+  "delta": {
+    "avg_temp_c": -2.8,
+    "avg_temp_c_pct": -5.8,
+    "avg_power_w": -8.0,
+    "avg_power_w_pct": -14.1,
+    "peak_power_w": -14.6,
+    "peak_power_w_pct": -22.8,
+    "avg_gpu_pct": -14.9,
+    "avg_gpu_pct_pct": -78.4,
+    "avg_vram_mb": -5,
+    "avg_vram_mb_pct": -0.3,
+    "avg_core_mhz": -687,
+    "avg_core_mhz_pct": -49.7,
+    "avg_fan_pct": 0,
+    "avg_fan_pct_pct": 0.0
+  },
+  "raw_after": [
+    {
+      "ts": "2026-11-14T15:42:32.292185",
+      "temp_c": 46,
+      "power_w": 48.53,
+      "gpu_pct": 4,
+      "mem_pct": 8,
+      "vram_mb": 1839,
+      "fan_pct": 30,
+      "core_mhz": 727
+    },
+    {
+      "ts": "2026-11-14T15:42:35.323691",
+      "temp_c": 45,
+      "power_w": 48.19,
+      "gpu_pct": 3,
+      "mem_pct": 7,
+      "vram_mb": 1831,
+      "fan_pct": 30,
+      "core_mhz": 735
+    },
+    {
+      "ts": "2026-11-14T15:42:38.362925",
+      "temp_c": 45,
+      "power_w": 48.45,
+      "gpu_pct": 3,
+      "mem_pct": 7,
+      "vram_mb": 1830,
+      "fan_pct": 30,
+      "core_mhz": 675
+    },
+    {
+      "ts": "2026-11-14T15:42:41.391584",
+      "temp_c": 46,
+      "power_w": 48.88,
+      "gpu_pct": 5,
+      "mem_pct": 8,
+      "vram_mb": 1830,
+      "fan_pct": 30,
+      "core_mhz": 660
+    },
+    {
+      "ts": "2026-11-14T15:42:44.424204",
+      "temp_c": 45,
+      "power_w": 47.71,
+      "gpu_pct": 4,
+      "mem_pct": 7,
+      "vram_mb": 1830,
+      "fan_pct": 30,
+      "core_mhz": 645
+    },
+    {
+      "ts": "2026-11-14T15:42:47.461226",
+      "temp_c": 45,
+      "power_w": 48.96,
+      "gpu_pct": 4,
+      "mem_pct": 8,
+      "vram_mb": 1831,
+      "fan_pct": 30,
+      "core_mhz": 712
+    },
+    {
+      "ts": "2026-11-14T15:42:50.500217",
+      "temp_c": 45,
+      "power_w": 48.32,
+      "gpu_pct": 4,
+      "mem_pct": 7,
+      "vram_mb": 1831,
+      "fan_pct": 30,
+      "core_mhz": 712
+    },
+    {
+      "ts": "2026-11-14T15:42:53.538810",
+      "temp_c": 45,
+      "power_w": 48.95,
+      "gpu_pct": 5,
+      "mem_pct": 8,
+      "vram_mb": 1831,
+      "fan_pct": 30,
+      "core_mhz": 667
+    },
+    {
+      "ts": "2026-11-14T15:42:56.571014",
+      "temp_c": 45,
+      "power_w": 49.16,
+      "gpu_pct": 5,
+      "mem_pct": 8,
+      "vram_mb": 1834,
+      "fan_pct": 30,
+      "core_mhz": 735
+    },
+    {
+      "ts": "2026-11-14T15:42:59.609520",
+      "temp_c": 45,
+      "power_w": 49.31,
+      "gpu_pct": 4,
+      "mem_pct": 7,
+      "vram_mb": 1833,
+      "fan_pct": 30,
+      "core_mhz": 682
+    }
+  ]
+}
