@@ -1,0 +1,56 @@
+{
+  "ts": "2026-11-14T16:22:17.184917",
+  "mode": "20/60/20",
+  "gpu": {
+    "temp_c": 54,
+    "power_w": 98.67,
+    "gpu_pct": 12,
+    "vram_mb": 2841
+  },
+  "available": {
+    "power_w": 381.33,
+    "temp_headroom_c": 18,
+    "vram_mb": 23159,
+    "gpu_pct": 68
+  },
+  "game_budget": {
+    "power_w": 76.266,
+    "vram_mb": 4631.8,
+    "gpu_pct": 13.600000000000001
+  },
+  "ai_budget": {
+    "power_w": 228.79799999999997,
+    "vram_mb": 13895.4,
+    "gpu_pct": 40.8
+  },
+  "capacity": {
+    "balatro": 4,
+    "stardew": 2,
+    "noita": 4,
+    "dredge": 2,
+    "cw4": 2,
+    "climbing": 4,
+    "moldrise": 4,
+    "sailforth": 3
+  },
+  "plan": [
+    "balatro",
+    "stardew",
+    "noita",
+    "dredge",
+    "cw4",
+    "climbing",
+    "moldrise",
+    "sailforth",
+    "balatro",
+    "stardew",
+    "noita",
+    "dredge",
+    "cw4",
+    "climbing",
+    "moldrise",
+    "sailforth",
+    "balatro"
+  ],
+  "total_capacity": 25
+}

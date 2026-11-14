@@ -1,0 +1,56 @@
+{
+  "ts": "2026-11-14T16:22:16.995348",
+  "mode": "80/20",
+  "gpu": {
+    "temp_c": 54,
+    "power_w": 97.77,
+    "gpu_pct": 16,
+    "vram_mb": 2840
+  },
+  "available": {
+    "power_w": 382.23,
+    "temp_headroom_c": 18,
+    "vram_mb": 23160,
+    "gpu_pct": 64
+  },
+  "game_budget": {
+    "power_w": 305.78400000000005,
+    "vram_mb": 18528.0,
+    "gpu_pct": 51.2
+  },
+  "ai_budget": {
+    "power_w": 76.44600000000001,
+    "vram_mb": 4632.0,
+    "gpu_pct": 12.8
+  },
+  "capacity": {
+    "balatro": 17,
+    "stardew": 10,
+    "noita": 16,
+    "dredge": 10,
+    "cw4": 10,
+    "climbing": 17,
+    "moldrise": 17,
+    "sailforth": 12
+  },
+  "plan": [
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro",
+    "balatro"
+  ],
+  "total_capacity": 109
+}
