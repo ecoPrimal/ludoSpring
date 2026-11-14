@@ -1,0 +1,21 @@
+{
+    "ts":  "2026-11-14T15:19:01.8292444-05:00",
+    "game":  "S.T.A.L.K.E.R. 2: Heart of Chornobyl",
+    "baseline":  {
+                     "avg_gpu_pct":  57,
+                     "avg_power_w":  306,
+                     "avg_temp_c":  66.5,
+                     "peak_power_w":  321.3,
+                     "avg_vram_mb":  8960,
+                     "samples":  10
+                 },
+    "settings":  {
+                     "resolution_scale":  100,
+                     "frame_gen":  "DLSS Frame Generation 2x",
+                     "shading_quality":  "Epic",
+                     "upscaling_quality":  "NVIDIA DLAA",
+                     "dlss_sharpness":  10,
+                     "async_compute":  "Enabled",
+                     "upscaling":  "DLSS"
+                 }
+}
