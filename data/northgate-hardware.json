@@ -1,0 +1,96 @@
+﻿{
+    "usb":  {
+                "controllers":  8,
+                "usb4_thunderbolt":  true,
+                "usb4_speed_gbps":  40
+            },
+    "storage_total_tb":  8.4,
+    "ram":  {
+                "per_stick_gb":  48,
+                "manufacturer":  "G.Skill",
+                "part":  "F5-6400J3239F48G",
+                "speed_mhz":  6400,
+                "type":  "DDR5",
+                "total_gb":  96,
+                "sticks":  2
+            },
+    "ip":  "192.168.4.147",
+    "errors":  [
+                   "MediaTek MT7927 WiFi 7 — needs driver",
+                   "MediaTek Bluetooth — needs driver",
+                   "AMD PSP/CCP crypto — needs chipset driver",
+                   "AMD I2S Audio x2 — needs chipset driver",
+                   "AMD GPIO/Power Mgmt — needs chipset driver",
+                   "Realtek card reader — needs driver"
+               ],
+    "fix":  "Install AMD X870E chipset driver pack + MediaTek WiFi 7 driver (ASUS Armory Crate or manual)",
+    "timestamp":  "2026-11-14T18:50:20.0601077-05:00",
+    "audio":  [
+                  "NVIDIA HDMI Audio",
+                  "AMD HDMI Audio",
+                  "USB Audio 2.0",
+                  "CORSAIR HS80 MAX Wireless",
+                  "Steam Streaming Mic + Speakers"
+              ],
+    "network":  {
+                    "bluetooth":  "MediaTek BT (NEEDS DRIVER)",
+                    "wifi":  "MediaTek MT7927 WiFi 7 (NEEDS DRIVER)",
+                    "wired":  "Realtek 2.5 Gbps"
+                },
+    "steam":  {
+                  "remote_play_port":  27036,
+                  "streaming_audio":  true,
+                  "running":  true
+              },
+    "hostname":  "TAMISON",
+    "storage":  [
+                    {
+                        "gb":  3726,
+                        "model":  "WD_BLACK SN850X 4TB",
+                        "type":  "NVMe"
+                    },
+                    {
+                        "gb":  932,
+                        "model":  "Samsung 990 PRO 1TB",
+                        "type":  "NVMe"
+                    },
+                    {
+                        "gb":  3726,
+                        "model":  "Samsung 990 PRO 4TB",
+                        "type":  "NVMe"
+                    }
+                ],
+    "gate":  "northGate",
+    "motherboard":  {
+                        "chipset":  "AMD X870E",
+                        "serial":  "250556580402034",
+                        "manufacturer":  "ASUS",
+                        "model":  "ROG STRIX X870E-E GAMING WIFI"
+                    },
+    "gpus":  [
+                 {
+                     "pcie_max":  "Gen5 x16",
+                     "name":  "NVIDIA GeForce RTX 5090",
+                     "pcie_idle":  "Gen1 x8 (power saving)",
+                     "type":  "GDDR7",
+                     "driver":  "610.88",
+                     "role":  "PRIMARY COMPUTE",
+                     "vram_gb":  32
+                 },
+                 {
+                     "vram_gb":  2,
+                     "name":  "AMD Radeon (iGPU)",
+                     "type":  "shared",
+                     "role":  "DISPLAY OUTPUT (mobo HDMI)"
+                 }
+             ],
+    "cpu":  {
+                "name":  "AMD Ryzen 9 9950X3D",
+                "cores":  16,
+                "max_mhz":  4300,
+                "threads":  32,
+                "architecture":  "Zen 5 + 3D V-Cache",
+                "l3_cache_mb":  128
+            },
+    "wave":  258
+}
