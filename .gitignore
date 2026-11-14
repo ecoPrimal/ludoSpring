@@ -1,6 +1,7 @@
 ﻿
 
 repos/
+**/target/
 
 data/nexus-api-key.json
 
