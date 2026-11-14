@@ -1,0 +1,10 @@
+C:\Users\mokke\Desktop\ludoSpring\engine\kenshi-reborn\target\release\build\bitstream-io/8470230be61b46b2\out\bitstream_io-8470230be61b46b2.d: C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\lib.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\huffman.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\read.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\write.rs
+
+C:\Users\mokke\Desktop\ludoSpring\engine\kenshi-reborn\target\release\build\bitstream-io/8470230be61b46b2\out\libbitstream_io-8470230be61b46b2.rlib: C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\lib.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\huffman.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\read.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\write.rs
+
+C:\Users\mokke\Desktop\ludoSpring\engine\kenshi-reborn\target\release\build\bitstream-io/8470230be61b46b2\out\libbitstream_io-8470230be61b46b2.rmeta: C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\lib.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\huffman.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\read.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\write.rs
+
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\lib.rs:
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\huffman.rs:
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\read.rs:
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bitstream-io-4.10.0\src\write.rs:

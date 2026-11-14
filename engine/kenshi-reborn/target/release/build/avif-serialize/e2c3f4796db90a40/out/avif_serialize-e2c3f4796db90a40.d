@@ -1,0 +1,10 @@
+C:\Users\mokke\Desktop\ludoSpring\engine\kenshi-reborn\target\release\build\avif-serialize/e2c3f4796db90a40\out\avif_serialize-e2c3f4796db90a40.d: C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\lib.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\boxes.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\constants.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\writer.rs
+
+C:\Users\mokke\Desktop\ludoSpring\engine\kenshi-reborn\target\release\build\avif-serialize/e2c3f4796db90a40\out\libavif_serialize-e2c3f4796db90a40.rlib: C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\lib.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\boxes.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\constants.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\writer.rs
+
+C:\Users\mokke\Desktop\ludoSpring\engine\kenshi-reborn\target\release\build\avif-serialize/e2c3f4796db90a40\out\libavif_serialize-e2c3f4796db90a40.rmeta: C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\lib.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\boxes.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\constants.rs C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\writer.rs
+
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\lib.rs:
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\boxes.rs:
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\constants.rs:
+C:\Users\mokke\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\avif-serialize-0.8.9\src\writer.rs:
