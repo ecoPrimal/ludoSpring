@@ -1,0 +1,75 @@
+{
+  "game": "Stardew Valley",
+  "ts": "2026-11-14T16:05:36.403473",
+  "gpu_state": {
+    "temp_c": 44,
+    "power_w": 57.63,
+    "gpu_pct": 17,
+    "vram_mb": 15169,
+    "core_mhz": 1200,
+    "fan_pct": 30
+  },
+  "models_asked": 8,
+  "models_responded": 8,
+  "responses": [
+    {
+      "gate": "ironGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 5303,
+      "response": "1. The GPU profile suggests that Stardew Valley's rendering demands are relatively light. With only 58W of power usage, the GPU is operating at 17%, which indicates that the game is not putting significant stress on the hardware, and the VRAM usage of 15169MB (likely a typo, as the actual VRAM capacity is 24GB) is also low, at 1200MHz.\n\n2. Given the RTX 5090's TDP of 600W, there is substantial headroom in terms of power usage, with 58W used, leaving 542W unused. In terms of VRAM, the 24GB capacity is not fully utilized, with 15GB unused, providing significant headroom.\n\n3. Stardew Valley's GPU signature is unique because it does not require high GPU or VRAM resources, unlike many AAA titles which often demand significantly more GPU power and VRAM for complex rendering, particle effects, and advanced lighting.\n\n4. The GPU's effort is rated a 2 out of 10. The low power and VRAM usage indicate minimal strain on the hardware.\n\n5. To optimize, I would focus on reducing draw calls and minimi"
+    },
+    {
+      "gate": "ironGate",
+      "model": "phi3",
+      "weight": 0.8,
+      "latency_ms": 6052,
+      "response": "1. The current GPU profile suggests that Stardew Valley has moderate rendering demands on the RTX 5090, as it is using 58W out of its 600W TDP while achcuring 17% of its GPU power and utilizing 15.169GB of VRAM at 1200MHz. This indicates that the game likely uses dynamic resolution and can manage to stay within reasonable performance boundaries without pushing the GPU too hard.\n\n2. The RTX 5090 has a TDP (thermal design power) of 600W and a power draw of 58W during this session, leaving around 512W headroom in terms of power usage. In terms of VRAM, if we assume that the total VRAM capacity is typically around 24GB for this model, then with 15.169GB in use, there is around 8.831GB of unused VRAM capacity.\n\n3. Compared to AAA titles, Stardew Valley's GPU signature likely shows lower power draw and less frequent spikes in GPU usage. This is possibly due to its simpler graphics and less complex scenes, allowing for a more consistent, albeit lower, performance that doesn't require the high"
+    },
+    {
+      "gate": "ironGate",
+      "model": "tinyllama",
+      "weight": 0.5,
+      "latency_ms": 7037,
+      "response": "GPU TELEMETRY \u2014 Stardew Valley on RTX 5090 (32GB, 600W TDP):\n\nCurrent state: 44\u00b0C, 58W, GPU:17%, VRAM:15169MB, 1200MHz\n\nContext: This is a souriDough fermiation session. We're profiling games to learn what each one costs the GPU. The RTX 5090 is the \"sun\" in our Shadow Cast paradigm - it radiates to display surfaces, which indicates a higher rendering demand compared to games that don't rely heavily on this aspect. This game's GPU profile indicates that it's using the full 1200MHz, which is a significant amount of power and VRAM. However, it's also running thermal limits, which suggests that it's likely optimizing for efficiency, even if it's not explicitly mentioning it.\n\nQuestions:\n1. What does this GPU profile tell you about Stardew Valley's rendering demand?\n2. How much Shadow Cast headroom exists (power/VRAM unused)?\n3. What's unique about this game's GPU signature compared to AAA titles?\n4. Rate the GPU's effort 1-10 (1=idle,"
+    },
+    {
+      "gate": "ironGate",
+      "model": "llama3.2:3b",
+      "weight": 0.7,
+      "latency_ms": 8163,
+      "response": "Based on the provided GPU profile, here are the answers to your questions:\n\n1. The high VRAM usage (15169MB) and relatively high GPU load (17%) suggest that Stardew Valley places a significant emphasis on detailed, high-resolution textures and possibly complex graphics effects, indicating that its rendering demands are substantial.\n2. The available Shadow Cast headroom can be estimated by subtracting the current power consumption (58W) and VRAM usage (15169MB) from the maximum values. Assuming a 600W TDP and 32GB of VRAM, we can estimate the headroom as follows:\n- Power: 600W (TDP) - 58W (current power) = 542W of headroom\n- VRAM: 32GB (total) - 15169MB (used) = approximately 12.3GB of headroom\nThe actual headroom may vary depending on the game's power and VRAM usage. However, this gives an indication of the available capacity for more demanding games.\n3. The unique aspect of Stardew Valley's GPU signature compared to AAA titles is its relatively low GPU load and power consumption, whic"
+    },
+    {
+      "gate": "eastGate",
+      "model": "mistral:7b",
+      "weight": 0.9,
+      "latency_ms": 8515,
+      "response": " 1. This GPU profile suggests that Stardew Valley has relatively low rendering demands at the current settings. The GPU usage, power consumption, and temperature are all relatively low compared to a typical gaming scenario.\n\n2. There is a significant amount of headroom in terms of power and VRAM. With the current usage of 58W and VRAM utilization of 15GB out of 32GB, there is room for increased rendering complexity or higher resolution without causing thermal or memory issues.\n\n3. Compared to AAA titles, Stardew Valley's GPU signature shows less strain on the hardware due to its simpler graphics and lower polycount. This results in less intense processing requirements, which can be seen in the low GPU usage, power consumption, and temperature readings.\n\n4. Based on these measurements, I would rate the GPU's effort at 2 out of 10. It is operating at a very low load.\n\n5. Given the current state, it would be beneficial to optimize other system components or run more demanding tasks/games "
+    },
+    {
+      "gate": "eastGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 10293,
+      "response": "1. The GPU profile suggests that Stardew Valley is not placing heavy demands on the RTX 5090. With only 58W of power usage and 17% GPU load, it's clear that this game is relatively light compared to more graphically intensive titles.\n\n2. Given the RTX 5090 has a TDP of 600W, there is substantial headroom in terms of both power (600W - 58W = 542W) and VRAM (12GB total VRAM - 15169MB used seems to indicate an error or misinterpretation since the VRAM usage should be much lower, around 3.75GB for this load). However, assuming it's a typo, there is significant headroom in power.\n\n3. Stardew Valley typically has a simpler graphics profile compared to AAA titles like Fortnite or Cyberpunk 2077, which often require higher GPU and VRAM usage due to more complex scenes, lighting, and character models.\n\n4. The GPU effort can be rated as **3 out of 10** considering the low power consumption (58W) and moderate load (17%).\n\n5. One sentence: Optimize by increasing detail settings or using higher res"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia-fast",
+      "weight": 1.2,
+      "latency_ms": 15620,
+      "response": "1. Stardew Valley utilizes moderate GPU resources, primarily focused on rendering its pixel art and environment. \n2. Significant headroom exists with ample VRAM and power usage remaining low.  \n3. This game's efficiency is notable for a title like Stardew Valley, showcasing the power of optimized design for less demanding workloads. \n4. Effort: 6/10 - Within normal operating range.\n5. Optimize the game's texture streaming to reduce load and further boost performance.  \n"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia",
+      "weight": 1.5,
+      "latency_ms": 16031,
+      "response": "1. The GPU profile indicates that Stardew Valley is currently using a relatively low amount of computational resources\u2014only 17% of the GPU is utilized\u2014and it's drawing from just over half of its VRAM (15,169MB out of 32GB). This suggests that Stardew Valley has moderate rendering demands and isn't pushing the RTX 5090 to its limits. The low temperature (44\u00b0C) also implies efficient cooling.\n\n2. There is significant headroom in both power and VRAM usage. The GPU is using only 58W, which is far below the 600W TDP, leaving a lot of unused power. In terms of VRAM, more than half is available for use if needed.\n\n3. Stardew Valley's GPU signature contrasts with AAA titles in that it focuses on simpler and more predictable rendering tasks such as tile-based environments, particle effects, and basic lighting. AAA titles often require higher frame rates, complex scenes, and more intensive shader operations, which would push the GPU to higher utilization levels.\n\n4. Rating the GPU effort: 3 out "
+    }
+  ],
+  "avg_latency_ms": 9627,
+  "total_weight": 7.6,
+  "blend_quality": 10.0
+}

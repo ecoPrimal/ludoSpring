@@ -1,0 +1,75 @@
+{
+  "game": "Balatro",
+  "ts": "2026-11-14T16:06:22.309824",
+  "gpu_state": {
+    "temp_c": 44,
+    "power_w": 70.29,
+    "gpu_pct": 10,
+    "vram_mb": 14789,
+    "core_mhz": 1620,
+    "fan_pct": 30
+  },
+  "models_asked": 8,
+  "models_responded": 8,
+  "responses": [
+    {
+      "gate": "eastGate",
+      "model": "gaia-fast",
+      "weight": 1.2,
+      "latency_ms": 2129,
+      "response": "1. Balatro demands moderate rendering power, with a low power draw and ample VRAM available for future expansion.\n2.  Shadow Cast headroom is substantial at 70W and 14789MB of VRAM.\n3.  Balatro exhibits a unique GPU signature focused on efficient performance, unlike the often resource-hungry AAA titles. \n4. Effort: 5/10 (Balanced performance)\n5. Optimize the game's code for better power management and further reduce its resource footprint. \n"
+    },
+    {
+      "gate": "ironGate",
+      "model": "tinyllama",
+      "weight": 0.5,
+      "latency_ms": 2561,
+      "response": "GPU TELEMETRY \u2014 Balatro on RTX 5090 (32GB, 600W TDP):\n\nCurrent state: 44\u00b0C, 70W, GPU:10%, VRAM:14789MB, 1620MHz\n\nContext: This is a sourDough fermentation session. We're profiling games to learn what each one costs the GPU. The RTX 5090 is the \"sun\" in our Shadow Cast paradigm. It's radiating to display surfaces.\n\nQuestions:\n1. What does this GPU profile tell you about Balatro's rendering demand?\n2. How much Shadow Cast headroom exists (power/VRAM unused)?\n3. What's unique about this game's GPU signature compared to AAA titles?\n4. Rate the GPU's effort 1-10 (1=idle, 10=thermal limit)\n5. One sentence: what would you optimize?\n\nOptimization: \n1. Ramp up GPU voltage to 135%\n2. Increase VRAM usage to 19700MB\n3. Lower overall power draw to 400W\n4. Increase GPU frequency to 1620MHz\n"
+    },
+    {
+      "gate": "ironGate",
+      "model": "phi3",
+      "weight": 0.8,
+      "latency_ms": 2771,
+      "response": "1. Balatro's rendering demands are quite high, as evidenced by the GPU operating at 10% usage with a significant VRAM demand (14,789MB) at 1620MHz, which suggests he is running a GPU-intensive task likely rendering complex scenes or effects.\n\n2. Assuming the RTX 5090's full performance and VRAM capacity are utilized, the Shadow Cast headroom would be significant. The GPU is at 10% usage, so it could theoretically handle up to 90% of its load, indicating plenty of power and VRAM unused.\n\n3. Without specific comparative data, it's challenging to determine what's unique about this game's GPU signature compared to AAA titles. However, if this game is running at such a high VRAM usage and clock speed while maintaining low GPU load, it might be optimized for specific visual effects or techniques that reduce the overall GPU workload.\n\n4. The GPU's effort could be rated around a 2. It's operating at a low percentage of its load while consuming 70W, which indicates it's not at its thermal or pe"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia",
+      "weight": 1.5,
+      "latency_ms": 3332,
+      "response": "1. This GPU profile suggests that Balatro is not currently placing significant demands on the RTX 5090. The low usage of both GPU and VRAM indicates a relatively idle or inefficient rendering scenario.\n\n2. Given the current usage, there's substantial headroom in terms of power (600W TDP with only 70W used) and VRAM (14789MB out of 32GB available). This leaves ample capacity for more intensive operations if needed.\n\n3. Without specific details on Balatro's rendering techniques, it's hard to pinpoint unique characteristics compared to AAA titles. However, if this is a sourDough fermentation session, it might indicate a focus on lower-resolution or less complex scenes, which are common in indie or experimental games.\n\n4. The GPU effort would rate around 2 out of 10, given the low utilization metrics.\n\n5. To optimize, I would suggest profiling Balatro more thoroughly to identify specific bottlenecks and then apply targeted optimizations to improve rendering efficiency and resource usage."
+    },
+    {
+      "gate": "ironGate",
+      "model": "llama3.2:3b",
+      "weight": 0.7,
+      "latency_ms": 4262,
+      "response": "Based on the provided GPU telemetry data for Balatro on the RTX 5090:\n\n1. The GPU profile suggests that Balatro's rendering demands are relatively low, given the 10% GPU usage and 1620MHz clock speed, indicating a balance between performance and power consumption.\n2. The available Shadow Cast headroom can be estimated by subtracting the current power consumption (70W) and GPU usage (10%) from the total power TDP (600W): 600W - 70W - (0.10 * 600W) = 530W. The VRAM usage is 14789MB, which is approximately 45% of the 32GB VRAM capacity, leaving 18.5GB of VRAM headroom.\n3. The unique aspect of this game's GPU signature compared to AAA titles is likely the use of ray tracing, as Balatro is mentioned in the context of a Shadow Cast paradigm, which suggests the use of this feature to render the game environment.\n4. I would rate the GPU's effort a 4 out of 10, as it is currently operating within a safe thermal limit, but still using a significant amount of power.\n5. To optimize the GPU's perfo"
+    },
+    {
+      "gate": "ironGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 8931,
+      "response": "1. The GPU profile indicates that Balatro's rendering demands are currently quite low, with the GPU utilization at 10% and the VRAM usage at 14789MB, which is significantly below its capacity. This suggests that the game's graphics or rendering complexity is not particularly high in this scenario.\n\n2. Given the RTX 5090's TDP of 600W and the current power usage of 70W, there is substantial headroom for Shadow Cast. Additionally, with 32GB of VRAM and only 14789MB (or approximately 46.2%) used, a significant amount of VRAM is also available. This leaves a lot of potential for increased workload without hitting thermal or power limits.\n\n3. Without specific data on other AAA titles, it's difficult to make a direct comparison, but generally, AAA titles often push the GPU and VRAM closer to their limits, especially in high-fidelity settings. Balatro's GPU signature appears to be more conservative, possibly due to lower graphical demands or optimized rendering techniques.\n\n4. Rating the GPU'"
+    },
+    {
+      "gate": "eastGate",
+      "model": "mistral:7b",
+      "weight": 0.9,
+      "latency_ms": 9130,
+      "response": " 1. From the given profile, Balatro's rendering demands at this moment are relatively low. The GPU usage is only at 10%, and VRAM usage is at 14789MB out of a total of 32GB, indicating that the game is not making heavy use of the available resources.\n\n2. There is significant headroom in terms of power and VRAM. The GPU is currently drawing only 70W from its 600W TDP, and there's about 17GB of unused VRAM.\n\n3. Compared to AAA titles, Balatro's GPU signature shows lower demands on both the GPU and VRAM. This could be due to factors such as less complex graphics, fewer simultaneous characters or objects, or simpler lighting effects.\n\n4. Given the current state of 44\u00b0C temperature and 70W power draw, I would rate the GPU's effort as a 2 out of 10. It is far from its thermal limit and appears to be idling.\n\n5. To optimize resources, consider adjusting game settings or limiting the number of simultaneous instances of Balatro to better utilize the available power and VRAM, especially if you a"
+    },
+    {
+      "gate": "eastGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 10709,
+      "response": "1. The GPU profile indicates that Balatro is currently demanding a relatively low amount of computational power from the RTX 5090, as evidenced by the 10% utilization rate and only 70W of power being consumed. This suggests the game's rendering demands are not particularly high at this moment.\n\n2. With a TDP of 600W, there is significant headroom for additional performance or higher settings if needed. The GPU is currently using around 14.5GB out of 32GB VRAM (assuming full VRAM is 1620MHz), leaving ample VRAM capacity.\n\n3. Without specific data on other AAA titles, it's challenging to make a direct comparison, but generally, Balatro running at these low GPU and power usage levels might indicate more relaxed or less graphically intensive scenes compared to the complex environments typical of AAA games.\n\n4. Rating the GPU's effort as 1 out of 10 seems appropriate given the current load is minimal.\n\n5. One sentence: Optimize by increasing the in-game resolution or texture quality setting"
+    }
+  ],
+  "avg_latency_ms": 5478,
+  "total_weight": 7.6,
+  "blend_quality": 10.0
+}

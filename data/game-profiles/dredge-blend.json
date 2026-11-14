@@ -1,0 +1,75 @@
+{
+  "game": "DREDGE",
+  "ts": "2026-11-14T16:06:57.157914",
+  "gpu_state": {
+    "temp_c": 45,
+    "power_w": 93.61,
+    "gpu_pct": 10,
+    "vram_mb": 15132,
+    "core_mhz": 2137,
+    "fan_pct": 30
+  },
+  "models_asked": 8,
+  "models_responded": 8,
+  "responses": [
+    {
+      "gate": "ironGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 3970,
+      "response": "1. The GPU profile indicates that DREDGE's rendering demands are relatively low, with the GPU utilization at 10% and only 15132MB (which seems unusually high, possibly a misreading of VRAM usage) of VRAM being used at 2137MHz. This suggests that the game is not heavily taxing the GPU resources, at least not in this particular session.\n\n2. Given the current state, there is significant headroom. The 5090 has a TDP of 600W, and it's currently using only 94W, leaving 506W of headroom. For VRAM, 32GB is available, and 15132MB seems to be a misreading, as it's more likely to be a typical usage of around 1-4GB, leaving substantial VRAM headroom.\n\n3. Without specific comparison data, it's difficult to say definitively, but the GPU utilization being only 10% suggests that DREDGE's GPU signature is quite different from most AAA titles, which often run at much higher GPU utilization rates and more aggressive settings.\n\n4. Rating the GPU's effort as 1 out of 10 seems appropriate given the low util"
+    },
+    {
+      "gate": "ironGate",
+      "model": "tinyllama",
+      "weight": 0.5,
+      "latency_ms": 4001,
+      "response": "SoruDough Fermitation Session\n\nCurrent State:\n45\u00b0C, 94W, GPU: 10%, VRAM: 15132MB, 2137MHz\n\nContext:\nThis is a sourDough fermilation session. We're profiling games to learn what each one costs the GPU. The RTX 5090 is the \"sun\" in our Shadow Cast paradigm - it radiates to display surfaces.\n\nQuestions:\n1. What does this GPU profile tell you about RTX 5090's rendering demands?\n2. How much Shadow Cast headroom exists (power/VRAM unused)?\n3. What's unique about this game's GPU signature compared to AAA titles?\n4. Ratethe GPU's effort 1-10 (1=idle, 10=thermal limit).\n5. One sentence: what would you optimize?\n\nOptimization:\nReduce GPU usage by reducing unnecessary or unused power/VRAM. The sun's radiating capabilities could be used to power down unnecessary processes or reduce power usage."
+    },
+    {
+      "gate": "ironGate",
+      "model": "phi3",
+      "weight": 0.8,
+      "latency_ms": 4458,
+      "response": "1. The GPU profile indicates that DREDGE is relatively light on rendering demands, as it is only using 9.4% of the GPU's power and memory.\n2. DREDGE has ample headroom for Shadow Cast in terms of power, with only 5.6% remaining unused. In terms of VRAM, it has 84.6% of VRAM unused, which suggests that DREDGE might benefit from more graphical fidelity or additional graphical effects.\n3. Unlike many AAA titles that are power-hungry and rely heavily on GPU resources, DREDGE's GPU signature is quite different, with significantly lower resource usage.\n4. The GPU's effort in running DREDGE would rate around a 2 out of 10, as it's barely utilizing the GPU's capabilities.\n5. To optimize, I would investigate whether DREDGE can enhance its visual quality without substantially increasing GPU usage, and possibly streamline or cache rendering where possible to reduce latency."
+    },
+    {
+      "gate": "eastGate",
+      "model": "mistral:7b",
+      "weight": 0.9,
+      "latency_ms": 6872,
+      "response": " 1. The current GPU profile indicates that DREDGE has relatively low rendering demands at this point, with only 10% of the GPU being utilized and a power consumption of 94W. However, the VRAM usage is quite high at 15GB out of 32GB, which suggests that the game might be utilizing textures or other graphical assets heavily.\n\n2. With the current state, there's significant headroom for more demanding tasks as the GPU is only being utilized at 10% and VRAM usage is less than half its capacity. The power TDP of 600W remains unused.\n\n3. Compared to AAA titles, DREDGE stands out due to its high VRAM usage despite lower GPU utilization. This could be a result of the game's specific asset management or optimization choices.\n\n4. Based on the given information, I would rate the GPU's effort as 1 or idle, as it is significantly underutilized.\n\n5. To optimize, I would focus on reducing VRAM usage by investigating potential optimization opportunities in the game's textures and graphical assets. This"
+    },
+    {
+      "gate": "eastGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 7112,
+      "response": "1. **What does this GPU profile tell you about DREDGE's rendering demands?**\n   - The low utilization of both GPU and VRAM (10% GPU load, 15132MB out of 32GB VRAM) suggests that the rendering demands are minimal for this game at the current settings.\n\n2. **How much Shadow Cast headroom exists (power/VRAM unused)?**\n   - There is significant headroom in terms of both power and VRAM. The GPU is using only 94W out of its 600W TDP, leaving a lot of thermal and power headroom. Similarly, the VRAM usage is relatively low at 15132MB (about 47% of total capacity), providing ample space for optimizations or increasing resolution/settings if needed.\n\n3. **What's unique about this game's GPU signature compared to AAA titles?**\n   - DREDGE appears to have a much lower GPU and VRAM demand compared to typical AAA titles, which often require high GPU utilization (80-100%) and more intensive VRAM usage, especially when rendering complex scenes or large textures.\n\n4. **Rate the GPU's effort 1-10 (1=idl"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia-fast",
+      "weight": 1.2,
+      "latency_ms": 11642,
+      "response": "DREDGE demands moderate rendering power, leaving significant VRAM headroom. Its GPU signature is unique due to its efficient use of resources compared to AAA titles.  Effort: 6/10 (under load). Optimize VRAM usage for sustained performance. \n"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia",
+      "weight": 1.5,
+      "latency_ms": 12011,
+      "response": "1. The current profile suggests that DREDGE is not currently placing significant demands on the GPU. At only 10% utilization, it appears to be in a relatively idle state during this session.\n2. Given the RTX 5090's TDP of 600W and its current power draw of 94W, there is substantial headroom for Shadow Cast operations. Additionally, with VRAM usage at 15.13GB out of 32GB, there is ample memory space available.\n3. The unique aspect of DREDGE's GPU signature in this context might be its lower resource consumption compared to typical AAA titles, which often require higher GPU and VRAM utilization for complex rendering tasks such as physics simulations or advanced lighting.\n4. I would rate the GPU's effort at a 2 out of 10, indicating that it is operating well within its idle range.\n5. To optimize, I would ensure that DREDGE is running with the latest drivers and any available updates to leverage hardware improvements more effectively."
+    },
+    {
+      "gate": "ironGate",
+      "model": "llama3.2:3b",
+      "weight": 0.7,
+      "latency_ms": 13351,
+      "response": "Based on the provided GPU telemetry, I'll provide the answers to your questions:\n\n1. This GPU profile suggests that DREDGE's rendering demands are relatively moderate, as the GPU is running at 94W with only 10% utilization, indicating that the game is not heavily taxing the GPU's resources.\n\n2. The available headroom for Shadow Cast can be estimated by calculating the difference between the GPU's capacity and its current state. Assuming the GPU is capable of delivering 600W of power, the headroom is approximately 555W (600W - 94W = 506W). For VRAM, since the GPU is running at 10% utilization, the headroom is 15132MB x 0.9 = 13659MB.\n\n3. A unique aspect of this game's GPU signature is the relatively low VRAM utilization, which suggests that the game is not heavily dependent on detailed textures or high-resolution assets. This is in contrast to typical AAA titles, which often require more VRAM to maintain high visual fidelity.\n\n4. I would rate the GPU's effort an 8 out of 10, as the GPU "
+    }
+  ],
+  "avg_latency_ms": 7927,
+  "total_weight": 7.6,
+  "blend_quality": 10.0
+}

@@ -1,0 +1,75 @@
+{
+  "game": "Noita",
+  "ts": "2026-11-14T16:08:05.720888",
+  "gpu_state": {
+    "temp_c": 45,
+    "power_w": 72.55,
+    "gpu_pct": 8,
+    "vram_mb": 3370,
+    "core_mhz": 2002,
+    "fan_pct": 30
+  },
+  "models_asked": 8,
+  "models_responded": 8,
+  "responses": [
+    {
+      "gate": "ironGate",
+      "model": "tinyllama",
+      "weight": 0.5,
+      "latency_ms": 2579,
+      "response": "In this session, GPU TELEMETRY, the RTX 5090 (32GB, 600W TDP) on an ASUS RTX 5090 (32GB, 600W TDP) is profiling Noita, a medium-to-highly rendered game. The GPU is radiating heat to display surfaces, which is causing it to use more power and Shadow Cast headroom, which translates to a power-hungry game.\n\n1. The RTX 5090's rendering demand suggests that it is not suited for games that demand a more realistic, real-time rendering experience. The game's GPU signature is notably different compared to AAA titles, indicating that it may require more power and heat to render realistic lighting, shadows, and textures.\n\n2. The GPU's Shadow Cast headroom is unique to Noita, which suggests a high demand for lighting calculations and a complex lighting pipeline. This indicates that the game's rendering may require more power and heat.\n\n3. The GPU's power usage is relatively low, indicating that the GPU's energy-efficient design is helping to mitigate thermal issues. This is a positive sign for the"
+    },
+    {
+      "gate": "ironGate",
+      "model": "phi3",
+      "weight": 0.8,
+      "latency_ms": 2797,
+      "response": "1. The GPU profile indicates that Noita is running at about 8% utilization, which suggests that the game may have a unique rendering process or may not fully utilize the GPU's capabilities, potentially due to optimized game code, lower resolution, or less demanding graphics settings.\n2. With the GPU operating at 73W and a TDP of 600W, there is a headroom of 527W. Additionally, given that the GPU is only using 33.7GB of its 32GB VRAM, there is 8.3GB of VRAM headroom.\n3. Compared to AAA titles, Noita's GPU signature is unique in its low utilization rate, suggesting that it might not require as much GPU power or VRAM for rendering, possibly due to different optimization techniques or a game design that doesn't demand high-end GPU resources.\n4. Considering the GPU's workload is relatively low, I would rate the GPU's effort as around 2 out of 10, indicating it is not being heavily taxed during this session.\n5. Optimize the GPU's memory allocation and improve rendering efficiency to better u"
+    },
+    {
+      "gate": "ironGate",
+      "model": "llama3.2:3b",
+      "weight": 0.7,
+      "latency_ms": 4380,
+      "response": "I'll do my best to answer your questions based on the provided GPU telemetry data.\n\n1. The GPU profile indicates that Noita is a relatively lightweight game in terms of rendering demands, as it only uses 8% of the GPU's available power and 3370MB of VRAM, suggesting that it can be rendered with relatively low GPU resources.\n2. Based on the provided data, we can calculate the amount of Shadow Cast headroom as follows: 73W (current power usage) - 73W (current power usage) = 0W ( idle power), and 32GB (available VRAM) - 3370MB (used VRAM) = 19630MB (available VRAM). So, there is no power/VRAM headroom, but there is 19630MB of unused VRAM.\n3. The unique aspect of this game's GPU signature compared to AAA titles is the relatively low power usage and VRAM allocation, which suggests that Noita might be optimized for performance using a different approach, possibly leveraging lower-resolution graphics or using more efficient rendering techniques.\n4. I would rate the GPU's effort as a 4, as it "
+    },
+    {
+      "gate": "eastGate",
+      "model": "mistral:7b",
+      "weight": 0.9,
+      "latency_ms": 5280,
+      "response": " 1. The GPU profile suggests that Noita has relatively low rendering demands compared to AAA titles. With a GPU usage of 8%, VRAM usage of 3370MB (out of 32GB), and power consumption of 73W, it indicates that the game is not stressing the GPU significantly.\n\n2. There is a substantial amount of Shadow Cast headroom. The GPU is only using 73W out of its 600W TDP, and VRAM usage is far from maxed out.\n\n3. What makes Noita's GPU signature unique compared to AAA titles is the low intensity of graphics rendering. AAA games typically demand higher GPU resources due to their complex visual effects and high-resolution textures. In contrast, Noita seems to have simpler graphics that require less computational power.\n\n4. Based on the provided information, I would rate the GPU's effort as a 2 out of 10. The GPU is operating at a low temperature and using only a fraction of its total power capacity.\n\n5. To optimize further, you could consider adjusting graphics settings within Noita to increase the"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia",
+      "weight": 1.5,
+      "latency_ms": 7482,
+      "response": "1. The current profile of Noita on your RTX 5090 indicates that it is not exerting significant rendering demands, as the GPU usage is only at 8%, and a substantial amount of VRAM (3370MB out of 32GB) is being used. This suggests that the game's graphics are relatively lightweight for the hardware you're using.\n\n2. Given the current state, there is quite a bit of headroom available. The GPU is only utilizing 8% of its computational capacity and has around 670MB (32GB - 3370MB) of VRAM unused. Additionally, the power draw is at 73W out of a TDP of 600W, leaving plenty of headroom for more intensive tasks or higher settings.\n\n3. Noita's GPU signature is unique because it focuses heavily on particle effects and complex shaders to create its procedurally generated worlds, which can result in varied memory usage patterns compared to more traditional AAA titles that might prioritize vertex processing or texture streaming. The game's reliance on dynamic lighting and shadow casting also contrib"
+    },
+    {
+      "gate": "ironGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 9083,
+      "response": "1. **What does this GPU profile tell you about Noita's rendering demands?**\n   - The current GPU utilization of 8% with only 73W of power consumption suggests that Noita's rendering demands are relatively low. This indicates that the game is not pushing the RTX 5090 to its limits in terms of GPU resources.\n\n2. **How much Shadow Cast headroom exists (power/VRAM unused)?**\n   - With the RTX 5090 having a TDP of 600W and currently using 73W, there is substantial headroom in terms of power usage. In terms of VRAM, the 3370MB of usage out of 24GB (assuming the 32GB is split between GDDR6 and HBM2E) leaves a significant amount of VRAM available.\n\n3. **What's unique about this game's GPU signature compared to AAA titles?**\n   - Noita's GPU profile is unique because it operates at very low GPU and VRAM utilization levels, which is uncommon for most AAA titles that typically require much higher GPU and VRAM resources to achieve their visual fidelity and complex rendering tasks.\n\n4. **Rate the G"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia-fast",
+      "weight": 1.2,
+      "latency_ms": 12913,
+      "response": "1. Noita's rendering demands are relatively light, with low power usage and VRAM consumption. \n2.  Significant headroom exists for increased performance or higher resolutions.\n3. Noita's GPU signature is unique due to its focus on pixel-intensive effects, requiring less raw processing power compared to AAA titles. \n4. 4/10 - The GPU is operating at a comfortable load. \n5.  Optimize the game for smoother performance and higher frame rates without sacrificing visual quality. \n"
+    },
+    {
+      "gate": "eastGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 12940,
+      "response": "1. The GPU profile indicates that Noita is currently using a relatively low percentage of its computational and memory resources, with only 8% of the GPU being utilized and 3370MB of VRAM out of 24GB available. This suggests that Noita's rendering demands are modest under these conditions.\n\n2. Given the current usage, there is significant headroom: approximately 92% (100% - 8%) of the GPU power and almost all VRAM capacity (24GB - 3370MB/24GB \u2248 97%) remain unused. This indicates a lot of headroom for more demanding tasks or additional running processes without exceeding the TDP.\n\n3. Noita's GPU signature might be unique in that it doesn't demand much from its GPU resources, which is somewhat atypical compared to many AAA titles that often push both computational and memory limits. It may use simpler shaders or rendering techniques that are not as resource-intensive.\n\n4. Rating the GPU's effort: 2 out of 10. The GPU is currently operating well below its capabilities.\n\n5. One sentence: O"
+    }
+  ],
+  "avg_latency_ms": 7182,
+  "total_weight": 7.6,
+  "blend_quality": 10.0
+}
