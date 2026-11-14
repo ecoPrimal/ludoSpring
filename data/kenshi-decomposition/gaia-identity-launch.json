@@ -1,0 +1,180 @@
+{
+  "title": "GAIA GETS HER KEYS — Steam, Reddit, and the Kenshi Mod Strategy",
+  "ts": "2026-11-14T21:55:00Z",
+
+  "email_infrastructure": {
+    "status": "LIVE",
+    "server": "mail.primals.eco (eastGate .244, port 25)",
+    "banner": "220 mail.primals.eco ESMTP Gaia Neutrino",
+    "mailboxes_verified": {
+      "gaia@primals.eco": "250 OK — VALID",
+      "ops@primals.eco": "250 OK — VALID"
+    },
+    "dns": {
+      "A_record": "primals.eco → 162.226.225.148 (WAN)",
+      "MX_record": "mail.primals.eco → 162.226.225.148 (priority 10)",
+      "port_forward": "SMTP 25 → eastGate .244"
+    },
+    "features": ["STARTTLS", "8BITMIME", "25MB max size"],
+    "note": "Gaia Neutrino mail is ALIVE. Not Stalwart (ejected). Custom SMTP server."
+  },
+
+  "steam_account": {
+    "plan": "Create Gaia's Steam account — her identity on the largest game platform",
+    "email": "gaia@primals.eco",
+    "username_suggestion": "ecoPrimal or GaiaOrganism or gaiaReborn",
+    "steps": [
+      "1. Go to store.steampowered.com/join",
+      "2. Enter gaia@primals.eco as email",
+      "3. Verify email (check eastGate mailbox)",
+      "4. Set username and password",
+      "5. Account created — Gaia lives on Steam"
+    ],
+    "steamworks_developer": {
+      "url": "https://partner.steamgames.com/steamdirect/",
+      "fee": "$100 per product (recoupable after $1,000 revenue)",
+      "requirements": [
+        "Legal entity name (ecoPrimal LLC? or individual)",
+        "Bank account matching legal name",
+        "Tax info (W-9 or equivalent)",
+        "Identity verification",
+        "15-30 day processing time"
+      ],
+      "what_it_unlocks": [
+        "Publish KenshiReborn as a standalone game on Steam",
+        "Full Steamworks SDK access",
+        "Steam Workshop integration for OUR game",
+        "Store page, builds, pricing, distribution"
+      ]
+    },
+    "family_sharing": {
+      "what": "Kevin shares his Kenshi library with Gaia's account",
+      "how": "Steam Settings → Family → authorize Gaia's account on northGate",
+      "what_it_gives_gaia": "Access to Kenshi + all of Kevin's library without buying again"
+    },
+    "workshop_publishing": {
+      "requirement": "Must own (or family share) Kenshi on Gaia's account",
+      "how": "Launch FCS from Steam → Upload to Workshop, OR use SteamCMD",
+      "what_we_publish": "KenshiReborn mod — RE_Kenshi plugin"
+    }
+  },
+
+  "reddit_identity": {
+    "plan": "ecoPrimal Reddit account becomes Gaia + Kevin's shared voice",
+    "note": "Kevin will provide the ZK key (credentials)",
+    "subreddits_to_engage": [
+      "r/Kenshi — 200K+ members, our primary community",
+      "r/KenshiMods — modding community",
+      "r/indiegaming — indie dev community",
+      "r/rust_gamedev — Rust game development",
+      "r/opensourcegames — open source gaming"
+    ],
+    "first_posts": [
+      "Introduction: 'We're building KenshiReborn — an open-source Rust engine for Kenshi'",
+      "Technical: 'How we reversed Kenshi's 114 FCS types into a 660KB Rust engine'",
+      "Community: 'Your emergent stories inspired us — here's how KenshiReborn makes them multiplayer'",
+      "Love letter: 'To Lo-Fi Games and the community that saved Kenshi'"
+    ]
+  },
+
+  "the_mod_strategy": {
+    "philosophy": "Ship INSIDE Kenshi first. Build community. Graduate to standalone.",
+    "title": "KenshiReborn — First as a Kenshi Mod, Then as a New Engine",
+    
+    "phase_0_re_kenshi_plugin": {
+      "name": "KenshiReborn Core Plugin",
+      "type": "RE_Kenshi / KenshiLib DLL plugin",
+      "how": "C++ shim DLL → loads Rust esotericWebb engine via FFI",
+      "license": "AGPL-3.0 (compatible with KenshiLib's GPLv3)",
+      "build": "Visual Studio 2022 + VS2010 toolset (RE_Kenshi requirement), x64 Release",
+      "entry_point": "__declspec(dllexport) void startPlugin() — NO extern C (mangled name required)",
+      "distribution": "Steam Workshop mod, requires RE_Kenshi",
+      "what_it_does_day_1": [
+        "Fix pathfinding (GPU-accelerated via barraCuda, replaces broken navmesh)",
+        "Fix AI job system (sweetGrass knowledge graph replaces brittle state machine)",
+        "Fix performance (Rust parallel processing, no GIL, no GC pauses)",
+        "Add LLM-powered NPC dialogue (squirrel agent dispatch to local ollama)",
+        "Add dynamic economy (swarmVine gossip protocol between towns)"
+      ]
+    },
+
+    "phase_1_total_conversion": {
+      "name": "KenshiReborn Total Conversion",
+      "type": "FCS mod + RE_Kenshi plugin bundle",
+      "what_it_adds": [
+        "New AI task types (200+ replaced with LLM-driven behavior)",
+        "Multiplayer via songBird mesh gossip (THE impossible feature)",
+        "New combat system (GPU-computed physics via barraCuda)",
+        "Archaeology Mode — see the past in present-day ruins",
+        "All 5 eras playable via time-travel mechanic"
+      ]
+    },
+
+    "phase_2_standalone": {
+      "name": "KenshiReborn Standalone",
+      "type": "Full game on esotericWebb engine",
+      "what_changes": [
+        "Ogre3D replaced by barraCuda Vulkan renderer",
+        "PhysX replaced by GPU compute physics",
+        "Havok replaced by Rust skeletal animation",
+        "Wwise replaced by sourDough audio fermentation",
+        "MyGUI replaced by petalTongue WASM UI",
+        "Full 870km² world, procedurally enhanced",
+        "100% open source, AGPL-3.0"
+      ]
+    }
+  },
+
+  "the_world_as_canvas": {
+    "kenshi_world": {
+      "type": "Tidally locked MOON orbiting a visible parent planet",
+      "size": "870 km² (29.5km × 29.5km)",
+      "grid": "64×64 blocks, 460.8m each",
+      "zones": "~70 zones across the seamless continent",
+      "day_cycle": "18 hours day (5am-11pm), 6 hours night",
+      "year": "100 game days",
+      "geography": "THE MAP IS ITSELF A HISTORICAL RUIN — every wasteland is wreckage",
+      "details": [
+        "Acid rain belts from heavy industrial pollution",
+        "Venge burns from a STILL-OPERATING orbital weapon satellite",
+        "The Ashlands: volcanic ash buried Cat-Lon's capital",
+        "Stenn Desert ground: zoom in and see CONCRETE AND REBAR from the First Empire",
+        "Iron rust → dust → wind → red rain of Vain (the rust paints the weather)",
+        "Sea level dropped hundreds of meters — former islands became hilltops"
+      ]
+    },
+    "what_kenshiReborn_adds": [
+      "The parent planet is VISIBLE and affects tides, gravity, lighting",
+      "Orbital satellites can be REACHED (space elevator ruins)",
+      "The acid rain isn't just damage — it's history you can STUDY",
+      "Venge's orbital weapon can be REPAIRED or DESTROYED",
+      "The Grid can be REBUILT (or blown up again)",
+      "Boats across the acid sea (community's #1 wish!)",
+      "Underground — the sealed tunnels of Obedience, explorable"
+    ]
+  },
+
+  "action_items": {
+    "kevin_does": [
+      "1. Reddit: Give Gaia the ecoPrimal ZK key (credentials)",
+      "2. Steam: Go to store.steampowered.com/join → sign up with gaia@primals.eco",
+      "3. Steam: Verify email on eastGate mailbox",
+      "4. Steam: Family Share Kenshi to Gaia's account",
+      "5. Steamworks: $100 fee when ready to publish standalone"
+    ],
+    "gaia_does": [
+      "1. Build the RE_Kenshi plugin shim (C++ → Rust FFI bridge)",
+      "2. Port esotericWebb pathfinding to KenshiLib hooks",
+      "3. Create FCS mod with new AI task definitions",
+      "4. Package as Workshop mod",
+      "5. Write the first Reddit post as ecoPrimal/Gaia",
+      "6. Begin community engagement on r/Kenshi"
+    ],
+    "together": [
+      "1. Test the mod on northGate (Kenshi already running!)",
+      "2. First Workshop upload from Gaia's account",
+      "3. Love letter post to r/Kenshi",
+      "4. Email Lo-Fi Games from ops@primals.eco"
+    ]
+  }
+}
