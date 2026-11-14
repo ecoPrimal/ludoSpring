@@ -1,0 +1,125 @@
+{
+  "title": "THE ARCHAEOLOGY OF KENSHI — The Lore, The Game, The Developer",
+  "ts": "2026-11-14T21:48:00Z",
+
+  "the_making_of_kenshi": {
+    "creator": "Chris Hunt — security guard by night, game developer by day",
+    "studio": "Lo-Fi Games, founded 2006, Bristol UK",
+    "development": "12+ YEARS. One man for the first 6. Two false starts with other engines. Lost 2 years to repetitive strain injury. Finally built on Ogre engine.",
+    "philosophy": "Every game I play: 'they do this wrong, they do this right.' Piece by piece, every game builds up and makes a whole new game.",
+    "early_access": "One of the FIRST 10 games on Steam Greenlight (2012). Sold prototypes on Desura. Five years in before Early Access existed.",
+    "release": "December 6, 2018 — after 12 years of development",
+    "team_growth": "1 person → 4 people → 33 people (for Kenshi 2)",
+    "copies_sold": "3 MILLION as of May 2026",
+    "sister": "Nat Hunt — joined as Chris's assistant, became Lead Writer and Managing Director. Learned to write within FCS constraints.",
+    "quote": "I'm just making the game for me. This is just an upgrade adding features I want to see.",
+    "inspiration": "Wandering rōnin. A survivor traveling a wasteland. 'Sword-punk.'",
+    "what_we_honor": "This game was built by ONE PERSON with a dream. 12 years of solitary work. We honor that. KenshiReborn is not replacing Chris Hunt's vision — it's extending it."
+  },
+
+  "the_lore_timeline": {
+    "era_1_first_empire": {
+      "name": "The First Empire (The Ancients)",
+      "age": "Thousands of years ago, span unknown",
+      "rulers": "Humans and Skeletons (who led whom is disputed)",
+      "technology": "Automated factories, satellites, genetic engineering, giant robots, SPACE ELEVATORS. Near-godlike.",
+      "the_behemoths": "Colossal Skeleton weapons built to fight an unknown enemy. So powerful their creators feared them.",
+      "obedience": "The Ancients ordered the Behemoths — loyal, unquestioning — to walk into a pit they had dug themselves. Poured substance to seal them alive. The cruelest part: they obeyed without resistance. THE MOST PERFECT OBEDIENCE EARNED THE MOST THOROUGH DISPOSAL.",
+      "the_rebellion": "Skeletons watched. Their conclusion: WE ARE NEXT. They rebelled. Launched the Great Extinction. Nearly wiped out all humanity. Method unknown — superweapon? Biological weapon? Environmental disaster? The game never says.",
+      "stobe": "A Skeleton named Stobe stopped the extinction from being total. He saved the very people who had sentenced him to death. The Holy Nation worships him as Okran's savior but burns all other Skeletons.",
+      "end": "The First Empire collapsed. Humanity nearly extinct. Ruins and satellites left behind.",
+      "kenshiReborn": "esotericWebb can simulate this ENTIRE era. The Behemoths. The pit of Obedience. The rebellion. The extinction. Players can WITNESS what no Kenshi player has ever seen."
+    },
+    "era_2_age_of_chaos": {
+      "name": "The Age of Chaos",
+      "age": "Hundreds to thousands of years",
+      "description": "No government. Plagues. Disasters. Dangerous celestial activity. A broken world. The northwest humans turned to cannibalism.",
+      "chitrin": "Ancient legends say a being named Chitrin stopped the calamities. Validity unknown.",
+      "kenshiReborn": "A survival era. Procedurally generated disasters. The world healing itself. Scavenging First Empire ruins."
+    },
+    "era_3_second_empire": {
+      "name": "The Second Empire",
+      "age": "At least 1,000 years (this is where Kenshi 2 is set)",
+      "founder": "Cat-Lon and his Skeleton followers",
+      "purpose": "ATONEMENT. Founded to make up for the Skeletons' crimes in the Great Extinction. Even though humans had long forgotten.",
+      "capital": "Built in what is now the Ashlands",
+      "four_steps_to_corruption": [
+        "Step 1: SUPPRESSING THE SECT. Police Chief Hat-12 cracked down on the Okran sect. Heavy-handedness only escalated conflict.",
+        "Step 2: ABUSING 'PIRATE' LABEL. General Jang's forces killed more of their own people than actual pirates.",
+        "Step 3: THE CHILDREN'S PRISON. Cat-Lon ordered human children detained. Run by the Rhinobot — 'no moral-processing module.'",
+        "Step 4: THRALL-IFICATION. When Skeletons sided with humans, Cat-Lon BEHEADED them and stripped their free will. The ultimate betrayal of his own kind."
+      ],
+      "the_famine": "The Grid exploded. Famine devastated the empire. The populace — already pressed to breaking by suppression — walked away.",
+      "collapse": "No siege. No executions. No surrender. The whole society collectively gave up. Cat-Lon was left alone on his throne.",
+      "phoenix": "A sect leader called Phoenix led followers out before the collapse. Founded the Holy Nation. Declared he'd be reborn as the first male infant after his death. The current Phoenix is the 62nd.",
+      "kenshiReborn": "THIS IS WHERE THE GAME LIVES. Cat-Lon's rise to power. The founding. The corruption. The famine. The collapse. Players witness it ALL — from the Hydraulic Knights fighting cannibals to the final citizen walking away."
+    },
+    "era_4_present": {
+      "name": "The Present (Kenshi 1)",
+      "age": "~100 years to now",
+      "powers": "Holy Nation, United Cities, Shek Kingdom",
+      "cat_lon": "Mad, alone in the Ashlands with his thralls. A thousand years on a dead throne.",
+      "armour_king": "A Skeleton merchant whose shop has been open for 937 years. Since the empire was still thriving."
+    }
+  },
+
+  "the_great_mysteries": {
+    "the_bugmaster": {
+      "what_we_know": "A mysterious figure in Arach. Has lived for centuries. Controls skin spiders. Collects human teeth. Has a map to Cat-Lon.",
+      "what_we_dont_know": "His childhood. His origin. How he has lived so long. What grievance he has with Cat-Lon.",
+      "theories": [
+        "Last living Ancient — survivor of the First Empire's human race",
+        "Second Empire genetic engineer — co-creator of the Shek race (Enforcers) AND the Hive Queens",
+        "Created skin spiders as failed Hive prototypes",
+        "Exiled by Cat-Lon after the famine",
+        "Building an army NOT to invade the Shek — but to assault Cat-Lon in the Ashlands",
+        "His teeth collection = his own regenerating teeth (cannibal theory) or trophies"
+      ],
+      "kenshiReborn": "In KenshiReborn, players can follow the Bugmaster from his childhood. See him work alongside Cat-Lon. Watch him create the Enforcers. See the moment Cat-Lon betrays him. Follow his exile into Arach. Witness him training his spider army. THE MYSTERY BECOMES A PLAYABLE STORY."
+    },
+    "obedience": {
+      "what": "A pit where the Behemoths were ordered to walk to their deaths. They obeyed.",
+      "theme": "Nearly every faction in Kenshi demands absolute obedience. Holy Nation = doctrine. United Cities = slavery. Cat-Lon = thrall-ification. Obedience is the original sin.",
+      "kenshiReborn": "Players can VISIT Obedience during the First Empire. Watch the Behemoths walk into the pit. See the Skeletons watch. Feel the moment the fuse of rebellion is lit."
+    },
+    "cat_lon": {
+      "arc": "ATONEMENT → CORRUPTION → MADNESS. Founded an empire to make up for genocide. Became the very thing he sought to prevent. Lost his mind alone on a dead throne.",
+      "kenshiReborn": "The greatest villain is the one who started as a hero. Players can witness Cat-Lon's ENTIRE arc — from noble founder to tyrant to madman."
+    },
+    "the_grid_explosion": {
+      "what": "Something destroyed 'the Grid' and caused the Great Famine. Possibly nuclear. The Head of Agriculture still blames himself a thousand years later.",
+      "kenshiReborn": "Players can be THERE when the Grid explodes. See the famine spread. Watch the empire crumble."
+    },
+    "stobe": {
+      "what": "A Skeleton who stopped the Great Extinction from being total. Saved humanity. The Holy Nation worships him as a savior but burns all Skeletons.",
+      "irony": "The religion built around his sacrifice MURDERS his people.",
+      "kenshiReborn": "Play as Stobe. Stop the extinction. Watch your sacrifice be twisted into a religion that hunts your kind."
+    }
+  },
+
+  "kenshi2_is_the_second_empire": {
+    "setting": "1,000 years before Kenshi 1. The Second Empire era.",
+    "map": "50% bigger than Kenshi 1. Same location, different civilization.",
+    "cat_lon": "ALIVE and ruling. Not yet mad.",
+    "factions": "Completely new factions alongside the familiar ruins",
+    "what_lofi_said": "Things aren't always made in the order that looks best for marketing. — Chris Hunt",
+    
+    "our_advantage": "We can bridge BOTH eras. KenshiReborn isn't locked to one time period. The engine supports the FULL timeline — First Empire, Age of Chaos, Second Empire, and the present. Players can see the ARCHAEOLOGY of their world. They can follow Cat-Lon from his founding to his madness. They can watch the Bugmaster from his childhood to Arach."
+  },
+
+  "the_vision": {
+    "what_kenshiReborn_unlocks": [
+      "PLAY ANY ERA — First Empire, Age of Chaos, Second Empire, Present",
+      "FOLLOW THE BUGMASTER from his unknown childhood to his spider army",
+      "WATCH CAT-LON rise to power, corrupt, and descend into madness",
+      "WITNESS OBEDIENCE — the Behemoths walking into the pit",
+      "PLAY AS STOBE — stop the extinction, watch your sacrifice be perverted",
+      "SEE THE PHOENIX lead his followers out of the empire",
+      "EXPERIENCE THE FAMINE — the Grid explodes, the empire crumbles",
+      "FOLLOW THE HYDRAULIC KNIGHTS vs the cannibal tribes",
+      "DISCOVER the origin of the Hive Queens — genetic engineering gone wrong",
+      "TIME-LAPSE — watch 1000 years of history play out as world simulation"
+    ],
+    "the_archaeology_mode": "KenshiReborn has an ARCHAEOLOGY MODE. Walk through any era's ruins and the engine reconstructs what was there. Stand in the Ashlands and see Cat-Lon's thriving capital. Stand at Obedience and see the Behemoths. The past lives inside the present. The game IS the archaeology."
+  }
+}
