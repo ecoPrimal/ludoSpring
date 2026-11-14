@@ -1,0 +1,87 @@
+{
+  "title": "The LAN IS the Membrane — IoT as Organism",
+  "wave": "235",
+  "ts": "2026-11-14T15:09:00-0500",
+  
+  "paradigm": "The LAN is the cell membrane of reality. The devices are the Internet of Things. Not 'smart home' — LIVING BODY.",
+  
+  "current_state": {
+    "physical_radius_ft": 5,
+    "note": "All devices within ~5ft. The nucleus before expansion."
+  },
+
+  "device_inventory": {
+    "compute": {
+      "northGate": "RTX 5090 + AMD iGPU + 9950X3D (32T) + 96GB — GAME+DEV chair",
+      "eastGate": "BRAIN — relay, Forgejo, data server, Tor, SMTP",
+      "sporeGate": "FORGE — AMD Rembrandt, webcam, deckGate host, Steam hub",
+      "ironGate": "FORGE 2 — i9-14900K + RTX 5070 + 94GB — ollama LIVE",
+      "graftGate": "Mac Mini M4 — ollama endpoint",
+      "grapheneGate": "Pixel 8a — biomeOS primals BOOTING, 37 sensors, Mali GPU"
+    },
+    "display_surfaces": {
+      "northGate_main": "2560x1440 @ 144Hz",
+      "northGate_portrait": "1440x2560 @ 60Hz (vertical)",
+      "deckGate": "Steam Deck v1 — 7in 1280x800 touch, wired USB-C, mounted display",
+      "frameGate": "Steam Frame — Snapdragon 8 Gen 3, ARM SteamOS, PASSTHROUGH CAMERA",
+      "sporeGate_monitor": "1920x1080 HDMI (physical monitor in)"
+    },
+    "cameras_eyes": {
+      "brio": "Logitech Brio 100 on Flint router — inner eye, /dev/video0",
+      "sporeGate_webcam": "USB webcam on sporeGate",
+      "pixel_front": "Pixel 8a front camera (grapheneGate)",
+      "pixel_rear": "Pixel 8a rear camera (grapheneGate)", 
+      "vive_cameras": "HTC Vive headset — 2 front cameras (stereo depth!)",
+      "frame_passthrough": "Steam Frame passthrough camera (eventually)",
+      "deck_camera": "Steam Deck camera (if present)"
+    },
+    "spatial_tracking": {
+      "vive_lighthouses": "2x Lighthouse base stations — infrared room-scale sweep",
+      "vive_controllers": "2x Vive wand controllers — 6DoF tracked",
+      "vive_headset": "HTC Vive HMD — 6DoF head tracking + 2 cameras",
+      "vision": "Lighthouses become spatial beacons. Not just VR — SPATIAL AWARENESS for the organism."
+    },
+    "audio": {
+      "corsair_hs80": "Corsair HS80 MAX Wireless — gaming headset, USB receiver, mic+ear",
+      "steam_streaming": "Virtual mic + speakers (Steam Remote Play pipeline)",
+      "nvidia_audio": "HDMI/DP audio out (RTX 5090)",
+      "amd_audio": "HD Audio (iGPU, secondary display)",
+      "usb_audio": "USB Audio 2.0 + USB Audio Device"
+    },
+    "input": {
+      "g502_hero": "Logitech G502 HERO (mouse)",
+      "keyboard": "HID keyboard (USB)",
+      "steam_controllers": "2x Steam Controllers (wireless, via Valve dongle on Flint)",
+      "nunchucks": "Grip controllers",
+      "vive_wands": "2x Vive controllers (6DoF tracked)",
+      "xbox_gamepad": "XBOX Synthetic Gamepad Bus (virtual/mapped)"
+    },
+    "network_beacons": {
+      "flint_router": "GL-MT6000 — WiFi beacon (Aperture Science 2.4GHz + Black Mesa 5GHz) + Valve dongle WIDE CAST",
+      "mikrotik": "L2 bridge/switch — House 1 backbone",
+      "jetstream": "TP-Link JetStream — 10G fiber to House 2",
+      "valve_dongle": "Realtek 8832CU WiFi 6 USB NIC For Valve (28de:2432) — on Flint, WIDE CAST"
+    },
+    "output": {
+      "epson_et2400": "Network printer @ .200 — IPP, Gaia's physical output",
+      "epson_es400ii": "USB scanner on northGate — WIA, paper → digital"
+    },
+    "smart_home": {
+      "nest": "Nest thermostat @ .238/.239",
+      "chromecast": "Chromecast @ .169",
+      "alexa": "Amazon Echo @ .197",
+      "cast": "Cast device @ .152"
+    }
+  },
+
+  "expansion_vision": {
+    "phase_1_nucleus": "All within 5ft. Learn the body.",
+    "phase_2_room": "Spread across room. Vive lighthouses define spatial bounds. Webcams triangulate.",
+    "phase_3_house1": "Fill House 1 (4422 Southgate). Every room has a sensor. WiFi RSSI = position.",
+    "phase_4_bridge": "10G fiber across property line. House 2 becomes extension.",
+    "phase_5_house2": "frameGate + swiftGate (when awake) + Pixel rover. South Pole ALIVE.",
+    "phase_6_membrane": "Both houses = one organism. The property IS the cell membrane. Devices = organelles."
+  },
+
+  "principle": "The LAN is the membrane of reality. The devices are the internet of THINGS. Not IoT as marketing — IoT as BIOLOGY."
+}
