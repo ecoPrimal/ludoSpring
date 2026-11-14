@@ -1,0 +1,143 @@
+{
+  "wave": 258,
+  "title": "Nexus API LIVE — The Mouth Opens",
+  "timestamp": "2026-11-14T22:45:00Z",
+  "gate": "northGate",
+  "status": "API_VALIDATED_AND_PULLING",
+
+  "nexus_account": {
+    "user_id": 307378173,
+    "username": "TamisonEcoPrimal",
+    "email": "gaia@primals.eco",
+    "is_premium": true,
+    "base_url": "https://api.nexusmods.com/v1",
+    "key_stored": "data/nexus-api-key.json (gitignored, heart-pull only)"
+  },
+
+  "games_scanned": {
+    "kenshi": {
+      "game_id": 736,
+      "total_mods": 1749,
+      "total_downloads": 10945869,
+      "categories": 21,
+      "updated_last_month": 121,
+      "trending_top": "RE_Kenshi (847) — 218K unique DLs, our #1 tool"
+    },
+    "oblivion_remastered": {
+      "game_id": 6953,
+      "total_mods": 4371,
+      "total_downloads": 39098835,
+      "trending_top": "OBSE64 (282) — 9.2K endorsements, script extender pattern"
+    },
+    "skyrim_special_edition": {
+      "game_id": 1704,
+      "total_mods": 144356,
+      "total_downloads": 13829828831,
+      "trending_top": "SKSE64 (30379) — 127K endorsements, THE modding bible"
+    },
+    "fallout_new_vegas": {
+      "game_id": 130,
+      "total_mods": 42522,
+      "total_downloads": 1394383156,
+      "trending_top": "xNVSE (67883) — 54K endorsements, faction system reference"
+    },
+    "dark_souls_3": {
+      "game_id": 432,
+      "total_mods": 1702,
+      "total_downloads": 12791194,
+      "trending_top": "Seamless Co-op (1895) — multiplayer pattern we need for Steel Age"
+    }
+  },
+
+  "key_kenshi_mods_studied": [
+    {
+      "mod_id": 847,
+      "name": "RE_Kenshi",
+      "version": "0.3.5",
+      "author": "BFrizzleFoShizzle",
+      "endorsements": 3727,
+      "unique_downloads": 218253,
+      "role": "Code injection + C++ plugin system — OUR gateway to Copper Age",
+      "note": "GPLv3, source cloned at repos/RE_Kenshi, 2700+ exposed C++ functions"
+    },
+    {
+      "mod_id": 950,
+      "name": "Particle System Override (PSO)",
+      "version": "3.4",
+      "author": "SCARaw",
+      "endorsements": 3911,
+      "role": "Rendering optimization — changes ALL particle rendering, massive FPS boost"
+    },
+    {
+      "mod_id": 804,
+      "name": "Nvidia GPU Optimization",
+      "version": "V10",
+      "author": "SCARaw",
+      "endorsements": 4410,
+      "role": "RTX optimization — directly relevant to our RTX 5090. Reduced load times."
+    },
+    {
+      "mod_id": 1216,
+      "name": "Kenshi Performance Fix",
+      "version": "1.3",
+      "author": "ElgarL and SCARaw",
+      "endorsements": 2594,
+      "role": "Engine fixes — log analysis, max effort shader fixes"
+    },
+    {
+      "mod_id": 114,
+      "name": "Reactive World",
+      "version": "27",
+      "author": "Shidan",
+      "endorsements": 4775,
+      "unique_downloads": 134792,
+      "role": "A-LIFE PATTERN — factions react, territories change, world LIVES. The STALKER vision."
+    },
+    {
+      "mod_id": 253,
+      "name": "Dark UI",
+      "version": "4",
+      "author": "Eldryn1",
+      "endorsements": 6094,
+      "role": "MyGUI modding reference — XML layouts, skins, templates"
+    },
+    {
+      "mod_id": 229,
+      "name": "Nice Map - Variations",
+      "version": "1.2.1",
+      "author": "Djeeshka",
+      "endorsements": 3828,
+      "role": "GIS/map reference — world map texture replacement"
+    }
+  ],
+
+  "data_saved": {
+    "nexus-ingest/kenshi-trending.json": "10 trending mods",
+    "nexus-ingest/kenshi-latest.json": "10 latest mods",
+    "nexus-ingest/kenshi-updated-1m.json": "121 mods updated in last month",
+    "nexus-ingest/kenshi-key-mods-detail.json": "9 key mods full detail",
+    "nexus-ingest/oblivionremastered-trending.json": "10 trending",
+    "nexus-ingest/skyrimspecialedition-trending.json": "10 trending",
+    "nexus-ingest/newvegas-trending.json": "10 trending",
+    "nexus-ingest/darksouls3-trending.json": "10 trending"
+  },
+
+  "distribution": {
+    "heart_pull": "API key at data/nexus-api-key.json — gitignored, local only",
+    "eastgate": "Ingest data pushed via git — eastGate pulls, mushrooms masticate",
+    "irongate": "PLAN: ironGate bulk-downloads ALL kenshi mods as training weight",
+    "sporeGate": "Absorbs via heart-pull every 2 min",
+    "northGate": "PRIMARY — RTX 5090 runs the game, processes data, builds mods"
+  },
+
+  "kevin_wisdom": "The Rust primals WILL solve the .mod binary format. Stop hex-dumping. PULL and BUILD.",
+
+  "next_steps": [
+    "Build Kenshi mod with FCS — playable TONIGHT",
+    "Wire Nexus API as permanent MCP tool on eastGate",
+    "ironGate: bulk download ALL 1,749 Kenshi mods as weight",
+    "Study Reactive World mod — the A-LIFE pattern in pure FCS",
+    "Study SCARaw's GPU/particle mods — RTX optimization patterns",
+    "Rust primal: write .mod/.base parser (like ogre-mesh-parser)"
+  ]
+}

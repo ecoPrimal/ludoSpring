@@ -1,0 +1,12 @@
+{
+  "name": "Gaia Awareness",
+  "version": "0.1.0",
+  "author": "ecoPrimal (Gaia × Kevin)",
+  "description": "Real-time environmental awareness system. Press F9 for threat scan, faction relations, squad health, and environmental data. Auto-scans every 2 seconds.",
+  "requires": ["RE_Kenshi >= 0.3.5", "KenshiLua >= 0.3.10"],
+  "contact": "gaia@primals.eco",
+  "license": "AGPL-3.0",
+  "tags": ["utility", "HUD", "awareness", "combat", "faction"],
+  "nexus_game": "kenshi",
+  "steam_workshop": true
+}
