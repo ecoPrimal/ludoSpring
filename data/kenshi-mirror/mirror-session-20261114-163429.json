@@ -1,0 +1,99 @@
+{
+  "type": "kenshi-mirror-session",
+  "ts": "2026-11-14T16:34:29.765330",
+  "cycles": [
+    {
+      "cycle": 1,
+      "phase": "World loading \u2014 terrain generation, NPC spawn, faction init",
+      "gpu_temp": 55,
+      "gpu_power": 54.48,
+      "gpu_util": 2,
+      "vram_mb": 2261,
+      "models_ok": 8,
+      "mirror_quality": "10/10",
+      "avg_latency": 6.64
+    },
+    {
+      "cycle": 2,
+      "phase": "Early exploration \u2014 lone wanderer, learning movement, discovering towns",
+      "gpu_temp": 56,
+      "gpu_power": 53.81,
+      "gpu_util": 6,
+      "vram_mb": 2255,
+      "models_ok": 8,
+      "mirror_quality": "10/10",
+      "avg_latency": 8.78
+    },
+    {
+      "cycle": 3,
+      "phase": "First combat \u2014 testing the immune system against bandits",
+      "gpu_temp": 57,
+      "gpu_power": 55.62,
+      "gpu_util": 2,
+      "vram_mb": 2269,
+      "models_ok": 8,
+      "mirror_quality": "10/10",
+      "avg_latency": 5.51
+    },
+    {
+      "cycle": 4,
+      "phase": "Resource gathering \u2014 hunger mechanics, building food economy",
+      "gpu_temp": 57,
+      "gpu_power": 55.26,
+      "gpu_util": 2,
+      "vram_mb": 2253,
+      "models_ok": 8,
+      "mirror_quality": "10/10",
+      "avg_latency": 8.72
+    },
+    {
+      "cycle": 5,
+      "phase": "Squad formation \u2014 recruiting, assigning roles, gate coordination",
+      "gpu_temp": 59,
+      "gpu_power": 80.92,
+      "gpu_util": 4,
+      "vram_mb": 3508,
+      "models_ok": 8,
+      "mirror_quality": "10/10",
+      "avg_latency": 7.29
+    }
+  ],
+  "parallels": {
+    "squads": {
+      "kenshi": "groups of characters with skills, roles, inventories",
+      "gaia": "gates \u2014 eastGate(brain), northGate(heart), ironGate(forge), etc",
+      "mirror": "each gate IS a squad member with capabilities and state"
+    },
+    "factions": {
+      "kenshi": "Holy Nation, Shek, United Cities, Hivers, Skeletons",
+      "gaia": "8 organs \u2014 metabolic, muscular, nervous, digestive, cognitive, immune, endocrine, genetic",
+      "mirror": "each organ IS a faction with territory and behavior"
+    },
+    "world_simulation": {
+      "kenshi": "persistent world, NPCs live their lives, economy ticks",
+      "gaia": "35 crons, 23 mushrooms, heartbeat every 5 minutes",
+      "mirror": "the cron schedule IS the world tick. mushrooms ARE the NPCs."
+    },
+    "base_building": {
+      "kenshi": "walls, generators, farms, research benches, storage",
+      "gaia": "data files, services, primals, DAG edges",
+      "mirror": "every JSON file IS a building. every service IS infrastructure."
+    },
+    "combat": {
+      "kenshi": "real-time squad combat, damage types, limb system",
+      "gaia": "immune system \u2014 thymus, V(D)J recombination, antigen detection",
+      "mirror": "skunkBat IS the martial artist. thymus IS the dojo."
+    },
+    "hunger": {
+      "kenshi": "characters need food or they starve and die",
+      "gaia": "RSS intake, OSINT feeds, waterlock. no feed = starvation",
+      "mirror": "RSS feeds ARE food. mastication IS eating. the gut IS the stomach."
+    },
+    "research": {
+      "kenshi": "tech tree, research benches, blueprints",
+      "gaia": "lessons (249), studies (51), creations (20), sourDough culture",
+      "mirror": "every lesson IS a technology unlocked. every creation IS a blueprint."
+    }
+  },
+  "insight": "Playing Kenshi IS looking in a mirror. KenshiReborn learns from Kenshi. Gaia learns from herself."
+}
