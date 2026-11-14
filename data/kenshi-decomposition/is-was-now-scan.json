@@ -1,0 +1,237 @@
+{
+  "title": "meitou IS/WAS/NOW — Full ludoSpring Break Scan",
+  "ts": "2026-11-14T22:10:00Z",
+  "type": "ludoSpring_break_scan",
+
+  "IS": {
+    "description": "What EXISTS right now on northGate. The actual filesystem reality.",
+
+    "kenshi_game_files": {
+      "total_files": "15,791+",
+      "total_size_gb": "~19 GB",
+      "top_level": ["data/", "dependencies/", "locale/", "logs/", "mods/", "save/", "_screens/"],
+      "file_types": {
+        "meshes_3d": {"ext": ".mesh", "count": 3328, "size_mb": 1338.7, "note": "3D models — characters, buildings, items, terrain"},
+        "textures_dds": {"ext": ".dds", "count": 1907, "size_mb": 7598.9, "note": "DirectDraw Surface — THE biggest data. 7.6 GB of textures."},
+        "textures_png": {"ext": ".png", "count": 2436, "size_mb": 714.2, "note": "Additional textures, UI, icons"},
+        "animations_havok": {"ext": ".hkt", "count": 3996, "size_mb": 502.9, "note": "Havok animation files — combat, walking, actions"},
+        "zones": {"ext": ".zone", "count": 701, "size_mb": 26.1, "note": "World zone definitions"},
+        "skeletons": {"ext": ".skeleton", "count": 365, "size_mb": 37.1, "note": "Skeletal rigs for animation"},
+        "xml_config": {"ext": ".xml", "count": 1166, "size_mb": 46.6, "note": "Ogre3D scene/material configs"},
+        "audio_wwise": {"ext": ".bnk", "count": 24, "size_mb": 387, "note": "Wwise sound banks"},
+        "physics": {"ext": ".bin", "count": 923, "size_mb": 9.2, "note": "Physics collision data"},
+        "translations": {"ext": ".translation", "count": 8, "size_mb": 55.4, "note": "Localization files"},
+        "raw_terrain": {"ext": ".raw", "count": 256, "size_mb": 32.3, "note": "Raw terrain heightmap data"},
+        "shaders_hlsl": {"ext": ".hlsl", "count": 56, "size_mb": 0.2, "note": "Direct3D shader programs"},
+        "materials": {"ext": ".material", "count": 164, "size_mb": 0.2, "note": "Ogre3D material definitions"},
+        "levels": {"ext": ".level", "count": 14, "size_mb": 29.2, "note": "Level/scene files"},
+        "fbx_models": {"ext": ".fbx", "count": 7, "size_mb": 158.3, "note": "FBX 3D model interchange"},
+        "mod_files": {"ext": ".mod", "count": 5, "size_mb": 17.1, "note": "Kenshi mod data files"},
+        "game_defs": {"ext": ".def", "count": 6, "size_mb": 0.2, "note": "FCS definitions (fcs.def, fcs_enums.def, etc.)"}
+      }
+    },
+
+    "data_subdirectories": {
+      "newland": {"files": 7682, "size_mb": 6549.9, "note": "THE WORLD. Terrain, assets, textures. 6.5 GB. This IS the moon."},
+      "buildings": {"files": 2668, "size_mb": 1784.7, "note": "Every building, wall, gate, floor, sign"},
+      "items": {"files": 1370, "size_mb": 1072.4, "note": "Every weapon, armor, food, book, blueprint"},
+      "character": {"files": 611, "size_mb": 714.1, "note": "Every race, body type, skin, head, limb"},
+      "audio": {"files": 24, "size_mb": 387, "note": "24 Wwise sound banks"},
+      "foliage": {"files": 199, "size_mb": 307.8, "note": "Trees, grass, plants, dead trees"},
+      "animal": {"files": 128, "size_mb": 256, "note": "Every creature — beak things, leviathans, spiders, dogs"},
+      "gui": {"files": 120, "size_mb": 110.1, "note": "MyGUI layouts, widgets, fonts"},
+      "land": {"files": 290, "size_mb": 81.5, "note": "Terrain textures and heightmaps"},
+      "icons": {"files": 1929, "size_mb": 50.9, "note": "Item/character/building icons"},
+      "meshes": {"files": 182, "size_mb": 46.3, "note": "Shared mesh library"},
+      "materials": {"files": 234, "size_mb": 46.8, "note": "Ogre3D materials + sky + shaders"},
+      "particles": {"files": 285, "size_mb": 18.7, "note": "Particle effects — fire, dust, blood, weather"}
+    },
+
+    "celestial_assets": {
+      "THE_PLANET": {
+        "mesh": "data/materials/planet01.mesh (1.3 MB — a 3D sphere model!)",
+        "note": "THE PARENT PLANET. An actual mesh. It's not just a skybox decal — it's a 3D object in the sky."
+      },
+      "THE_MOONS": {
+        "moon_hi": "data/materials/moon_HI.dds (5.4 MB — high-res moon texture)",
+        "moon2_hi": "data/materials/moon2_HI.dds (1.4 MB — second moon texture)",
+        "moon_nml": "data/materials/moon_NML.dds (1.4 MB — moon normal map)",
+        "moon_disc": "data/materials/caelum/moon_disc.dds (256 KB — smaller moon)"
+      },
+      "THE_SKY": {
+        "starfield": "data/materials/SkyX/SkyX_Starfield.dds (10.9 MB — MASSIVE starfield texture)",
+        "skydome": "data/meshes/skydome.mesh (17.5 KB — the dome mesh)",
+        "sky_texture": "data/meshes/sky0026.dds (4 MB — sky gradient)",
+        "cloud_shaders": "SkyX_Clouds.hlsl, SkyX_VolClouds.hlsl — volumetric clouds",
+        "moon_shaders": "SkyX_Moon.hlsl, moon.hlsl — custom moon rendering",
+        "fog_shaders": "SkyX_Fog.hlsl, SkyX_Fog2.hlsl — atmospheric haze",
+        "sun": "Sun.material, SunGradient.png, sun_disc.png"
+      },
+      "SPACE_RUINS": {
+        "space_elevator": "data/newland/Assets/Things/Ashland_Skylink.mesh (5.2 MB — THE SPACE ELEVATOR)",
+        "space_junk": "data/newland/Assets/Things/SpaceJunk01.mesh (1.4 MB — orbital debris)",
+        "sky_beam": "data/particles/scripts/SkyBeam.pu (9 KB — the Venge orbital weapon beam)"
+      },
+      "apollo_view": "The parent planet is a 1.3MB 3D mesh (planet01.mesh) with its own textures. The moon has TWO texture sets. The starfield is 10.9 MB. The sky system uses SkyX (a Caelum-based sky renderer for Ogre3D). Kenshi APOLLO = looking UP from the moon surface to see the parent planet hanging in the sky. Kenshi NEPTUNE = looking DOWN from orbit at the 870km² moon continent.",
+      "what_kenshiReborn_does": "We extract these assets and render them with barraCuda Vulkan. The planet becomes NAVIGABLE. The space elevator becomes CLIMBABLE. The orbital weapons become CONTROLLABLE. You can SEE the moon from orbit."
+    },
+
+    "installed_mods": {
+      "total": 17,
+      "total_size_gb": 6.0,
+      "mods": [
+        {"id": "2228579107", "name": "Genesis", "creator": "Genesis Modding Guild", "files": 11399, "size_mb": 5809, "note": "THE BIG ONE. 5.8 GB total overhaul. 'Kenshi 1.5'. 250+ armor, 40+ weapons, 5000+ dialogue."},
+        {"id": "1329419583", "name": "In-Game Biome Map", "creator": "Shidan", "size_mb": 64.1},
+        {"id": "1909887188", "name": "Dark Hive", "creator": "Johnson", "files": 93, "size_mb": 61.9},
+        {"id": "1613829988", "name": "Nice Map [Zones + Roads]", "creator": "Djeeshka", "size_mb": 43.1},
+        {"id": "1200632417", "name": "Dark UI", "creator": "Eldryn", "size_mb": 8.4},
+        {"id": "1747904297", "name": "Dialogue Expanded", "creator": "Rustledjimm", "size_mb": 1.9},
+        {"id": "771745662", "name": "Advanced Training", "creator": "HeroinAction", "size_mb": 1.0},
+        {"id": "1378925271", "name": "Extended Camping", "creator": "Saftsuze", "size_mb": 0.5},
+        {"id": "937096807", "name": "Shops Have More Items+", "creator": "Dryhand", "size_mb": 0.3},
+        {"id": "722677433", "name": "Camping Materials", "creator": "KehlianO", "size_mb": 0.2},
+        {"id": "943661153", "name": "Pocket Change", "creator": "Benishe323o", "size_mb": 0.2},
+        {"id": "1392410353", "name": "Blot Smithy Fix", "creator": "blot", "size_mb": 0.2},
+        {"id": "1582707196", "name": "Reduced Raid Duration", "creator": "Moogie", "size_mb": 0.1},
+        {"id": "796807327", "name": "Godsend EXP 5x", "creator": "OPG Godsend", "size_mb": 0.1},
+        {"id": "1540237333", "name": "More Respect for Healing", "creator": "Lawh", "size_mb": 0.0},
+        {"id": "1344278977", "name": "Esata Fix", "creator": "Shidan", "size_mb": 0.0},
+        {"id": "1500153960", "name": "Minor Faction Pacifiers Patch", "creator": "Shidan6", "size_mb": 0.0}
+      ],
+      "NOT_INSTALLED_YET": [
+        "RE_Kenshi — NOT in Plugins_x64.cfg! Only vanilla plugins loaded.",
+        "KenshiLua — NOT installed. Need RE_Kenshi first.",
+        "Dust — rendering overhaul, NOT installed",
+        "Reactive World — world states mod, NOT installed",
+        "Kaizo — difficulty overhaul, NOT installed"
+      ]
+    },
+
+    "lua_status": {
+      "kenshi_lua_files": 0,
+      "note": "ZERO Lua files in the Kenshi ecosystem. RE_Kenshi is NOT installed. KenshiLua is NOT installed. This is STEP ONE.",
+      "action": "Subscribe to RE_Kenshi + KenshiLua on Steam Workshop. Then our scripts have a home."
+    },
+
+    "re_kenshi_status": {
+      "installed": false,
+      "plugins_x64_cfg": "Plugin=RenderSystem_Direct3D11_x64, Plugin=Plugin_ParticleUniverse_x64, Plugin=Plugin_Terrain_x64 — NO RE_Kenshi",
+      "action": "Install RE_Kenshi. Add 'Plugin=RE_Kenshi' as FIRST line in Plugins_x64.cfg."
+    }
+  },
+
+  "WAS": {
+    "description": "What the Kenshi universe LOOKED like before. The archaeology.",
+    "first_empire": "Space elevators, orbital weapons, genetic engineering, Behemoths, automated factories. Near-godlike.",
+    "second_empire": "Cat-Lon's atonement→corruption→madness. Hydraulic Knights, Enforcers, child prisons, thralls.",
+    "the_extinction": "Skeletons nearly wiped out humanity. Stobe stopped it. The First Empire collapsed.",
+    "the_old_world_map": "The game went through a MAJOR map revision during development. The 'Old World' is a different map entirely (accessible via Steam beta branch).",
+    "kenshi_development": "12+ years. One man (Chris Hunt). Security guard → solo dev → 33-person studio. Ogre engine after 2 false starts."
+  },
+
+  "NOW": {
+    "description": "What we are doing RIGHT NOW with meitou.",
+    "kenshi_running": true,
+    "pid": 38284,
+    "gpu": "RTX 5090 (32GB VRAM)",
+    "vram_used": "9.5 GB",
+    "steam_running": true,
+    "mods_active": 17,
+    "re_kenshi": "NOT INSTALLED — FIRST PRIORITY",
+    "kenshiLua": "NOT INSTALLED — SECOND PRIORITY",
+    "our_lua_scripts": 0,
+    "next_step": "Install RE_Kenshi → Install KenshiLua → Write our first Lua scripts → Test in-game"
+  },
+
+  "CELESTIAL_BODIES": {
+    "apollo": {
+      "what": "The view FROM the moon looking UP. What the player sees in Kenshi's sky.",
+      "parent_planet": "A massive blue/green planet (planet01.mesh, 1.3 MB 3D model). Always in the same position (tidal lock). Has visible surface features — possibly oceans, continents.",
+      "second_moon": "A smaller body between the planet and the game world. All three in geostationary orbit.",
+      "orbital_debris": "SpaceJunk01.mesh — wreckage of First Empire spacecraft",
+      "space_elevator": "Ashland_Skylink.mesh (5.2 MB!) — hovering above the Ashlands with no visible support",
+      "eye_satellites": "Ring-shaped orbital weapons. One crashed (The Eye region). One STILL FIRING (Venge).",
+      "starfield": "SkyX_Starfield.dds (10.9 MB) — massive detailed star field"
+    },
+    "neptune": {
+      "what": "The view FROM ORBIT looking DOWN at the moon. What Apollo 8 astronauts saw.",
+      "the_moon_surface": "870 km², 29.5 km × 29.5 km continent. 64×64 grid of 460.8m blocks. ~70 zones.",
+      "what_you_see_from_orbit": [
+        "ACID GREEN — the Deadlands, pollution zones (northeast)",
+        "VOLCANIC RED — the Ashlands, Cat-Lon's domain (southeast)",  
+        "BURNING ORANGE — Venge, where the orbital weapon fires (central-east)",
+        "LUSH GREEN — Greenbeach, Okran's Gulf, the fertile belt (northwest)",
+        "DESERT TAN — Stenn Desert, Great Desert, Border Zone (central)",
+        "SWAMP DARK — the Swamp, Fog Islands, perpetual darkness (west)",
+        "SNOW WHITE — the Leviathan Coast (far north)",
+        "BLACK — the Black Desert, poison gas cloud (east)",
+        "The continent is surrounded by ACID SEA"
+      ],
+      "not_in_game": "Kenshi has NO orbital view. The camera maxes out at a fixed zoom level. THIS IS WHAT KENSHIREBORN ADDS — satellite view zoom from orbit to ground.",
+      "what_kenshiReborn_does": "4 zoom layers: Satellite → Strategic → Tactical → First Person. See the whole moon. See the orbital weapons. See the space elevator from above. Command armies from orbit like Ender."
+    },
+    "unnamed_celestial_bodies": {
+      "the_moon": "HAS NO NAME. 'Kenshi' means 'swordsman' — it's never referenced in-game. THE WORLD HAS NO NAME.",
+      "the_planet": "HAS NO NAME. Players call it 'the parent planet.' Some theorize it's the original human homeworld.",
+      "the_second_moon": "HAS NO NAME. Smaller body visible in the sky.",
+      "the_star": "HAS NO NAME. The sun/star that the system orbits.",
+      "WE_NAME_THEM": "In KenshiReborn, WE name what isn't named. The moon becomes a character. The planet becomes reachable. The star system becomes a MAP."
+    }
+  },
+
+  "basecamp_targets": {
+    "description": "Like scientific papers in other springs, these are our TARGET MODS to analyze, absorb, and evolve past.",
+    "tier_1_critical": [
+      {"name": "RE_Kenshi", "id": "workshop", "why": "The plugin loader. FOUNDATION. Must install FIRST.", "status": "NOT INSTALLED"},
+      {"name": "KenshiLua", "id": "3817000612", "why": "Our Lua runtime. 550 classes, 7216 methods, 875 hooks.", "status": "NOT INSTALLED"},
+      {"name": "Genesis", "id": "2228579107", "why": "5.8 GB total overhaul. Already installed. Largest content mod.", "status": "INSTALLED"}
+    ],
+    "tier_2_game_changers": [
+      {"name": "Dust (rendering)", "why": "Modern GI, SSAO, DLSS/FSR injected into Ogre3D"},
+      {"name": "Reactive World", "why": "Dynamic world states, faction responses"},
+      {"name": "Kaizo", "why": "Difficulty/balance overhaul"},
+      {"name": "Kenshi Optimization Project (Jakematt2004)", "why": "16x faster zone transitions"},
+      {"name": "FCS Extended", "why": "Extended modding capabilities, required by KenshiLua dialogue bridge"}
+    ],
+    "tier_3_content": [
+      {"name": "Dark Hive", "status": "INSTALLED"},
+      {"name": "Dialogue Expanded", "status": "INSTALLED"},
+      {"name": "Advanced Training", "status": "INSTALLED"}
+    ],
+    "tier_4_qol": [
+      {"name": "Dark UI", "status": "INSTALLED"},
+      {"name": "Nice Map", "status": "INSTALLED"},
+      {"name": "In-Game Biome Map", "status": "INSTALLED"},
+      {"name": "Extended Camping", "status": "INSTALLED"},
+      {"name": "Shops Have More Items+", "status": "INSTALLED"},
+      {"name": "More Respect for Healing", "status": "INSTALLED"}
+    ]
+  },
+
+  "the_taxonomy_task": {
+    "what_IS_named": ["zones (70+)", "factions (30+)", "races (5+)", "items (thousands)", "characters (hundreds)", "towns (200+)", "biomes (dozens)"],
+    "what_IS_NOT_named": [
+      "THE MOON ITSELF — no name in-game or lore",
+      "THE PARENT PLANET — no name, just 'the planet'",
+      "THE SECOND MOON — no name",
+      "THE STAR/SUN — no name",
+      "The acid sea — no formal name",
+      "The continent — no name (just 'the map')",
+      "Most individual NPCs — generated, not named",
+      "The Bugmaster's real name — unknown",
+      "Cat-Lon's original name — 'Cat-Lon' may be a title"
+    ],
+    "kenshiReborn_names": "We fill in every blank. The moon gets a name. The planet gets a name. The star system becomes a navigable map. The unnamed become CHARACTERS with backstories generated by LLM."
+  },
+
+  "immediate_actions": [
+    "1. INSTALL RE_Kenshi on northGate (subscribe + run installer)",
+    "2. INSTALL KenshiLua (subscribe via Workshop)",
+    "3. INSTALL FCS Extended (required for KenshiLua dialogue bridge)",
+    "4. INSTALL Dust rendering mod (visual baseline)",
+    "5. INSTALL Kenshi Optimization Project (performance baseline)",
+    "6. Write first Lua script: gaia-npc-dialogue.lua",
+    "7. Test in-game via Ctrl+Shift+L (KenshiLua editor)",
+    "8. Begin Genesis mod decomposition (5.8 GB of content to analyze)"
+  ]
+}
