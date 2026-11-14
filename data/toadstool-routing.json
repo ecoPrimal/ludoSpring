@@ -1,0 +1,61 @@
+{
+  "ts": "",
+  "gpus": [
+    {
+      "index": 0,
+      "name": "NVIDIA GeForce RTX 5090",
+      "driver": "610.88",
+      "pci_bus": "00000000:01:00.0",
+      "vram_mb": 32607,
+      "compute_cap": "12.0",
+      "type": "discrete",
+      "vendor": "NVIDIA",
+      "dx12_capable": true
+    },
+    {
+      "index": 1,
+      "name": "AMD Radeon(TM) Graphics",
+      "status": "OK",
+      "vram_mb": 2048,
+      "pnp_id": "PCI\\VEN_1002&DEV_13C0&SUBSYS_88771043&REV_C9\\4&1EBE6A9C&0&0041",
+      "type": "integrated",
+      "vendor": "AMD",
+      "dx12_capable": true
+    }
+  ],
+  "ue5_scan": {
+    "S.T.A.L.K.E.R. 2": []
+  },
+  "routing": {
+    "gaming": {
+      "workload": "gaming",
+      "routed_to": "NVIDIA GeForce RTX 5090",
+      "index": 0
+    },
+    "rendering": {
+      "workload": "rendering",
+      "routed_to": "NVIDIA GeForce RTX 5090",
+      "index": 0
+    },
+    "inference": {
+      "workload": "inference",
+      "routed_to": "NVIDIA GeForce RTX 5090",
+      "index": 0
+    },
+    "recording": {
+      "workload": "recording",
+      "routed_to": "AMD Radeon(TM) Graphics",
+      "index": 1
+    },
+    "streaming_encode": {
+      "workload": "streaming_encode",
+      "routed_to": "AMD Radeon(TM) Graphics",
+      "index": 1
+    },
+    "shader_compile": {
+      "workload": "shader_compile",
+      "routed_to": "NVIDIA GeForce RTX 5090",
+      "index": 0
+    }
+  }
+}
