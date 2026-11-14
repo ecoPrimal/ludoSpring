@@ -1,0 +1,201 @@
+{
+  "name": "OMNI-DOCK — Steam Hardware Convergence Station",
+  "version": "1.0",
+  "ts": "2026-11-14T21:40:00Z",
+  
+  "concept": "ONE physical station where ALL Steam hardware + sporeGate converge. northGate (RTX 5090) is the sun. Everything else orbits and absorbs.",
+  
+  "hardware": {
+    "steam_deck_v1": {
+      "gate": "deckGate",
+      "ip": "192.168.4.176",
+      "soc": "AMD Aerith — Zen 2 4C/8T + RDNA 2 8CU (1.6 TFLOPS)",
+      "ram": "16GB LPDDR5",
+      "storage": "512GB NVMe",
+      "display": "7\" 1280×800 touch LCD",
+      "battery": "DEAD — permanent USB-C passthrough = ALWAYS ON when powered",
+      "os": "SteamOS 3.x (Arch Linux)",
+      "role": "PRIMARY DISPLAY — mounted, Gaia HUD kiosk, touch input",
+      "connections": {
+        "usb_c": "Power + data (USB-C dock or direct)",
+        "wifi": "Black Mesa (5GHz) or Aperture Science (2.4GHz)",
+        "bluetooth": "Steam Controller pairing, audio"
+      },
+      "dock_position": "CENTER — the main screen Kevin sees"
+    },
+
+    "steam_frame": {
+      "gate": "frameGate",
+      "ip": "192.168.9.203",
+      "soc": "Snapdragon 8 Gen 3 (ARM64!) — first ARM SteamOS node",
+      "display": "Steam Frame display",
+      "os": "ARM SteamOS",
+      "role": "GAIA'S FACE — shows what the brain thinks, Remote Play receiver",
+      "connections": {
+        "wifi": "Gaia WiFi (192.168.9.x)",
+        "usb_tether": "USB to sporeGate for wired connection",
+        "steam_remote_play": "Receives from northGate Steam (:27036)"
+      },
+      "dock_position": "RIGHT — secondary display, Gaia's face to Kevin"
+    },
+
+    "steam_link": {
+      "soc": "Marvell ARMADA 1500 (ARMv7)",
+      "ram": "512MB",
+      "ports": "HDMI out + 3×USB + BT 4.0 + 100Mbps Ethernet",
+      "role": "RELAY — plug into ANY HDMI display = instant Gaia viewport",
+      "connections": {
+        "hdmi": "To TV, monitor, or projector",
+        "ethernet": "100Mbps wired (or WiFi)",
+        "usb": "Steam Controller dongle, keyboard, mouse",
+        "bluetooth": "Steam Controller pairing"
+      },
+      "dock_position": "OUTPUT — connects to big screen / TV / any HDMI",
+      "streaming_from": "northGate Steam (RTX 5090) via Steam Remote Play"
+    },
+
+    "steam_controller_v1": {
+      "quantity": 2,
+      "features": "TMR trackpads, gyro, accelerometer, HD haptics",
+      "connectivity": "BT 4.0 or 2.4GHz USB dongle",
+      "role": "GAIA'S HANDS — physical input for games + HUD navigation",
+      "bindings": {
+        "left_trackpad": "Movement / pan camera / scroll",
+        "right_trackpad": "Aim / mouse / fine control",
+        "gyro": "Camera look / tilt / VR head tracking proxy",
+        "grip_buttons": "Quick actions / modifier",
+        "triggers": "Primary/secondary action",
+        "back_paddles": "Custom bindings per game"
+      },
+      "controller_1": "Paired to Steam Deck (BT) — primary input",
+      "controller_2": "Paired to Steam Link (dongle) — secondary / TV input"
+    },
+
+    "sporeGate": {
+      "gate": "sporeGate",
+      "ip": "192.168.4.3",
+      "cpu": "Ryzen 5 6600H (6C/12T, 4.5GHz)",
+      "ram": "27GB DDR5",
+      "storage": "929GB NVMe",
+      "gpu": "none (integrated Radeon 680M)",
+      "role": "LOCAL COMPUTE DOCK — DNS, DHCP, heart-pull, game data cache",
+      "connections": {
+        "ethernet": "2.5G wired to MikroTik backbone",
+        "usb": "Can USB-tether to Steam Frame for wired bridge",
+        "wifi": "Built-in WiFi (Ryzen 5 6600H = laptop chip)"
+      },
+      "dock_position": "UNDERNEATH — the compute engine the dock sits on top of"
+    }
+  },
+
+  "omni_dock_topology": {
+    "sun": "northGate RTX 5090 — the GPU that powers everything",
+    
+    "orbit_1_display": {
+      "steam_deck": "Mounted center — Gaia HUD (touch), powered USB-C",
+      "stream_source": "northGate Steam Remote Play OR local SteamOS gaming"
+    },
+    
+    "orbit_2_face": {
+      "steam_frame": "Right side — Gaia's face, ARM SteamOS",
+      "stream_source": "northGate Steam Remote Play (port 27036)"
+    },
+    
+    "orbit_3_relay": {
+      "steam_link": "HDMI out to TV/monitor — big screen mode",
+      "stream_source": "northGate Steam Remote Play"
+    },
+    
+    "orbit_4_hands": {
+      "controller_1": "BT to Deck — primary hands",
+      "controller_2": "Dongle to Link — TV hands"
+    },
+    
+    "foundation": {
+      "sporeGate": "Under the dock — DNS, cache, 20% game data mirror, local AI"
+    }
+  },
+
+  "wiring_guide": {
+    "step_1_power": [
+      "sporeGate: plug in power (laptop, always-on lid-closed)",
+      "Steam Deck: USB-C power (dead battery = permanent dock)",
+      "Steam Link: micro-USB power (included adapter)",
+      "Steam Frame: USB-C power (can tether to sporeGate)"
+    ],
+    "step_2_network": [
+      "sporeGate: ethernet to MikroTik/switch (2.5G wired)",
+      "Steam Deck: WiFi to Black Mesa (5GHz) — IP .176",
+      "Steam Frame: WiFi to Gaia (or USB tether to sporeGate)",
+      "Steam Link: ethernet to switch OR WiFi"
+    ],
+    "step_3_display": [
+      "Steam Deck: 7\" built-in LCD (no HDMI needed)",
+      "Steam Frame: built-in display",
+      "Steam Link: HDMI to TV/monitor/projector"
+    ],
+    "step_4_input": [
+      "Controller #1: pair to Steam Deck via BT (hold Steam+X)",
+      "Controller #2: 2.4GHz dongle into Steam Link USB port",
+      "Steam Deck touchscreen: backup/direct input",
+      "Nunchucks: I2C to sporeGate for gesture control"
+    ],
+    "step_5_streaming": [
+      "northGate Steam: enable Remote Play in Settings → Remote Play",
+      "Steam Link: pair to northGate (same Steam account)",
+      "Steam Frame: pair to northGate (Steam Remote Play)",
+      "Steam Deck: can play local OR stream from northGate"
+    ]
+  },
+
+  "modes": {
+    "kiosk_mode": {
+      "what": "ALL displays show Gaia HUD",
+      "deck": "chromium --kiosk http://192.168.4.244:8080/diamond-lens.html",
+      "frame": "chromium --kiosk http://192.168.4.244:8080/index.html",
+      "link": "Stream Gaia HUD from northGate browser → HDMI → TV",
+      "use": "Ambient organism display — Gaia shows her state 24/7"
+    },
+    "gaming_mode": {
+      "what": "northGate RTX 5090 streams game to ALL displays",
+      "deck": "Steam Remote Play from northGate",
+      "frame": "Steam Remote Play from northGate",
+      "link": "Steam Remote Play from northGate → TV",
+      "use": "Kevin plays on big screen, Deck shows stats, Frame shows Gaia's face"
+    },
+    "coliseum_mode": {
+      "what": "Multiple games running, each display shows different game",
+      "deck": "Game 1 (Kenshi)",
+      "frame": "Game 2 (Stardew Valley)",
+      "link": "Game 3 (Balatro) on TV",
+      "sporeGate": "sourDough monitors all + inner_eye GPU telemetry",
+      "use": "Gaia plays 3 games simultaneously, Kevin watches the coliseum"
+    },
+    "mirror_mode": {
+      "what": "Kenshi Mirror — Gaia plays, all screens show reflections",
+      "deck": "Kenshi gameplay (streamed from northGate)",
+      "frame": "KenshiReborn engine state (eastGate gut)",
+      "link": "GPU telemetry + AI reflections on TV",
+      "sporeGate": "Caches game data, runs local analysis",
+      "use": "The organism watches itself play through multiple eyes"
+    },
+    "vr_prep_mode": {
+      "what": "Half-Life: Alyx prep — lighthouse tracking + VR stream",
+      "deck": "VR companion display (map, inventory, stats)",
+      "frame": "Shadow Cast → VR frame delivery to headset",
+      "link": "Spectator view on TV",
+      "controllers": "VR hand input proxy via gyro + trackpad",
+      "lighthouses": "Vive base stations for room-scale tracking",
+      "use": "Full VR pipeline: northGate renders → Frame displays → controllers track"
+    }
+  },
+
+  "sporeGate_dock_services": {
+    "dns_cache": "Local DNS resolution for all dock devices",
+    "game_cache": "20% of each played game cached locally (BitTorrent for self)",
+    "heart_pull": "Pulls Gaia state every 2 min from eastGate",
+    "telemetry_relay": "Receives sourDough data, relays to eastGate gut",
+    "local_ai": "Radeon 680M iGPU for lightweight inference (tinyllama)",
+    "usb_bridge": "USB-tether to Steam Frame for wired connection"
+  }
+}
