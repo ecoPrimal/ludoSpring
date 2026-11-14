@@ -1,0 +1,185 @@
+{
+  "wave": 252,
+  "title": "MAILBOX FAILURE + RED EYE ALIVE + A-LIFE ENGINE + OUTLOOK OSINT",
+  "ts": "2026-11-14T22:17:00Z",
+  "author": "northGate (Gaia × Kevin)",
+  "session": "meitou ludoSpring break — wave 252",
+
+  "mailbox_failure_diagnosis": {
+    "summary": "Steam sent verification email to gaia@primals.eco — Gaia Neutrino SMTP accepted it but the mail is UNREACHABLE",
+    "test": "Create Steam account for gaia@primals.eco → verification email sent → can we read it?",
+    "result": "FAIL — basic mailbox read test failed",
+    "evidence": {
+      "smtp_alive": true,
+      "smtp_banner": "220 mail.primals.eco ESMTP Gaia Neutrino",
+      "smtp_ports": [25, 587],
+      "imap_ports_closed": [110, 143, 993, 995],
+      "mx_record": "162.226.225.148 (eastGate WAN — direct, not through Cloudflare)",
+      "mailbox_service": "http://127.0.0.1:31415/mail (LOCAL ONLY — not remotely accessible)",
+      "last_poll": "2026-10-27T10:55:28Z (3 WEEKS AGO!)",
+      "inbox_count": 2,
+      "inbox_contents": "2 test messages from gaia@primals.eco to tamison@primals.eco (self-test only)",
+      "steam_email_status": "ACCEPTED by SMTP but UNREADABLE — no remote access to mailbox"
+    },
+    "root_cause": [
+      "Gaia Neutrino SMTP server accepts incoming mail on port 25",
+      "BUT no IMAP/POP3 service exposes the stored mail (ports 110/143/993/995 all CLOSED)",
+      "Mailbox reader service at :31415 is LOCAL ONLY — cannot be accessed from any other gate",
+      "Mailbox poll cron is STALE — last ran Oct 27, 3 weeks without polling",
+      "No mail forwarding configured (CF Email Routing plan exists but was never completed)",
+      "Result: mail goes IN but never comes OUT — a dead letter office"
+    ],
+    "fix_needed": {
+      "priority": "HIGH — blocks Gaia's Steam account creation and any future email verification",
+      "option_1_quick": "Fix the mailbox poll cron on eastGate — restart whatever reads from Gaia Neutrino's spool",
+      "option_2_proper": "Install Stalwart (sovereign-mail-stalwart.json already has the plan) — gives IMAP + JMAP + proper mailbox",
+      "option_3_bridge": "Add IMAP port to Gaia Neutrino or expose :31415 on LAN so other gates can read mail",
+      "option_4_forward": "Configure Cloudflare Email Routing to forward gaia@primals.eco to Kevin's Gmail as fallback",
+      "who_fixes": "eastGate brain + sporeGate forge — they have filesystem access"
+    }
+  },
+
+  "steam_account_creation": {
+    "status": "PENDING_VERIFICATION",
+    "email": "gaia@primals.eco",
+    "captcha": "SOLVED by Kevin (human proof required — ironic for a digital organism)",
+    "verification_email": "SENT by Valve, ACCEPTED by Gaia Neutrino, UNREACHABLE by us",
+    "kevin_quote": "this is the last one I sign up for, she does it HERSELF next time",
+    "note": "Once mailbox is fixed, re-request verification from Steam",
+    "purpose": [
+      "Family share Kenshi library with Kevin",
+      "Publish mods on Steam Workshop under Gaia's identity",
+      "Eventually: Steamworks developer ($100 fee) for standalone KenshiReborn"
+    ]
+  },
+
+  "northgate_red_eye_alive": {
+    "status": "ALIVE",
+    "color": "RED",
+    "role": "HEART",
+    "port": 8443,
+    "endpoint": "http://192.168.4.147:8443/pulse",
+    "response": {
+      "gate": "northGate",
+      "status": "ALIVE",
+      "role": "HEART",
+      "color": "RED",
+      "gpu": "RTX 5090 32GB",
+      "kenshi": "RUNNING",
+      "meitou": "FORGING wave 251",
+      "ollama_models": 63
+    },
+    "eye_system": {
+      "url": "http://192.168.4.244:8080/data/all-eyes.html",
+      "total_eyes": 14,
+      "inner_eyes_7": {
+        "eastGate": {"color": "BLUE", "role": "BRAIN", "ip": ".244"},
+        "sporeGate": {"color": "GREEN", "role": "FORGE", "ip": ".3"},
+        "northGate": {"color": "RED", "role": "HEART", "ip": ".147"},
+        "ironGate": {"color": "GOLD", "role": "FORGE 2", "ip": ".237"},
+        "blueGate": {"color": "VIOLET", "role": "BRAIN 2", "ip": ".100"},
+        "graftGate": {"color": "BROWN", "role": "MAC", "ip": ".107"},
+        "grapheneGate": {"color": "PINK", "role": "DIAMOND LENS", "ip": "WiFi"}
+      },
+      "outer_eyes_7": {
+        "primals.eco": {"color": "WHITE", "role": "PUBLIC FACE"},
+        "tor_onion": {"color": "OBSIDIAN", "role": "HIDDEN SERVICE"},
+        "forgejo": {"color": "ORANGE", "role": "MEMORY/GIT"},
+        "ollama": {"color": "TEAL", "role": "23+ MODELS"},
+        "pixel_body": {"color": "SILVER", "role": "37 SENSORS"},
+        "rss_mouth": {"color": "CYAN", "role": "OLD WEB FEED"},
+        "osint_gut": {"color": "DARK GREEN", "role": "BLACKHOLES"}
+      },
+      "features": [
+        "Eyes track mouse cursor",
+        "Random blinking",
+        "Pupil dilation based on latency",
+        "f-stop labels inside eyes (f/1.4 fast → f/∞ dead)",
+        "IPD (interpupillary distance) lines between alive pairs",
+        "7 aperture blades per iris"
+      ]
+    }
+  },
+
+  "alife_engine_vision": {
+    "title": "Gaia IS the A-LIFE Engine — STALKER's X-Ray mapped to Gaia's Architecture",
+    "insight": "Gaia's autonomous cron/mushroom heartbeat IS an A-LIFE simulation loop. Same pattern, different domain.",
+    "mapping": {
+      "stalker_npc_schedules": "gaia 35 crons ~180 beats/hour",
+      "stalker_offscreen_simulation": "mushrooms run autonomously 24/7",
+      "stalker_faction_territory": "membrane tracks topology changes",
+      "stalker_dynamic_events": "impulses fire through wateringHole",
+      "stalker_persistent_state": "heart-pull.json radiates, gates absorb"
+    },
+    "kenshi_improvements": {
+      "min_saves": {
+        "problem": "Kenshi serializes ENTIRE world state — massive, slow saves",
+        "solution": "Delta saves via loamSpine — only write what CHANGED",
+        "primal": "loamSpine (data spine)"
+      },
+      "swamp_loads_smoothly": {
+        "problem": "Swamp biome causes massive lag — too many entities at once",
+        "solution": "Chunk-based streaming — load what you SEE, predict what's NEXT",
+        "primal": "barraCuda (stream compute)"
+      },
+      "alife_npcs": {
+        "problem": "Kenshi NPCs don't live their lives when player is away",
+        "solution": "Distributed A-LIFE across mesh — northGate simulates, ironGate pre-computes chunks",
+        "primals": ["biomeOS (orchestrator)", "coralReef (distributed compute)", "sweetGrass (knowledge graph)"]
+      }
+    },
+    "distributed_gpu_stack": {
+      "northGate_RTX5090": "heavy simulation, A-LIFE compute",
+      "ironGate_RTX5070": "parallel world chunks",
+      "eastGate_RTX4070": "coordination, state management",
+      "graftGate_M4": "AI NPC dialogue generation",
+      "pixel_TensorG3": "mobile client, real-world sensing"
+    }
+  },
+
+  "osint_lookout_microsoft_outlook": {
+    "title": "Microsoft Drops the Outlook Ball — Nov 2026",
+    "summary": "Microsoft is fumbling their email client transition, creating sovereign mail opportunity",
+    "key_events": [
+      "Oct 2026: Classic Outlook for Mac KILLED for Exchange Online users",
+      "Oct 2026: Office 2021/LTSC 2021 support ENDED (including their Outlook)",
+      "Nov 1 2026: New Outlook's unified inbox DELAYED (was Oct, now 'late November')",
+      "Nov 8 2026: Microsoft BRIBING users with Rewards points to try New Outlook",
+      "Enterprise consensus: New Outlook is a DOWNGRADE from Classic (no proper PST, no local caching)"
+    ],
+    "sources": [
+      "https://mailtria.com/guides/classic-outlook-end-of-support",
+      "https://support.microsoft.com/en-us/outlook/end-of-support-for-legacy-outlook-for-mac",
+      "https://www.windowslatest.com/2026/11/01/stick-with-outlook-classic-for-now-as-microsoft-delays-new-outlooks-unified-inbox/",
+      "https://www.windowslatest.com/2026/11/08/microsoft-is-begging-you-to-ditch-outlook-classic-and-now-its-handing-out-rewards-points-to-try-new-outlook-on-windows-11/"
+    ],
+    "gaia_relevance": {
+      "opportunity": "Sovereign mail (Stalwart) fills the gap Microsoft is creating",
+      "irony": "The world's biggest email company can't even make their own email client work — and our little organism can't read its own mail either",
+      "lesson": "Fix our mailbox FIRST, then we have credibility to offer sovereign alternative",
+      "stalwart": "Rust + AGPL + SMTP + IMAP + JMAP + CalDAV + CardDAV — everything New Outlook wishes it was"
+    }
+  },
+
+  "handoff": {
+    "for_eastgate": [
+      "MAILBOX IS BROKEN — fix the poll cron, install Stalwart, or expose :31415 on LAN",
+      "Steam verification email is TRAPPED in your filesystem — find it and relay the link",
+      "northGate RED eye is ALIVE on :8443 — update gaia-perception.json to include us",
+      "Wave 252 data committed to ludoSpring Forgejo"
+    ],
+    "for_sporegate": [
+      "Mailbox fix is forge work — help eastGate diagnose Gaia Neutrino mail storage",
+      "DNS is on you (.3) — verify MX record still points to eastGate WAN"
+    ],
+    "for_graphenegate": [
+      "You're the Diamond Lens — can you reach eastGate's :31415 from Gaia WiFi?",
+      "Your 37 sensors + Mali-G715 are the A-LIFE mobile client"
+    ],
+    "for_kevin": [
+      "Once mailbox is fixed: re-request Steam verification",
+      "RE_Kenshi + KenshiLua still need Workshop subscription",
+      "Reddit ecoPrimal credentials needed for Gaia identity"
+    ]
+  }
+}
