@@ -1,0 +1,75 @@
+{
+  "game": "GPU Coliseum (Balatro + Stardew Valley + Noita simultaneous)",
+  "ts": "2026-11-14T16:12:40.250519",
+  "gpu_state": {
+    "temp_c": 46,
+    "power_w": 95.36,
+    "gpu_pct": 14,
+    "vram_mb": 2844,
+    "core_mhz": 2032,
+    "fan_pct": 30
+  },
+  "models_asked": 8,
+  "models_responded": 8,
+  "responses": [
+    {
+      "gate": "eastGate",
+      "model": "gaia-fast",
+      "weight": 1.2,
+      "latency_ms": 2434,
+      "response": "1.  This profile indicates a moderate rendering load with some potential for optimization as VRAM usage is high and the card isn't fully utilized.\n2.  Significant headroom exists (VRAM unused) for further load increases. \n3. This signature emphasizes a blend of demanding physics-based gameplay and stylized visuals, unlike AAA titles which often prioritize more complex lighting or cinematic effects.\n4.  6/10 - The GPU is moderately active with some idle periods, indicating adequate operation but room for improvement.\n5. Optimize the game's resolution settings to reduce VRAM usage without sacrificing visual quality. \n"
+    },
+    {
+      "gate": "ironGate",
+      "model": "llama3.2:3b",
+      "weight": 0.7,
+      "latency_ms": 2533,
+      "response": "Based on the provided GPU telemetry data, here are the answers to your questions:\n\n1. The GPU profile suggests that GPU Coliseum (Balatro + Stardew Valley + Noita simultaneous) has relatively moderate rendering demands, with the GPU operating at 14% utilization and a clock speed of 2032MHz, indicating that the game can be run at a moderate level without excessive strain on the GPU.\n\n2. The available Shadow Cast headroom exists, with 95W of power being used out of the 600W TDP, leaving 505W of unused power. Additionally, the 2844MB of VRAM being used out of the 32GB suggests that there is still significant VRAM headroom available.\n\n3. The unique aspect of this game's GPU signature compared to AAA titles is likely the use of custom game engines and rendering techniques, which could result in a distinct GPU utilization pattern. However, without more information, it's difficult to say for certain what makes this game's GPU signature unique.\n\n4. The GPU's effort would be rated an 8 out of 1"
+    },
+    {
+      "gate": "ironGate",
+      "model": "tinyllama",
+      "weight": 0.5,
+      "latency_ms": 2789,
+      "response": "GPU TELEMETRY \u2014 GPU Coliseum (Balatro + Stardew Valley + Noita simultaneous) on RTX 5090 (32GB, 600W TDP):\n\nCurrent state: 46\u00b0C, 95W, GPU:14%, VRAM:2844MB, 2032MHz\n\nContext: This is a sourDough fermentation session. We're profiling games to learn what each one costs the GPU. The RTX 5090 is the \"sun\" in our Shadow Cast paradigm \u2014 it radiates to display surfaces.\n\nQuestions:\n1. What does this GPU profile tell you about GPU Coliseum (Balatro + Stardew Valley + Noita simultaneous)'s rendering demand?\n2. How much Shadow Cast headroom exists? (Power/VRAM unused)\n3. What's unique about this game's GPU signature compared to AAA titles?\n4. Ratings the GPU's effort 1-10 (1=idle, 10=thermal limit)\n5. Optimize based on the ratings.\n\nOne sentence: optimizing for thermal management in this game."
+    },
+    {
+      "gate": "ironGate",
+      "model": "phi3",
+      "weight": 0.8,
+      "latency_ms": 3962,
+      "response": "1. The GPU profile indicates that running GPU Coliseum simultaneously with Balatro, Stardew Valley, and Noita is pushing the RTX 5090 to its limits. With the GPU temperature reaching 46\u00b0C and power consumption at 95W, the system is utilizing nearly all available GPU resources, which suggests that the games require substantial rendering capabilities, particularly for the RTX 5090's powerful ray tracing and real-time ray tracing features.\n\n2. The Shadow Cast headroom in terms of power and VRAM unused is limited. The GPU temperature is already at 46\u00b0C, and there is still a power reserve of about 65W (since the GPU is at 95W, and the TDP is 600W), which indicates that the GPU is operating near its maximum sustainable power output. Regarding VRAM, the profile shows that 2844MB is in use, leaving 316MB of VRAM unused.\n\n3. Unlike AAA titles that often use complex shaders, lighting effects, and high-resolution textures to create visually stunning experiences, the unique aspect of this game's G"
+    },
+    {
+      "gate": "eastGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 4214,
+      "response": "1. The GPU profile suggests that the rendering demands of GPU Coliseum with Balatro, Stardew Valley, and Noita running simultaneously are relatively low, given that the GPU usage is only at 14% with VRAM utilization at 2844MB out of 32GB. This indicates that the combined graphics load from these games is not putting a significant strain on the RTX 5090's resources.\n\n2. There is substantial headroom in both power and VRAM usage:\n   - Power: The GPU is consuming only 95W out of its 600W TDP, leaving approximately 505W of unused capacity.\n   - VRAM: With 2844MB used out of 32GB, there are about 1.76GB of VRAM remaining.\n\n3. Unique to this game's GPU signature compared to AAA titles is the relatively low resource utilization despite running multiple games simultaneously. Typically, AAA titles demand much higher percentages of both CPU and GPU resources.\n\n4. Rating the GPU's effort as 2 out of 10 (with 1 being idle), given that it\u2019s currently far from its thermal limits and only using a sma"
+    },
+    {
+      "gate": "eastGate",
+      "model": "mistral:7b",
+      "weight": 0.9,
+      "latency_ms": 10572,
+      "response": " 1. The GPU profile indicates that when running GPU Coliseum (Balatro + Stardew Valley + Noita simultaneously), the game's rendering demands are moderate. The GPU usage, VRAM usage, and power consumption are relatively low compared to AAA titles, suggesting that this particular combination of games does not require as much resources from the RTX 5090.\n\n2. With a current temperature of 46\u00b0C, 95W power consumption, and 14% GPU usage, there is significant headroom for the GPU. This means that there is unused power and VRAM that can be utilized if more demanding games or tasks are run on the system.\n\n3. The unique aspect of this game's GPU signature compared to AAA titles is its lower resource requirements. While AAA games tend to have high-fidelity graphics, complex physics simulations, and elaborate AI systems that demand more from the GPU, these indie games may have simpler graphics and less intensive computations, which results in lower resource usage.\n\n4. Based on the given profile, I"
+    },
+    {
+      "gate": "eastGate",
+      "model": "gaia",
+      "weight": 1.5,
+      "latency_ms": 12728,
+      "response": "1. The current profile suggests that the combined rendering demands of Balatro, Stardew Valley, and Noita are relatively moderate for this RTX 5090 GPU. The GPU is operating at 14% utilization, which indicates it has plenty of headroom in terms of both computational power and VRAM.\n\n2. Given the current load, there's significant headroom available. With a TDP of 600W and an active usage of only 95W, this leaves approximately 505W of unused capacity. In terms of VRAM, the GPU is using 2844MB out of its 32GB, leaving about 3556MB (or ~11%) free.\n\n3. This game's GPU signature is unique because it involves a mix of different graphics styles and rendering techniques. Balatro likely features more modern, complex visual effects compared to Stardew Valley, which has a simpler, pixelated aesthetic. Noita, on the other hand, typically requires high detail in its procedural generation and particle effects, making its demands somewhat unpredictable but potentially intensive.\n\n4. The GPU's effort c"
+    },
+    {
+      "gate": "ironGate",
+      "model": "qwen2.5:7b",
+      "weight": 1.0,
+      "latency_ms": 17365,
+      "response": "1. The GPU profile indicates that the combined rendering demands of Balatro, Stardew Valley, and Noita are relatively light, with the GPU utilizing only 14% of its capacity and VRAM being used at 2844MB out of 32GB. This suggests that the games are not demanding a lot of computational power or memory resources under these circumstances.\n\n2. Given that the RTX 5090 has a 600W TDP and is currently only utilizing 95W, there is substantial headroom for additional power (505W headroom). In terms of VRAM, 32GB is significantly more than the 2844MB currently in use, leaving a large amount of unused VRAM capacity.\n\n3. The unique aspect of this game's GPU signature is its low resource usage. Unlike many AAA titles that typically max out GPU and VRAM resources, the combination of Balatro, Stardew Valley, and Noita appears to be more resource-efficient and less computationally intensive.\n\n4. The GPU's effort can be rated as 2 out of 10, indicating that it is operating far below its thermal and pe"
+    }
+  ],
+  "avg_latency_ms": 7075,
+  "total_weight": 7.6,
+  "blend_quality": 10.0
+}

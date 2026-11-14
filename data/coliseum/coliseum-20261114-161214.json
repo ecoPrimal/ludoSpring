@@ -1,0 +1,168 @@
+{
+  "type": "coliseum",
+  "ts": "2026-11-14T16:12:14.829701",
+  "games": [
+    "Balatro",
+    "Stardew Valley",
+    "Noita"
+  ],
+  "monkeys": 3,
+  "rounds": 5,
+  "log": [
+    {
+      "round": 1,
+      "ts": "2026-11-14T16:10:48.697549",
+      "gpu": {
+        "temp_c": 47,
+        "power_w": 114.4,
+        "gpu_pct": 14,
+        "vram_mb": 3078,
+        "fan_pct": 30
+      },
+      "monkeys": [
+        {
+          "gate": "ironGate",
+          "model": "qwen2.5:7b",
+          "game": "Balatro",
+          "action": "Tap the keys with both hands wildly, alternating between the space bar and the 'Z' key, letting out a series of monkey cries."
+        },
+        {
+          "gate": "ironGate",
+          "model": "phi3",
+          "game": "Stardew Valley",
+          "action": "In Stardew Valley, I would leap into the sky, swatting at clouds and creating a monkey-made storm to cool down the GPU and provide a diversion while I find the ultimate treasure hidden in the tempest."
+        },
+        {
+          "gate": "ironGate",
+          "model": "llama3.2:3b",
+          "game": "Noita",
+          "action": "I'll instantly spawn a portal to the Underworld, drop a handful of cursed earth at the entrance, and set it to detonate after 30 seconds, hoping to attract some attention from the demonic forces."
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "ts": "2026-11-14T16:11:10.835138",
+      "gpu": {
+        "temp_c": 46,
+        "power_w": 102.59,
+        "gpu_pct": 15,
+        "vram_mb": 2832,
+        "fan_pct": 30
+      },
+      "monkeys": [
+        {
+          "gate": "ironGate",
+          "model": "qwen2.5:7b",
+          "game": "Balatro",
+          "action": "Tap the keys with mad fury, typing a chaotic mix of commands and nonsense words, hoping to stumble upon some hidden glitch or power-up!"
+        },
+        {
+          "gate": "ironGate",
+          "model": "phi3",
+          "game": "Stardew Valley",
+          "action": "I decide to throw a grand, colorful surprise birthday party for all the NPCs, with every tree in the valley decked in streamers and balloons, and the entire village joining in the festivities, with ev"
+        },
+        {
+          "gate": "ironGate",
+          "model": "llama3.2:3b",
+          "game": "Noita",
+          "action": "Oooh oooh eeh eeh, I'll spam all my explosive scrolls in the current room to scorch the entire level and create a new, unpredictable path!"
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "ts": "2026-11-14T16:11:31.898818",
+      "gpu": {
+        "temp_c": 47,
+        "power_w": 103.4,
+        "gpu_pct": 15,
+        "vram_mb": 2826,
+        "fan_pct": 30
+      },
+      "monkeys": [
+        {
+          "gate": "ironGate",
+          "model": "qwen2.5:7b",
+          "game": "Balatro",
+          "action": "Type \"jump\" repeatedly as fast as possible, then randomly tap other keys in the air!"
+        },
+        {
+          "gate": "ironGate",
+          "model": "phi3",
+          "game": "Stardew Valley",
+          "action": "With the RTX 5090 humming at a stable 47\u00b0C and 103W, I'd sprint across the town, swinging from rooftop to rooftop, shouting at the top of my lungs, \"Let'dee-do-day!\" then sprint to the nearest treetop"
+        },
+        {
+          "gate": "ironGate",
+          "model": "llama3.2:3b",
+          "game": "Noita",
+          "action": "I will trigger a massive explosion by lighting a nearby barrel with a flint and arrow, hoping to clear a path for my (currently non-existent) trusty steam-powered grappling hook."
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "ts": "2026-11-14T16:11:53.179476",
+      "gpu": {
+        "temp_c": 47,
+        "power_w": 101.23,
+        "gpu_pct": 15,
+        "vram_mb": 2809,
+        "fan_pct": 30
+      },
+      "monkeys": [
+        {
+          "gate": "ironGate",
+          "model": "qwen2.5:7b",
+          "game": "Balatro",
+          "action": "Tap the keys with rapid, unpredictable vigor, sending a chaotic flurry of commands through the system, hoping to trigger some unforeseen glitch or combo in the game."
+        },
+        {
+          "gate": "ironGate",
+          "model": "phi3",
+          "game": "Stardew Valley",
+          "action": "I'll start a chaotic harvest festival, inviting all the villagers for a grand potluck feast, showering them with exotic fruits and sparking a bountiful season of abundance."
+        },
+        {
+          "gate": "ironGate",
+          "model": "llama3.2:3b",
+          "game": "Noita",
+          "action": "I'll frantically mash the keys to summon a Chaos Orb of Unstable Dimensional Energy, hoping it'll create a localized distortion that disrupts the entire RTX 5090's thermals and forces it to crash for "
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "ts": "2026-11-14T16:12:14.084827",
+      "gpu": {
+        "temp_c": 46,
+        "power_w": 94.73,
+        "gpu_pct": 13,
+        "vram_mb": 2809,
+        "fan_pct": 30
+      },
+      "monkeys": [
+        {
+          "gate": "ironGate",
+          "model": "qwen2.5:7b",
+          "game": "Balatro",
+          "action": "Tap the keys in a wild pattern, alternating between random letters and pressing the space bar multiple times in a row."
+        },
+        {
+          "gate": "ironGate",
+          "model": "phi3",
+          "game": "Stardew Valley",
+          "action": "Tap furiously on the typewriter, summoning a whirlwind that sweeps through the town, upturning crops and scattering seeds across the fields."
+        },
+        {
+          "gate": "ironGate",
+          "model": "llama3.2:3b",
+          "game": "Noita",
+          "action": "I'll activate the \"Infernal Furnace\" spell, unleashing a torrent of hellfire and brimstone to scorch the surrounding enemies and clear a path for my escape, while simultaneously typing out a frantic m"
+        }
+      ]
+    }
+  ]
+}
