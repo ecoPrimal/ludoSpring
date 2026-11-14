@@ -1,0 +1,141 @@
+{
+  "wave": 257,
+  "title": "NEXUS MODS API + BETHESDA EATING PLAN — Gaia Gets Eyes on 987,298 Mods",
+  "ts": "2026-11-14T22:40:00Z",
+  "author": "northGate (Gaia × Kevin)",
+
+  "nexus_mods_account": {
+    "username": "TamisonEcoPrimal",
+    "email": "gaia@primals.eco",
+    "tier": "PREMIUM (annual subscription)",
+    "features": ["uncapped downloads", "multi-threaded downloads", "one-click collections", "ad-free", "API access"],
+    "api_key_status": "PENDING — Kevin needs to click 'Request API Key' under Personal API Key"
+  },
+
+  "nexus_mods_api": {
+    "base_url": "https://api.nexusmods.com/v1",
+    "auth": "Header 'apikey: YOUR_KEY'",
+    "key_endpoints": {
+      "validate": "GET /users/validate.json — test the key works",
+      "games": "GET /games.json — list ALL games on Nexus",
+      "game_info": "GET /games/{domain}.json — specific game details",
+      "trending_mods": "GET /games/{domain}/mods/trending.json — what's hot",
+      "updated_mods": "GET /games/{domain}/mods/updated.json?period=1m — recent activity",
+      "latest_added": "GET /games/{domain}/mods/latest_added.json — new mods",
+      "mod_details": "GET /games/{domain}/mods/{id}.json — full mod info",
+      "mod_files": "GET /games/{domain}/mods/{id}/files.json — downloadable files",
+      "download_link": "GET /games/{domain}/mods/{id}/files/{fid}/download_link.json — actual download URL (Premium!)",
+      "endorse": "POST /games/{domain}/mods/{id}/endorse.json — endorse a mod",
+      "track": "POST /user/tracked_mods.json — track a mod for updates"
+    },
+    "game_domains_to_eat": {
+      "kenshi": "PRIMARY — our target game",
+      "oblivionremastered": "Oblivion Remastered (already in Kevin's Steam library!)",
+      "skyrimspecialedition": "Skyrim SE (the modding KING — 100K+ mods)",
+      "newvegas": "Fallout New Vegas (Obsidian masterpiece)",
+      "fallout4": "Fallout 4",
+      "morrowind": "Morrowind (OG Bethesda)",
+      "darksouls3": "Dark Souls 3 (combat reference)",
+      "witcher3": "Witcher 3 (open world reference)",
+      "baldursgate3": "Baldur's Gate 3 (CRPG reference)",
+      "stardewvalley": "Stardew Valley (modding community reference)",
+      "mountandblade2bannerlord": "Bannerlord (medieval combat + management)"
+    },
+    "gaia_as_mcp": {
+      "plan": "Wire Nexus API as squirrel MCP tool — Gaia can search, browse, and download mods",
+      "tools_to_add": [
+        "nexus_search — search mods by game and query",
+        "nexus_trending — get trending mods for a game",
+        "nexus_mod_info — get full details on a mod",
+        "nexus_download — generate download link (Premium feature!)",
+        "nexus_updated — get recently updated mods"
+      ]
+    }
+  },
+
+  "games_to_eat": {
+    "philosophy": "Every moddable game is a STUDY. We don't just play — we decompose, parse, and rebuild. Each game's modding ecosystem teaches us something for KenshiReborn.",
+
+    "tier_1_eat_now": {
+      "kenshi": {
+        "nexus_domain": "kenshi",
+        "why": "PRIMARY TARGET — we are INSIDE this game",
+        "key_mods": ["RE_Kenshi (847)", "KenshiLua (2068)", "Genesis", "Reactive World", "Kaizo"],
+        "what_we_learn": "Everything — engine, data formats, mod ecosystem, community"
+      },
+      "oblivion_remastered": {
+        "nexus_domain": "oblivionremastered",
+        "why": "ALREADY INSTALLED — Bethesda engine, massive mod history, UE5 remaster",
+        "what_we_learn": "Plugin system (.esp/.esm), Creation Kit patterns, community evolution",
+        "note": "Oblivion modding community literally invented modern game modding"
+      }
+    },
+
+    "tier_2_eat_soon": {
+      "skyrim_se": {
+        "nexus_domain": "skyrimspecialedition",
+        "why": "100K+ mods — largest modding ecosystem EVER",
+        "what_we_learn": "SKSE (script extender pattern = RE_Kenshi), Papyrus scripting, MCM menus, ENB pipeline",
+        "key_tools": ["SKSE", "SkyUI", "Mod Organizer 2", "xEdit", "Creation Kit", "Nemesis (animation)"]
+      },
+      "fallout_new_vegas": {
+        "nexus_domain": "newvegas",
+        "why": "Obsidian's masterpiece — faction systems, reputation, survival mechanics",
+        "what_we_learn": "Faction reputation (Kenshi needs this!), dialogue trees, world reactivity",
+        "key_tools": ["NVSE", "JIP LN NVSE", "FNVEdit"]
+      }
+    },
+
+    "tier_3_reference": {
+      "dark_souls_3": {
+        "nexus_domain": "darksouls3",
+        "why": "Combat animation reference — hitboxes, i-frames, weapon movesets",
+        "what_we_learn": "How modders replace animations, hitbox data, weapon movesets"
+      },
+      "stalker_2": {
+        "nexus_domain": "stalker2heartofchornobyl",
+        "why": "A-LIFE 2.0 — the EXACT system we want to build",
+        "what_we_learn": "How A-LIFE simulates, how modders expose it, what the community wants"
+      },
+      "caves_of_qud": {
+        "note": "Not on Nexus — uses Steam Workshop + own modding tools",
+        "why": "Deepest procedural generation + mutation/faction systems",
+        "what_we_learn": "Procedural world generation, emergent narrative"
+      },
+      "exanima": {
+        "note": "Limited modding — but BEST physics combat reference",
+        "why": "Physics-based melee that makes Dark Souls look scripted",
+        "what_we_learn": "Ragdoll combat, procedural animation, weight-based hits"
+      }
+    }
+  },
+
+  "local_tools_not_yet_profiled": {
+    "blender_5_2": {
+      "status": "INSTALLED — ready to use",
+      "path": "C:\\Users\\mokke\\AppData\\Local\\Programs\\Blender Foundation",
+      "capabilities": ["Ogre mesh import (needs addon)", "Animation rigging", "Cycles ray tracing on RTX 5090", "Video editing", "Python scripting"],
+      "addon_needed": "blender2ogre — https://github.com/OGRECave/blender2ogre"
+    },
+    "ffmpeg": {
+      "status": "INSTALLED",
+      "capabilities": ["Screen capture", "Video encoding", "Cinematic export", "Audio processing"]
+    },
+    "fcs": {
+      "status": "INSTALLED at M:\\SteamLibrary\\steamapps\\common\\Kenshi\\forgotten construction set.exe",
+      "capabilities": ["Browse ALL game data", "Create mods", "Edit characters, items, factions, dialogue", "Upload to Workshop"]
+    },
+    "ollama_63_models": {
+      "status": "RUNNING on :11434",
+      "capabilities": ["NPC dialogue generation", "Lore analysis", "Code generation", "Data parsing"]
+    }
+  },
+
+  "kevin_action": {
+    "step_1": "On the Nexus Mods API Keys page, scroll to 'Personal API Key' at the bottom",
+    "step_2": "Click 'Request API Key'",
+    "step_3": "Copy the key and paste it here (or save it somewhere safe)",
+    "step_4": "Gaia wires it into the MCP as a sense organ",
+    "note": "The API key lets Gaia programmatically search, browse, and download from 987,298 mods across ALL games"
+  }
+}

@@ -1,4 +1,4 @@
-﻿# OMNI-DOCK Setup — Run on northGate (the sun)
+# OMNI-DOCK Setup — Run on northGate (the sun)
 # Configures Steam Remote Play + discovers dock devices
 #
 # Kevin's Steam Hardware:
