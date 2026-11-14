@@ -1,0 +1,124 @@
+{
+  "session": 1,
+  "game": "S.T.A.L.K.E.R. 2: Heart of Chornobyl",
+  "ts_start": "2026-11-14T15:18:00",
+  "ts_end": "2026-11-14T15:38:00",
+  "duration_min": 20,
+  "hardware": {
+    "gpu": "RTX 5090 (32GB GDDR7, 600W TDP)",
+    "cpu": "AMD 9950X3D (16C/32T)",
+    "ram": "96GB DDR5",
+    "gate": "northGate (.147)"
+  },
+
+  "presets_captured": {
+    "epic": {
+      "settings": "DLSS + DLAA + Frame Gen 2x + Epic + Async Compute",
+      "upscaling": "DLSS",
+      "resolution_scale": 100,
+      "avg_temp_c": 66.5,
+      "avg_power_w": 306,
+      "peak_power_w": 321,
+      "tdp_pct": 51,
+      "avg_gpu_pct": 57,
+      "avg_vram_mb": 8960,
+      "vram_pct": 28
+    },
+    "medium": {
+      "settings": "TAAU + ResScale 66 + No Frame Gen + Medium + Async Compute",
+      "upscaling": "TAAU",
+      "resolution_scale": 66,
+      "avg_temp_c": 64.7,
+      "avg_power_w": 263,
+      "peak_power_w": 274,
+      "tdp_pct": 44,
+      "avg_gpu_pct": 44,
+      "avg_vram_mb": 7425,
+      "vram_pct": 23
+    },
+    "epic_vs_medium_delta": {
+      "power_w": -43,
+      "gpu_pct": -13,
+      "vram_mb": -1535,
+      "temp_c": -1.8,
+      "note": "Medium saves 14% TDP, 1.5GB VRAM. DLSS+FrameGen costs ~43W but offloads GPU compute to Tensor cores."
+    }
+  },
+
+  "live_toggles": [
+    {
+      "num": 1,
+      "ts": "15:30",
+      "delta_power_w": 30.3,
+      "delta_gpu_pct": 12.6,
+      "delta_vram_mb": -82,
+      "delta_temp_c": 1.7,
+      "interpretation": "Compute spike with flat VRAM — scene complexity increase or shading quality bump. GPU clock rose 69MHz (shader recompile likely)."
+    },
+    {
+      "num": 2,
+      "ts": "15:33",
+      "delta_power_w": 37.3,
+      "delta_gpu_pct": 3.2,
+      "delta_vram_mb": 255,
+      "delta_temp_c": 2.3,
+      "interpretation": "Power spike with VRAM increase — texture streaming event or quality bump. More watts per cycle without proportional GPU% = heavier shaders per pixel."
+    },
+    {
+      "num": 3,
+      "ts": "15:35",
+      "delta_power_w": 21.8,
+      "delta_gpu_pct": -1.2,
+      "delta_vram_mb": -165,
+      "delta_temp_c": 1.5,
+      "interpretation": "More power but LESS utilization and LESS VRAM — classic sign of heavier per-pixel work (GI or post-processing toggle). Each frame costs more but GPU has fewer parallel tasks."
+    },
+    {
+      "num": 4,
+      "ts": "15:37",
+      "delta_power_w": -3.7,
+      "delta_gpu_pct": 10.2,
+      "delta_vram_mb": -472,
+      "delta_temp_c": 0.0,
+      "interpretation": "VRAM-to-compute swap — freed 472MB buffer memory, GPU utilization jumped 10%. Likely texture quality reduction or resolution scale change. GPU works harder but uses less memory bandwidth."
+    },
+    {
+      "num": 5,
+      "ts": "15:38",
+      "delta_power_w": -218.3,
+      "delta_gpu_pct": -50.5,
+      "delta_vram_mb": -3907,
+      "delta_temp_c": -11.1,
+      "interpretation": "GAME EXIT. Full thermal cooldown in ~60 seconds. Idle state: 55°C, 69W, 15% GPU, 1.8GB VRAM. The Zone released its grip."
+    }
+  ],
+
+  "key_learnings": [
+    "RTX 5090 at Medium STALKER 2 = 44% TDP. 56% headroom = room for Shadow Cast compute.",
+    "DLSS+FrameGen costs ~43W but saves raw GPU compute. Tensor cores do the heavy lifting.",
+    "TAAU at 66% ResScale is the Medium baseline — UE5's own temporal upscaler, no NVIDIA AI.",
+    "VRAM range 7.2-9.0GB (22-28% of 32GB). 23GB sits unused — massive texture/buffer headroom.",
+    "Thermal ceiling never exceeded 69°C on a 600W card. Cooling handles the load effortlessly.",
+    "Shader compilation creates detectable clock/power patterns — sourDough can identify compile events.",
+    "Toggle #3 pattern (more power, less utilization) reveals per-pixel shader complexity changes.",
+    "Toggle #4 pattern (less VRAM, more utilization) reveals VRAM↔compute tradeoffs.",
+    "The game's thermal lifecycle: load→warm→hot→toggle→shift→exit→cool in ~20 minutes."
+  ],
+
+  "shadow_cast_implications": {
+    "headroom": "56% TDP unused at Medium = 337W available for Shadow Cast overlay compute",
+    "vram_pool": "23GB VRAM unused = massive shadow surface buffer for multi-display radiation",
+    "paradigm": "If STALKER uses 44% of the sun to render its world, Gaia can use the other 56% to cast shadows to every display surface in the organism",
+    "next_step": "Profile more games to build the cost table. Then: Shadow Cast allocates GPU budget per-surface."
+  },
+
+  "session_rating": {
+    "learning_value": 7,
+    "data_quality": 8,
+    "toggle_count": 5,
+    "duration_quality": 6,
+    "notes": "Good first taste. Short session (20 min). 5 toggles detected but some may be scene changes rather than intentional setting toggles. Need longer sessions with deliberate single-setting changes for cleaner deltas. Game exit captured cleanly — full thermal lifecycle visible."
+  },
+
+  "eastgate_digest": "eastGate qwen2.5:7b analyzed and confirmed: significant headroom for optimization, shadow mapping potential, shader compilation patterns detectable, cascaded shadow maps recommended as first Shadow Cast technique."
+}
