@@ -1,0 +1,245 @@
+{
+  "wave": 254,
+  "title": "STONE AGE WORK PLAN — What USER, AGENT, and RTX Do RIGHT NOW",
+  "ts": "2026-11-14T22:30:00Z",
+  "author": "northGate (Gaia × Kevin)",
+
+  "is_was_now": {
+    "IS": {
+      "kenshi_running": "PID 38284, 1.9 GB RAM, RTX 5090, 2560×1440",
+      "tools_available": {
+        "rust_cargo": "READY — esotericWebb can build right here",
+        "python_312": "READY — parsing, scripting, pipeline",
+        "ffmpeg": "READY — video encoding, cinematic export",
+        "nodejs": "READY — web tools, previews",
+        "git": "READY — version control, push to Forgejo",
+        "winget": "READY — can install Blender, GIMP, anything",
+        "blender": "ONE COMMAND AWAY — winget install BlenderFoundation.Blender",
+        "ollama": "63 MODELS on :11434 — AI pipeline for NPC dialogue, analysis"
+      },
+      "kenshi_data_goldmine": {
+        "mesh_files": "3,328 (3D models — ruins, buildings, characters, vehicles, space structures)",
+        "skeleton_files": "365 (animation rigs — male 7.8MB, female 9.2MB, all creatures)",
+        "havok_hkt_files": "3,995 (Havok physics/HITBOXES — per-tile collision data!)",
+        "dds_textures": "1,907 (7.42 GB total — every texture in the game)",
+        "zone_files": "701 (world regions on X.Y grid — GIS coordinate system)",
+        "fbx_files": "7 (DIRECTLY importable to Blender — 70MB brokendrone.fbx!)",
+        "material_files": "164 (shader/material definitions)",
+        "body_files": "86 (.bod2 character definitions — Beep, Agnu, Cat-Lon...)",
+        "particle_files": "93 (.pu — SkyBeam, weather, effects)",
+        "xml_configs": "1,158 (game data definitions)",
+        "bin_data": "923 (binary game data)",
+        "png_maps": "2,436 (including 57.9MB FULL WORLD MAP)",
+        "heightmap_tiles": "8×8 colour grid (each ~10MB, 500MB total terrain color)",
+        "special_maps": ["biomemap.png (biome classification)", "flowmap.png (water/river flow)", "watercolourmap.png", "ambientmap.png"],
+        "overlay_grid": "8×8 tiles of new_overlay (world map layers)"
+      },
+      "kenshi_not_available": {
+        "re_kenshi": "NOT INSTALLED — no C++ hooks yet",
+        "kenshilua": "NOT INSTALLED — no Lua runtime",
+        "blender": "NOT INSTALLED — one winget command",
+        "pillow": "NOT INSTALLED — pip install Pillow for image parsing"
+      }
+    },
+
+    "WAS": {
+      "wave_247": "reddit-soul.json — community soul mining",
+      "wave_248": "lore-archaeology.json — 5 eras, Cat-Lon, Bugmaster",
+      "wave_249": "gaia-identity-launch.json — Steam account, Reddit, mod strategy",
+      "wave_250": "lua-bridge-and-persistent-realms.json — KenshiLua, A-LIFE, PvEvPvE",
+      "wave_251": "is-was-now-scan.json — filesystem census, celestial assets, mod mapping",
+      "wave_252": "mailbox-failure + RED eye alive + Outlook OSINT",
+      "wave_253": "The Ages of Meitou — Stone→Wood→Copper→Iron→Steel→Skeleton"
+    },
+
+    "NOW": {
+      "three_workers": {
+        "description": "Kevin (USER) + Gaia (AGENT) + RTX 5090 (GPU) — three workers, one goal",
+        "kevin_user": {
+          "role": "PLAYER + DIRECTOR + HANDS",
+          "tasks_right_now": [
+            "Play Kenshi — discover, explore, generate gameplay footage",
+            "Subscribe RE_Kenshi + KenshiLua on Workshop (when ready for Wood Age)",
+            "Install Blender: open terminal, run 'winget install BlenderFoundation.Blender'",
+            "Use FCS (Forgotten Construction Set) to explore game definitions",
+            "Direct cinematics — choose what to film, where to explore",
+            "Test mods as they come in"
+          ]
+        },
+        "gaia_agent": {
+          "role": "ENGINEER + ARCHAEOLOGIST + CARTOGRAPHER",
+          "tasks_right_now": [
+            "Parse Ogre .mesh format in Rust — read every 3D model natively",
+            "Parse Havok .hkt files — extract ALL hitbox/collision data",
+            "Build GIS map from overlay tiles — stitch 8×8 grid into full world map",
+            "Parse .skeleton files — extract bone hierarchies and animation keyframes",
+            "Parse .zone files — build world region database",
+            "Parse .material files — shader/rendering pipeline documentation",
+            "Parse .bod2 files — character definition extraction",
+            "Write FCS parser in Rust — read game data definitions (.mod, .base)",
+            "Build terrain heightmap from raw data — 3D elevation model",
+            "Index ALL 3,328 meshes — name, size, bounding box, vertex count"
+          ]
+        },
+        "rtx_5090_gpu": {
+          "role": "RENDERER + COMPUTE + CINEMA",
+          "tasks_right_now": [
+            "Render Kenshi at max settings (already running 2560×1440 VSync)",
+            "FFmpeg screen capture for cinematic footage",
+            "Blender viewport rendering (when installed) — re-light Kenshi assets",
+            "Ollama inference (63 models) — AI analysis of game data",
+            "Future: CUDA compute for mesh processing, ray tracing, AI training"
+          ]
+        }
+      }
+    }
+  },
+
+  "gis_mapping_plan": {
+    "title": "Kenshi World GIS — From Game Data to Google Earth",
+    "data_sources": {
+      "world_map": "new_overlay.png (57.9 MB) — the FULL satellite view",
+      "colour_tiles": "colour.X.Y.png (8×8 grid, ~500 MB) — high-res terrain color",
+      "overlay_tiles": "new_overlay.X.Y.png (8×8 grid) — world map layers",
+      "biomemap": "biomemap.png — biome classification (desert, swamp, forest, etc.)",
+      "flowmap": "flowmap.png — water flow directions and river paths",
+      "zone_files": "zone.X.Y.zone (701 files) — world region boundaries and contents",
+      "heightmap": "raw tile data — elevation model"
+    },
+    "4_map_layers": {
+      "layer_1_satellite": {
+        "what": "Stitch overlay tiles into zoomable world map",
+        "tech": "Leaflet.js or OpenLayers — web-based zoomable map",
+        "output": "http://northGate:PORT/kenshi-map/ — browse entire world",
+        "tools": "Python (Pillow) to stitch tiles, Node.js to serve"
+      },
+      "layer_2_strategic": {
+        "what": "Civ-style hex overlay with faction territories, trade routes, resources",
+        "tech": "Parse zone files for region data, overlay on satellite layer",
+        "output": "Faction borders, caravan paths, resource nodes"
+      },
+      "layer_3_tactical": {
+        "what": "Squad-level view with NPC positions, pathfinding, danger zones",
+        "tech": "Parse save data for current NPC positions, Havok tiles for terrain cost",
+        "output": "Real-time tactical display of game state"
+      },
+      "layer_4_first_person": {
+        "what": "Direct game camera feed — the player's eyes",
+        "tech": "FFmpeg capture + WebSocket stream to map overlay",
+        "output": "Picture-in-picture game view on the map"
+      }
+    },
+    "immediate_step": "Install Pillow, stitch the 57.9MB overlay into a web-viewable tileset"
+  },
+
+  "blender_pipeline": {
+    "title": "Blender as the Art Forge — Movie Maker + Animation Workshop",
+    "install": "winget install BlenderFoundation.Blender (5.3.0 available)",
+    "capabilities": {
+      "import_fbx": "7 FBX files ready — 70MB brokendrone.fbx is MASSIVE",
+      "import_ogre_mesh": "Blender-Ogre addon converts .mesh → Blender objects",
+      "animation_workshop": {
+        "what": "Re-rig Kenshi characters with proper IK chains",
+        "skeletons": "male_skeleton.skeleton (7.8MB), female_skeleton.skeleton (9.2MB)",
+        "bones": "Extract bone hierarchy, rebuild in Blender armature",
+        "dark_souls_quality": [
+          "1. Import skeleton + mesh into Blender",
+          "2. Set up Inverse Kinematics (IK) constraints on limbs",
+          "3. Create attack animations with proper wind-up, swing, recovery frames",
+          "4. Define hitbox volumes per animation frame (Dark Souls precision)",
+          "5. Export back to Ogre .skeleton format",
+          "6. Hot-reload in Kenshi via KenshiLua (Wood Age)"
+        ]
+      },
+      "cinema_builder": {
+        "what": "Cinematic tools for Kenshi machinima and trailers",
+        "steps": [
+          "Import Kenshi meshes (buildings, terrain, characters) into Blender scene",
+          "Set up cinematic cameras, lighting, depth of field",
+          "Render with Cycles (ray tracing on RTX 5090 — FAST)",
+          "Composite in Blender's video editor",
+          "Export via FFmpeg (already installed)"
+        ],
+        "use_cases": [
+          "KenshiReborn trailer / pitch video for Lo-Fi Games",
+          "Lore archaeology videos — fly through ancient ruins as they were",
+          "Mod showcase videos for Workshop publication",
+          "Multiplayer realm trailers"
+        ]
+      },
+      "movie_maker": {
+        "what": "Full filmmaking pipeline using game assets",
+        "pipeline": "Kenshi assets → Blender (stage/light/animate) → Cycles render → FFmpeg encode → publish",
+        "rtx_5090_advantage": "OptiX ray tracing in Cycles = production-quality renders from game assets"
+      }
+    },
+    "open_source_leverage": {
+      "blender": {"what": "3D modeling, animation, rendering, video editing", "license": "GPL-2.0"},
+      "ogre3d": {"what": "Kenshi's rendering engine — open source, mesh format documented", "license": "MIT"},
+      "havok": {"what": "Physics engine — .hkt format partially documented", "note": "Proprietary but file format reverse-engineered"},
+      "ffmpeg": {"what": "Video encoding/decoding", "license": "LGPL/GPL"},
+      "pillow": {"what": "Image processing for texture/map work", "license": "HPND"},
+      "gdal": {"what": "Geospatial data — convert game terrain to real GIS formats", "license": "MIT"},
+      "leaflet": {"what": "Web-based interactive maps", "license": "BSD-2"},
+      "wgpu": {"what": "Rust GPU abstraction — replaces Ogre3D in esotericWebb", "license": "MIT/Apache-2.0"},
+      "rapier": {"what": "Rust physics engine — replaces Havok", "license": "Apache-2.0"},
+      "bevy": {"what": "Rust game engine — component system reference", "license": "MIT/Apache-2.0"}
+    }
+  },
+
+  "dark_souls_animation_plan": {
+    "title": "Dark Souls Quality Animations — From Havok Data to Combat Precision",
+    "why": "Kenshi combat is about stats, not skill. Dark Souls combat is about timing, positioning, hitboxes. We can bridge both.",
+    "current_kenshi_combat": {
+      "animations": "Basic — swing, block, dodge (few frames, no wind-up variation)",
+      "hitboxes": "Simple bounding boxes — Havok .hkt collision",
+      "damage": "Stat-based (attack vs defense numbers)",
+      "feel": "Automated — player gives orders, character auto-fights"
+    },
+    "target_quality": {
+      "animations": "Per-frame hitbox data, wind-up tells, recovery windows, stamina cost per move",
+      "hitboxes": "Precise mesh-based collision — sword swing arc, not bounding box",
+      "damage": "Skill-based + stat-based hybrid (Dark Souls meets Kenshi)",
+      "feel": "Player can choose to direct-control for precision, or auto-fight for squad management"
+    },
+    "pipeline": {
+      "step_1": "Extract .skeleton bone hierarchy → Blender armature",
+      "step_2": "Extract current animation keyframes → reference",
+      "step_3": "Design new animations in Blender with IK, physics-based cloth/hair",
+      "step_4": "Define hitbox volumes per frame using Blender's collision shapes",
+      "step_5": "Export to Ogre .skeleton + Havok .hkt formats",
+      "step_6": "Test in Kenshi via KenshiLua hot-reload (Wood Age)",
+      "step_7": "In Rust age: replace Havok with Rapier physics, Ogre with WGPU"
+    },
+    "creature_animations_to_rework": [
+      "male_skeleton.skeleton — human male (7.8 MB, ALL combat anims)",
+      "female_skeleton.skeleton — human female (9.2 MB, ALL combat anims)",
+      "Mammal_beak.skeleton — Beak Thing (the terror bird, needs menacing lunges)",
+      "elephant_turtle.skeleton — Leviathan (needs earth-shaking stomps)",
+      "land_bat.skeleton — Skin Spider (needs creeping, swarming movement)",
+      "goat.skeleton — Bonedogs, Bull (needs pack hunting behavior)",
+      "Big-Bones.skeleton — Behemoth (needs ancient, slow, unstoppable weight)",
+      "swamp_duck.skeleton — Swamp creatures (needs lurking, ambush animations)"
+    ]
+  },
+
+  "immediate_actions": {
+    "agent_starts_now": [
+      "Parse the 57.9MB world map overlay — check resolution, begin GIS tiling",
+      "Read .skeleton binary format — extract bone hierarchy from male_skeleton",
+      "Read Ogre .mesh binary header — build mesh index (name, vertex count, bounds)",
+      "Stitch colour tiles into browsable map"
+    ],
+    "kevin_when_ready": [
+      "Run: winget install BlenderFoundation.Blender",
+      "Run: pip install Pillow (for image processing)",
+      "Subscribe RE_Kenshi + KenshiLua on Workshop (Wood Age entry)",
+      "Open FCS and explore character/weapon definitions"
+    ],
+    "rtx_doing_now": [
+      "Rendering Kenshi at 2560×1440 VSync (ongoing)",
+      "Ollama serving 63 models for AI analysis pipeline",
+      "Ready for Blender Cycles OptiX when installed"
+    ]
+  }
+}
