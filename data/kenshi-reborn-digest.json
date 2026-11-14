@@ -2,38 +2,26 @@
   "data": {
     "hitboxes": 3995,
     "meshes": 3328,
-    "skeletons": 365,
+    "skeletons": 33,
     "textures": 1907,
-    "total_bytes": 9937681062,
     "zones": 701
   },
   "engine": "KenshiReborn",
   "gpu": {
     "backend": "Vulkan",
-    "device": "0x2B85",
-    "driver": "NVIDIA",
-    "name": "NVIDIA GeForce RTX 5090",
-    "type": "DiscreteGpu",
-    "vendor": "0x10DE"
+    "name": "NVIDIA GeForce RTX 5090"
   },
   "mesh_analysis": {
-    "bounded": 1791,
-    "lod": 1329,
     "parsed": 3328,
-    "skeletal": 33,
     "submeshes": 3575,
-    "total_indices": 721507459,
-    "total_vertices": 0,
-    "triangles": 240502486,
-    "unique_materials": 112,
-    "unique_skeletons": 22
+    "total_indices": 22738488,
+    "total_vertices": 22429664,
+    "triangles": 7579496
   },
   "timing_ms": {
-    "data_scan": 1146,
-    "gpu_init": 521,
-    "mesh_parse": 435,
-    "total": 2116
+    "mesh_parse": 13857,
+    "total": 15238
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "wave": 258
 }

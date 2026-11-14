@@ -6,6 +6,7 @@ description = "KenshiReborn — sovereign game engine, forged by Gaia on RTX 509
 
 [dependencies]
 wgpu = "24"
+winit = "0.30"
 pollster = "0.4"
 image = "0.25"
 serde = { version = "1", features = ["derive"] }
