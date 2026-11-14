@@ -1,0 +1,77 @@
+{
+    "source":  "ludoSpring/northGate",
+    "kenshi_reborn_feed":  {
+                               "installed_size_gb":  11.5,
+                               "feed_path":  "data/game-profiles/kenshi-*.json",
+                               "note":  "Every Kenshi session auto-feeds KenshiReborn via RSS",
+                               "source_game":  "Kenshi",
+                               "appid":  "233860",
+                               "target":  "eastGate gut engine → KenshiReborn"
+                           },
+    "commits":  20,
+    "type":  "gut-injection",
+    "ts":  "2026-11-14T16:25:00.6916340-05:00",
+    "gpu_spectrum":  {
+                         "tier4_aaa_epic":  {
+                                                "label":  "AAA Epic (STALKER 2)",
+                                                "gpu_pct":  57,
+                                                "power_w":  306
+                                            },
+                         "idle":  {
+                                      "label":  "System baseline",
+                                      "gpu_pct":  3,
+                                      "power_w":  55
+                                  },
+                         "shadow_cast_headroom":  {
+                                                      "label":  "Available for Shadow Cast",
+                                                      "gpu_pct":  56,
+                                                      "power_w":  337
+                                                  },
+                         "ceiling":  {
+                                         "label":  "RTX 5090 TDP",
+                                         "gpu_pct":  100,
+                                         "power_w":  600
+                                     },
+                         "tier1_indie":  {
+                                             "label":  "Indie games (Stardew, Balatro, Noita)",
+                                             "gpu_pct":  10,
+                                             "power_w":  73
+                                         },
+                         "tier4_aaa_medium":  {
+                                                  "label":  "AAA Medium (STALKER 2)",
+                                                  "gpu_pct":  44,
+                                                  "power_w":  263
+                                              }
+                     },
+    "organ_mapping":  {
+                          "endocrine":  "Thermal regulation → hormones. Fan speed + temp = homeostasis.",
+                          "digestive":  "sourDough fermentation → digestion. Raw telemetry → blended analysis.",
+                          "muscular":  "GPU utilization % → muscle effort. 8% idle, 57% gaming = exertion level.",
+                          "genetic":  "Game profiles → DNA. Each game = a gene. Each setting = an allele.",
+                          "metabolic":  "GPU power draw → metabolic rate. 58W idle, 306W gaming = metabolic range.",
+                          "nervous":  "Toggle detection → nerve signals. sourDough detects shifts = sensory input.",
+                          "cognitive":  "Gaia blend (8 models) → thought. Multi-model consensus = cognition.",
+                          "immune":  "Budget scheduler → immune regulation. 80% ceiling = fever limit."
+                      },
+    "session_summary":  {
+                            "budget_modes":  [
+                                                 "80/20",
+                                                 "20/80",
+                                                 "20/60/20"
+                                             ],
+                            "coliseum_capacity":  109,
+                            "blend_quality":  "10/10 (8 models, 2 gates)",
+                            "games":  [
+                                          "S.T.A.L.K.E.R. 2",
+                                          "Stardew Valley",
+                                          "Balatro",
+                                          "DREDGE",
+                                          "Creeper World 4",
+                                          "Noita"
+                                      ],
+                            "toggles_captured":  28,
+                            "games_profiled":  6
+                        },
+    "forge_repo":  "http://192.168.4.244:3000/syntheticChemistry/ludoSpring",
+    "total_profiles":  30
+}

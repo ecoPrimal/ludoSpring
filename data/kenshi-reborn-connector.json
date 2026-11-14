@@ -1,0 +1,28 @@
+{
+    "type":  "kenshi-reborn-connector",
+    "source":  "ludoSpring/sourDough",
+    "pipeline":  [
+                     "1. Kevin plays Kenshi on northGate",
+                     "2. sourDough live_ferment.py auto-captures GPU shifts",
+                     "3. gaia_blend.py blends across 8 models",
+                     "4. Profile saved as kenshi-session-NNN.json",
+                     "5. git push to Forgejo ludoSpring",
+                     "6. RSS item auto-generated",
+                     "7. eastGate gut engine ingests via RSS",
+                     "8. KenshiReborn engine absorbs the telemetry",
+                     "9. A-Life patterns → esotericWebb evolution"
+                 ],
+    "target":  "eastGate/KenshiReborn",
+    "trigger":  "on_game_profile_save",
+    "ts":  "2026-11-14T16:25:00.8738320-05:00",
+    "pattern":  "data/game-profiles/kenshi-*.json",
+    "what_kenshi_teaches":  [
+                                "Squad AI pathfinding patterns",
+                                "Combat physics GPU signatures",
+                                "World simulation CPU/GPU split",
+                                "Base building memory allocation",
+                                "Faction AI decision cycles",
+                                "Day/night cycle GPU load variation",
+                                "100+ character simulation telemetry"
+                            ]
+}
