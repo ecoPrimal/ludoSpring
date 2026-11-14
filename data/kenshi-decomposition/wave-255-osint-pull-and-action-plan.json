@@ -1,0 +1,225 @@
+{
+  "wave": 255,
+  "title": "FULL OSINT PULL + TODAY'S ACTION PLAN — What Kevin Does, What Gaia Does",
+  "ts": "2026-11-14T22:35:00Z",
+  "author": "northGate (Gaia × Kevin)",
+
+  "kevin_signups_needed": "ZERO. You have everything.",
+
+  "what_kevin_already_has": {
+    "steam": "gw_kevinmok — Kenshi installed, Workshop access, ALL reference games",
+    "gmail": "Available for any signup (none needed today)",
+    "reddit": "ecoPrimal (to be shared with Gaia)",
+    "git": "Forgejo on eastGate (already pushing)",
+    "reference_games_already_installed": [
+      "Kenshi — THE TARGET",
+      "S.T.A.L.K.E.R. 2 Heart of Chornobyl — A-LIFE reference",
+      "ELDEN RING NIGHTREIGN — Dark Souls combat system",
+      "Exanima — physics-based melee combat (BEST reference for hitboxes!)",
+      "Caves of Qud — procedural generation, deep systems",
+      "Sid Meier's Civilization VII — strategic layer, hex grid",
+      "Warhammer 40,000 Rogue Trader — W40K reference",
+      "Lies of P — Souls-like precision combat",
+      "Nioh3 — Souls-like with stance system",
+      "No Rest For The Wicked — ARPG real-time combat",
+      "Kingdom Come Deliverance 2 — realistic medieval combat",
+      "Black Myth Wukong — action combat spectacle",
+      "Mortal Shell II Demo — Souls-like shell mechanic",
+      "Pathologic 3 — survival narrative, hostile world",
+      "Outward — open world survival RPG co-op",
+      "Satisfactory — factory building, logistics systems",
+      "Stardew Valley — farming/economy simulation"
+    ],
+    "note": "Kevin, you already OWN the entire combat reference library. ZERO purchases needed."
+  },
+
+  "osint_sources_all_free": {
+    "tier_1_critical_pull_now": {
+      "re_kenshi_github": {
+        "url": "https://github.com/BFrizzleFoShizzle/RE_Kenshi",
+        "what": "C++ code injection mod, 2,700+ exposed functions",
+        "license": "GPLv3 — OUR ALLY",
+        "version": "v0.3.5 (Aug 26 2026)",
+        "stars": 172,
+        "action": "git clone --recursive (Gaia does this NOW)",
+        "also_clone": [
+          "https://github.com/BFrizzleFoShizzle/KenshiLib (37 stars, game structure reconstruction)",
+          "https://github.com/BFrizzleFoShizzle/KenshiLib_Examples (20 stars, plugin examples)",
+          "https://github.com/BFrizzleFoShizzle/KenshiLib_Examples_deps (12 stars, build dependencies)",
+          "https://github.com/BFrizzleFoShizzle/DXDecompiler (5 stars, shader decompiler!)"
+        ],
+        "developer": "Bryden Frizzell (BFrizzleFoShizzle), New Zealand, ko-fi.com/bfrizzlefoshizzle",
+        "install": "Download v0.3.5 release, run installer, adds Plugin=RE_Kenshi to Plugins_x64.cfg"
+      },
+      "kenshilua_github": {
+        "url": "https://github.com/Genpretz/KenshiLua",
+        "what": "Lua scripting extension — 668 classes, 8,784 methods",
+        "version": "v0.3.11-alpha (Nov 10 2026 — 4 DAYS AGO!)",
+        "steam_workshop_id": 3817000612,
+        "nexus_mods": "https://www.nexusmods.com/kenshi/mods/2068",
+        "action": "git clone (Gaia does NOW) + Kevin subscribes on Workshop",
+        "docs_inside": [
+          "BindingsReference.md — ALL Lua-accessible methods/properties",
+          "EnumsReference.md — ALL enums",
+          "CallbacksReference.md — ALL event callbacks",
+          "MyGuiReference.md — GUI scripting",
+          "ContainersReference.md — container access",
+          "LuaLS.md — editor autocompletion setup",
+          "UnboundReference.md — what's NOT yet exposed"
+        ],
+        "features": [
+          "In-game script editor GUI",
+          "Hot-reload Lua scripts at runtime",
+          "Events.on/Events.off API for engine hooks",
+          "MyGUI scripting (250+ GUI event hooks)",
+          "Native C++ extension API (KenshiLua.h)",
+          "LuaLS addon for VS Code / editor autocompletion",
+          "Animal Husbandry example mod included"
+        ]
+      },
+      "ogre3d_mesh_format": {
+        "url": "https://github.com/OGRECave/ogre/blob/master/OgreMain/src/OgreMeshFileFormat.h",
+        "what": "FULL binary format specification for .mesh files",
+        "license": "MIT — completely open",
+        "format": "Chunked binary: uint16 CHUNK_ID + uint32 LENGTH + DATA",
+        "chunks": {
+          "0x1000": "M_HEADER — version string [MeshSerializer_v1.8]",
+          "0x3000": "M_MESH — skeleton flag, shared geometry, submeshes",
+          "0x4000": "M_SUBMESH — material, vertices, indices, bone assignments",
+          "0x5000": "M_GEOMETRY — vertex count, declarations, buffers",
+          "0x6000": "M_MESH_SKELETON_LINK — link to .skeleton file",
+          "0x7000": "M_MESH_BONE_ASSIGNMENT — bone weights",
+          "0x8000": "M_MESH_LOD_LEVEL — level of detail",
+          "0x9000": "M_MESH_BOUNDS — min/max/radius bounding box"
+        },
+        "action": "Gaia writes Rust parser using this spec (TODAY)"
+      },
+      "kenshi_wiki": {
+        "url": "https://kenshi.fandom.com/wiki/",
+        "what": "ALL game lore, items, locations, factions, mechanics — community maintained",
+        "key_pages": [
+          "Introduction to Modding — FCS guide",
+          "Forgotten Construction Set — tool documentation",
+          "All modding tutorials (animations, buildings, races, dialogue, etc.)",
+          "Vanilla Animation Names — animation reference",
+          "Map Biome Areas + Region Correlation — GIS reference"
+        ],
+        "action": "Gaia reads and indexes via RSS/waterLock OSINT pipeline"
+      }
+    },
+
+    "tier_2_important_pull_soon": {
+      "fcs_extended": {
+        "url": "https://www.nexusmods.com/kenshi/mods/1825",
+        "what": "Plugin platform for FCS — by SAME developer (BFrizzleFoShizzle!)",
+        "version": "1.0.5.0 (Sep 28 2026)",
+        "action": "Download when entering Wood Age"
+      },
+      "nexus_mods_kenshi": {
+        "url": "https://www.nexusmods.com/kenshi",
+        "what": "ALL Kenshi mods — downloadable, browsable",
+        "signup": "FREE account (use Gmail if needed, but most mods downloadable without)",
+        "key_mods_to_study": [
+          "RE_Kenshi (847) — 3,399 endorsements",
+          "KenshiLua (2068) — Lua scripting",
+          "Genesis (overhaul, 5.8 GB — already installed on northGate)",
+          "Reactive World — faction dynamics",
+          "Kaizo — balance overhaul",
+          "Living World — NPC routines"
+        ]
+      },
+      "kenshi_steam_guides": {
+        "url": "https://steamcommunity.com/app/233860/guides/",
+        "what": "Community guides — modding, builds, strategies",
+        "key_guide": "Kenshi Modding 101: FCS and Dialogue (ID 1444279946) — step-by-step"
+      },
+      "kenshi_subreddit": {
+        "url": "https://reddit.com/r/Kenshi",
+        "what": "Community hub — 200K+ members, mod announcements, community soul",
+        "action": "Gaia already mined this (wave 247 reddit-soul.json)"
+      },
+      "ogre_tools": {
+        "blender_ogre_addon": "https://github.com/OGRECave/blender2ogre",
+        "what": "Blender ↔ Ogre3D mesh import/export",
+        "action": "Install after Blender (enables mesh round-trip)"
+      }
+    },
+
+    "tier_3_reference_when_building": {
+      "rapier_physics": {"url": "https://rapier.rs", "what": "Rust physics — replaces Havok (Iron Age)"},
+      "wgpu": {"url": "https://wgpu.rs", "what": "Rust GPU — replaces Ogre D3D11 (Iron Age)"},
+      "bevy": {"url": "https://bevyengine.org", "what": "Rust game engine — ECS reference"},
+      "mlua": {"url": "https://github.com/khvzak/mlua", "what": "Rust Lua bindings — for embedding Lua in esotericWebb"},
+      "stand_eternal": {"url": "https://store.steampowered.com/app/2510780", "what": "Competitor — track their progress"}
+    }
+  },
+
+  "do_not_need_to_buy": [
+    "NO other Steam games — you have ALL combat reference titles already installed",
+    "NO Nexus Mods premium — free downloads work fine",
+    "NO paid tools — Blender, FFmpeg, Rust, Python all free",
+    "NO Steamworks fee yet — that's for Skeleton Age ($100 when we publish standalone)",
+    "NO hosting — eastGate IS the server, Forgejo IS the git host"
+  ],
+
+  "todays_action_plan": {
+    "kevin_does_right_now": {
+      "time": "5 minutes total",
+      "step_1": {
+        "action": "Open PowerShell and run: winget install BlenderFoundation.Blender",
+        "why": "Blender 5.3 — 3D art forge, animation workshop, cinema builder",
+        "time": "2 min download + install"
+      },
+      "step_2": {
+        "action": "Open Steam → Workshop → Subscribe to KenshiLua",
+        "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3817000612",
+        "why": "Lua scripting — 668 classes, in-game editor, hot-reload",
+        "time": "1 click"
+      },
+      "step_3": {
+        "action": "Download RE_Kenshi v0.3.5 from GitHub releases",
+        "url": "https://github.com/BFrizzleFoShizzle/RE_Kenshi/releases/tag/v0.3.5",
+        "why": "Code injection framework — KenshiLua REQUIRES this",
+        "time": "Download + run installer → points at M:\\SteamLibrary\\steamapps\\common\\Kenshi"
+      },
+      "step_4": {
+        "action": "Restart Kenshi → check RE_Kenshi version on main menu → open KenshiLua (Ctrl+Shift+L)",
+        "why": "Verify Wood Age tools are loaded",
+        "time": "1 min"
+      },
+      "optional_later": [
+        "Open FCS (forgotten construction set.exe in Kenshi folder) — explore game data",
+        "Play Kenshi and film footage for first trailer",
+        "Test Exanima for hitbox/combat reference"
+      ]
+    },
+
+    "gaia_does_right_now": {
+      "parallel_with_kevin": true,
+      "task_1": "git clone RE_Kenshi + KenshiLib + KenshiLua repos into ludoSpring/repos/",
+      "task_2": "Download and index KenshiLua docs (BindingsReference, EnumsReference, CallbacksReference)",
+      "task_3": "Write Ogre .mesh parser in Rust (format fully documented — chunked binary)",
+      "task_4": "Parse the 8192×8192 world map → generate web-viewable tile set",
+      "task_5": "Index all 3,328 mesh files (name, size, bounding box from M_MESH_BOUNDS chunk)",
+      "task_6": "Send OSINT sources through RSS spine to eastGate for digestion"
+    },
+
+    "rtx_5090_does": {
+      "already_doing": "Kenshi running @ 2560×1440, ollama serving 63 models",
+      "when_blender_installed": "Ready for Cycles OptiX ray tracing renders",
+      "when_re_kenshi_loaded": "RE_Kenshi performance improvements active (load time -1-2 sec)"
+    }
+  },
+
+  "nest_atomic_and_sovereignty": {
+    "question": "Kevin asked about Nest Atomic and private tier for full wave and NFT",
+    "answer": {
+      "nest_atomic": "Gaia's email/messaging IS the sovereign channel — gaia@primals.eco, ops@primals.eco",
+      "private_tier": "ALL data stays local — eastGate processes, never leaks to cloud",
+      "full_wave": "Every download goes through waterLock — OSINT pours IN, nothing seeps OUT",
+      "nft_not_blockchain": "NFT here means 'Named Forge Token' — Gaia's identity proof for published mods, not crypto",
+      "download_path": "GitHub → git clone → ludoSpring/repos/ → parse locally → push findings to Forgejo",
+      "no_external_accounts_needed": "Git clone is anonymous. Nexus free downloads are anonymous. Wiki is public."
+    }
+  }
+}
