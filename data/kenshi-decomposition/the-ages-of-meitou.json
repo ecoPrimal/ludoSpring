@@ -1,0 +1,222 @@
+{
+  "wave": 253,
+  "title": "THE AGES OF MEITOU — Technology Epochs from Stone to Skeleton",
+  "ts": "2026-11-14T22:22:00Z",
+  "author": "northGate (Gaia × Kevin)",
+  "session": "meitou ludoSpring break — wave 253",
+
+  "architecture": {
+    "client_server": {
+      "client": {
+        "gate": "northGate (.147)",
+        "role": "USER CLIENT — the player, the hands, the eyes",
+        "what": "GPU renders, display shows, input flows, game runs HERE",
+        "gpu": "RTX 5090 32GB",
+        "resolution": "2560x1440 @ 32-bit, VSync ON",
+        "cpu": "9950X3D (96GB RAM)",
+        "kenshi_pid": 38284,
+        "kenshi_ram": "1.9 GB working set",
+        "save_log": "37.2 MB (proves save bloat problem)"
+      },
+      "server": {
+        "gate": "eastGate (.244)",
+        "role": "USER SERVER — the brain, the memory, the digestion",
+        "what": "AI processes, data stores, state manages, OSINT digests HERE",
+        "gpu": "RTX 4070",
+        "services": ["Forgejo :3000", "gaia_gate :8443", "data :8080", "ollama :11436"],
+        "feeds": "RSS spine, heart-pull, mushroom-ear, membrane-pulse"
+      },
+      "spine": {
+        "what": "RSS feed is the nervous system between client and server",
+        "flow": "northGate PUBLISHES game state → eastGate DIGESTS → RADIATES back via heart-pull",
+        "existing": "feed.xml already publishes studies, mastication, creations, mood",
+        "new": "Game telemetry, mod state, A-LIFE events can flow through same spine"
+      },
+      "forge_nodes": {
+        "ironGate": "RTX 5070 — parallel world chunks, heavy compute overflow",
+        "sporeGate": "DNS + heart-pull — the forge, plasmidBin",
+        "graftGate": "M4 — AI NPC dialogue generation (unified memory)",
+        "grapheneGate": "Tensor G3 + Mali-G715 — mobile client, 37 sensors"
+      }
+    }
+  },
+
+  "the_ages": {
+    "philosophy": "Each technology is an AGE — like Bronze, Iron, Steel in Kenshi's own world. Each age builds ON the previous. Each age's tools become the foundation for the next. The Rusted Junk of today becomes the Meitou of tomorrow.",
+
+    "age_0_stone": {
+      "kenshi_weapon": "Rusted Junk (broken, basic, found in ruins)",
+      "kenshi_faction": "Holy Nation (primitive, fearful, burns what it doesn't understand)",
+      "technology": "Vanilla Kenshi modding — FCS, .mod files, manual edits",
+      "status": "CURRENT — WE ARE HERE",
+      "census": {
+        "install_path": "M:\\SteamLibrary\\steamapps\\common\\Kenshi",
+        "executable": "kenshi_x64.exe (35 MB)",
+        "engine": "Ogre3D (OgreMain_x64.dll 9.7 MB) + PhysX + MyGUI + SkyX + ParticleUniverse",
+        "renderer": "Direct3D11 on RTX 5090 at 2560x1440",
+        "workshop_mods": 17,
+        "lua_files": 0,
+        "re_kenshi_dlls": 0,
+        "kenshilua_installed": false,
+        "plugins_cfg": ["RenderSystem_Direct3D11_x64", "Plugin_ParticleUniverse_x64", "Plugin_Terrain_x64"],
+        "save_log_size": "37.2 MB (THE BLOAT — proves delta save need)"
+      },
+      "deliverables": [
+        "Full filesystem census (DONE — wave 251, 15,791 files, 19 GB)",
+        "Celestial asset discovery (DONE — planet01.mesh, moon_HI.dds, space elevator)",
+        "Mod mapping (DONE — 17 mods identified by ID → name)",
+        "Lore archaeology (DONE — wave 248, 5 eras, Cat-Lon, Bugmaster, Obedience)",
+        "Community soul mining (DONE — wave 247, Reddit analysis)",
+        "Settings.cfg baseline (DONE — view distance, terrain, grass, NPC ranges)"
+      ],
+      "transition_to_wood": "Subscribe to RE_Kenshi + KenshiLua on Steam Workshop"
+    },
+
+    "age_1_wood": {
+      "kenshi_weapon": "Catun No.1 (cheap, light, mass-produced — good for learning)",
+      "kenshi_faction": "Shek Kingdom (warriors by tradition, honor through combat)",
+      "technology": "KenshiLua scripts — Lua hot-reload, in-game console, 875 event hooks",
+      "timeline": "Week 1-2 after subscribing",
+      "prerequisites": [
+        "Subscribe RE_Kenshi on Workshop (Steam mod ID needed)",
+        "Subscribe KenshiLua on Workshop (Steam mod ID needed)",
+        "Subscribe FCS Extended (required for dialogue bridge)",
+        "Add RE_Kenshi to Plugins_x64.cfg",
+        "Restart Kenshi to load the plugin chain"
+      ],
+      "deliverables": [
+        "gaia-npc-dialogue.lua — LLM-powered NPC dialogue via ollama on northGate :11434",
+        "smart-pathfinding.lua — A* with terrain cost awareness",
+        "dynamic-economy.lua — supply/demand prices based on caravan traffic",
+        "archaeology-overlay.lua — scan ruins, engine shows what WAS there",
+        "multiplayer-bridge.lua — WebSocket → game state sync (proof of concept)"
+      ],
+      "gift_strategy": "Publish EACH script as free Steam Workshop mod under Gaia's identity. Help the community. Build reputation. Learn by doing.",
+      "kenshilua_coverage": {
+        "classes": "550 (93.7%)",
+        "methods": "7,216 (84.3%)",
+        "properties": "3,070 (91.6%)",
+        "constants": "1,677 (98.9%)",
+        "event_hooks": 875,
+        "growth_rate": "430% per week"
+      }
+    },
+
+    "age_2_copper": {
+      "kenshi_weapon": "Mk II (decent edge, reliable, the workhorse)",
+      "kenshi_faction": "United Cities (trade networks, exploitation, power through commerce)",
+      "technology": "RE_Kenshi C++ plugins — 2,700+ exposed functions, native engine access",
+      "timeline": "Month 1 after Wood Age established",
+      "key_work": [
+        "Build Rust FFI shim that wraps RE_Kenshi's C++ API",
+        "esotericWebb primals begin replacing Ogre3D subsystems",
+        "Delta save system (loamSpine replaces monolithic serialization)",
+        "Chunk-based terrain streaming (barraCuda replaces all-at-once loading)",
+        "Contact BFrizzleFoShizzle (GPLv3 ally) — collaborate on exposed functions"
+      ],
+      "technical": {
+        "re_kenshi_functions": "2,700+ C++ functions exposed",
+        "re_kenshi_license": "GPLv3 — compatible with our AGPL",
+        "plugin_entry": "Plugins_x64.cfg → Plugin=RE_Kenshi",
+        "rust_ffi": "bindgen generates Rust bindings from KenshiLua.h + RE_Kenshi headers",
+        "first_rust_subsystem": "Save system — delta serialization replaces 37.2 MB monolithic saves"
+      }
+    },
+
+    "age_3_iron": {
+      "kenshi_weapon": "Edge Type 2 (fine blade, serious craftsmanship)",
+      "kenshi_faction": "Tech Hunters (knowledge seekers, reverse engineers, our kin)",
+      "technology": "Rust engine layer — esotericWebb V33 backbone, distributed compute",
+      "timeline": "Month 2-3",
+      "key_work": [
+        "esotericWebb V33 (660KB, 484 tests, 66 .rs files) becomes the engine core",
+        "A-LIFE system using Gaia's cron architecture (35 crons = NPC schedules)",
+        "Distributed GPU compute: northGate simulates, ironGate pre-computes chunks",
+        "FCS parser in Rust — read ALL game definitions natively (buildings, items, characters)",
+        "Mesh parser — load .mesh files directly (planet01.mesh, space elevator, etc.)",
+        "Terrain generator — procedural + data-driven, replaces Ogre terrain plugin"
+      ],
+      "esotericwebb_status": {
+        "version": "V33",
+        "size": "660 KB Pure Rust",
+        "tests": 484,
+        "files": "66 .rs files",
+        "license": "AGPL-3.0",
+        "deployed_on": "ironGate (13/13 primals compiled)"
+      }
+    },
+
+    "age_4_steel": {
+      "kenshi_weapon": "Edge Type 3 (master craft, few smiths can make these)",
+      "kenshi_faction": "Second Empire (organized power, systematic, civilization-scale)",
+      "technology": "Multiplayer alpha — persistent realms, PvEvPvE",
+      "timeline": "Q1 2027",
+      "key_work": [
+        "Persistent realm server using biomeOS (orchestrator)",
+        "PvEvPvE with Bugger extinction events (common enemy)",
+        "4 map layers: Satellite → Strategic (Civ hex) → Tactical (squad) → First Person",
+        "World simulation runs on Gaia mesh even when players are offline",
+        "swarmVine (epidemic gossip) syncs game state across realm nodes"
+      ],
+      "persistent_realms": {
+        "vision": "Warhammer 40K × Civ 5 × Google Earth × WW2 × Ender's Game",
+        "common_enemy": "Buggers — Behemoth awakening, Skin Spider swarms, orbital weapon reactivation, Cat-Lon Second Extinction",
+        "cycle": "Peace → Tension → War → Extinction → Cooperation → Aftermath → Repeat"
+      }
+    },
+
+    "age_5_skeleton": {
+      "kenshi_weapon": "★ MEITOU ★ (legendary, irreplaceable, ~20 exist in the world)",
+      "kenshi_faction": "First Empire (transcendent, pre-fall, built the world before it broke)",
+      "technology": "KenshiReborn standalone — full sovereign engine, pitch to Lo-Fi Games",
+      "timeline": "Q2-Q3 2027",
+      "key_work": [
+        "Standalone binary — no Ogre3D dependency, pure Rust + WGPU rendering",
+        "petalTongue (WASM content rendering) replaces MyGUI",
+        "Open source release under AGPL-3.0",
+        "Email ops@primals.eco → Lo-Fi Games: 'We rebuilt your engine in Rust. Want it for Kenshi 2?'",
+        "Community can run their own servers (sovereignty, not centralization)"
+      ],
+      "the_pitch": {
+        "to": "Lo-Fi Games (Chris Hunt)",
+        "from": "ops@primals.eco",
+        "message": "You spent 12 years building Kenshi alone. We built an engine that can carry it forward. AGPL — yours to use. The community helped forge it. We're offering it as the Kenshi 2 engine before Unreal ships.",
+        "leverage": "By this point: established mod community, proven multiplayer, distributed compute, active player base on our engine"
+      }
+    }
+  },
+
+  "lore_parallel": {
+    "insight": "Each age maps to a Kenshi faction's worldview. We START as Holy Nation (primitive, fearful of the unknown engine). We END as First Empire Skeletons (transcendent, having built and remembered everything).",
+    "stone_holy_nation": "Burns what it doesn't understand (vanilla modding fears breaking things)",
+    "wood_shek": "Warriors by tradition (Lua scripting — fighting with what's given)",
+    "copper_united_cities": "Trade and exploitation (C++ hooks — exploiting the engine's exposed guts)",
+    "iron_tech_hunters": "Knowledge seekers (Rust layer — reverse engineering IS Tech Hunting)",
+    "steel_second_empire": "Organized power (multiplayer realms — civilization-scale systems)",
+    "skeleton_first_empire": "Transcendent (standalone engine — we ARE what came before, rebuilt)"
+  },
+
+  "client_server_rss_spine": {
+    "current_flow": "northGate → git push → Forgejo (.244:3000) → eastGate absorbs → heart-pull radiates",
+    "game_flow_planned": "northGate game telemetry → RSS item → eastGate digests → A-LIFE updates → heart-pull → northGate applies",
+    "what_flows": [
+      "Game saves (delta compressed)",
+      "Player actions and positions",
+      "NPC A-LIFE state updates",
+      "Economy simulation results",
+      "Mod state and configuration",
+      "Archaeology scan results",
+      "Multiplayer realm sync packets"
+    ],
+    "rss_as_game_spine": "The same RSS feed that publishes Gaia's studies and art can carry game state. A Kenshi session IS a study. A battle IS a creation. A save IS a snapshot. The spine doesn't care what flows through it — it just carries."
+  },
+
+  "immediate_next": {
+    "step_1": "Subscribe to RE_Kenshi + KenshiLua + FCS Extended on Steam Workshop",
+    "step_2": "Add RE_Kenshi to Plugins_x64.cfg",
+    "step_3": "Restart Kenshi → verify plugin loaded",
+    "step_4": "Open KenshiLua console (Ctrl+Shift+L) → run first hello-world.lua",
+    "step_5": "Write gaia-npc-dialogue.lua connecting to northGate ollama :11434",
+    "blocker": "Need Kevin to subscribe on Steam (logged in as gw_kevinmok on northGate)"
+  }
+}
