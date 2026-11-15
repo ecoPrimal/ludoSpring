@@ -1,0 +1,123 @@
+{
+  "name": "KenshiReborn Velocity Report",
+  "timestamp": "2026-11-14T19:37:00-05:00",
+  "wave": 258,
+
+  "session_velocity": {
+    "versions_shipped": 4,
+    "time_elapsed_hours": 4.5,
+    "rate": "0.89 versions/hour — nearly one release per hour",
+
+    "milestones": [
+      {"version": "v0.1.0", "name": "Stone Age — GPU Init",
+       "time_min": 30, "output": "RTX 5090 detected, Vulkan backend, headless scan"},
+      {"version": "v0.2.0", "name": "Stone Age — Biomemap",
+       "time_min": 45, "output": "Windowed Vulkan renderer, Kenshi biomemap on screen"},
+      {"version": "v0.3.0", "name": "Stone Age — PID Flow",
+       "time_min": 60, "output": "PID controller, 0.612μs/vertex, 83% LOW friction, flow analysis"},
+      {"version": "v0.4.0", "name": "Wood Age — 3D Mesh",
+       "time_min": 90, "output": "Full Ogre mesh parser, 3D bull rendered, matrix fixes, three-light rig"}
+    ],
+
+    "bugs_fixed": [
+      "Ogre \\n vs \\0 string terminator (CRITICAL — garbage counts → real counts)",
+      "WGPU Z clip space [0,1] vs OpenGL [-1,1] (dark render → visible mesh)",
+      "Column-major matrix multiply (transposed result → correct MVP)",
+      "vec![] macro generic parse ambiguity",
+      "PowerShell && operator (use ;)",
+      "Git index.lock stale file",
+      "Window on wrong monitor (Win32 P/Invoke fix)"
+    ],
+
+    "lines_of_code": {
+      "main_rs": 1037,
+      "mesh3d_rs": 253,
+      "render3d_rs": 440,
+      "total_rust": 1730,
+      "json_data_files": 6,
+      "shell_scripts": 2
+    }
+  },
+
+  "acceleration_factors": {
+    "steam_family_sharing": {
+      "family_name": "Southgate",
+      "members": ["Tamison (Kevin)", "gaia (Gaia)", "AvatarLeo (pending)"],
+      "slots": "3/6 used",
+      "impact": "Gaia account can access ALL of Kevin's Steam library on ANY gate",
+      "games_shared": "Kenshi + entire library",
+      "enables": [
+        "gaia account runs FCS on eastGate → Workshop uploads from Gaia's identity",
+        "gaia account on ironGate → parallel mod testing on Linux/SteamOS",
+        "gaia account on deckGate → Steam Deck native testing",
+        "gaia account on any gate → distributed game file access via Steam",
+        "Remote Play from northGate → stream to Deck/Link/Frame"
+      ]
+    },
+
+    "lan_wiring": {
+      "current": "All gates on 192.168.4.0/24, 10G fiber to House 2",
+      "next_phase": [
+        "Steam on eastGate (.244) → gaia account → Kenshi files cached locally",
+        "Steam on ironGate (.237) → gaia account → Linux/SteamOS mod testing",
+        "Steam on deckGate (.176) → direct play + mod testing on Steam Deck",
+        "Remote Play: northGate :27036 → NVENC encode → LAN → Deck/Link/Frame",
+        "FCS on any gate → Workshop publish from gaia account"
+      ],
+      "latency": {
+        "northgate_to_mikrotik": "0.25ms",
+        "northgate_to_eastgate": "0.28ms",
+        "northgate_to_router": "0.53ms",
+        "cross_house_fiber": "0.93ms"
+      }
+    }
+  },
+
+  "speed_comparison": {
+    "before_this_session": {
+      "kenshi_format_knowledge": "mod-forge could read/write .mod binary",
+      "rendering": "NONE — no 3D, no GPU",
+      "mesh_parsing": "NONE — unknown format",
+      "gpu_utilization": "0%",
+      "steam_integration": "gaia account exists but unused for Kenshi"
+    },
+    "after_this_session": {
+      "kenshi_format_knowledge": ".mod + .mesh (Ogre v1.100) fully reversed",
+      "rendering": "3D Vulkan on RTX 5090, orbiting camera, three-light rig",
+      "mesh_parsing": "22.4M vertices across 10,296 files inventoried",
+      "gpu_utilization": "Co-processor architecture: 95% available for Gaia",
+      "steam_integration": "Family Southgate, Workshop enumerated (39K+ mods), FCS located",
+      "speedup": "From ZERO to 3D rendering in 4.5 hours. ∞x improvement."
+    }
+  },
+
+  "next_phase_copper_age": {
+    "name": "Copper Age — Live Modding + Multi-Gate",
+    "goals": [
+      "1. Login gaia Steam account on eastGate → cache Kenshi files on .244",
+      "2. Run KenshiReborn + Kenshi simultaneously on northGate (co-processor proof)",
+      "3. Render multiple meshes in same scene (buildings + characters + terrain)",
+      "4. Wire Workshop upload pipeline (SteamCMD or FCS from gaia account)",
+      "5. Publish first Workshop mod from Gaia's identity",
+      "6. Steam Remote Play from northGate → deckGate/frameGate",
+      "7. Texture loading (.dds) → full material rendering",
+      "8. Zone loading (.zone) → terrain + placed objects",
+      "9. Animation (.skeleton) → skeletal mesh playback"
+    ],
+    "estimated_hours": "6-8 hours",
+    "tools": {
+      "hephaestus": "FCS (Forgotten Construction Set) — the forge",
+      "mod_forge": "kenshi-mod-forge (Rust) — automated .mod creation",
+      "renderer": "KenshiReborn (Rust/WGPU) — sovereign 3D engine",
+      "spillway": "Steam Workshop — deploy to 3M+ players",
+      "nexus": "Nexus Mods API — community reach"
+    }
+  },
+
+  "the_equation": {
+    "input": "Kenshi game files (9.3 GB) + RTX 5090 (95% free) + Steam Family + LAN mesh",
+    "process": "Parse → Render → Analyze → Forge → Deploy",
+    "output": "Live-modded Kenshi running on northGate, mods published to Workshop + Nexus",
+    "feedback": "Play → observe → improve → replay → the redox cycle Kevin described"
+  }
+}
