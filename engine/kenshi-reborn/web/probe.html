@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html><head><meta charset='utf-8'><title>PROBE</title></head>
+<body style='background:#000;color:#0f0;font:12px monospace;padding:10px'>
+<pre id='out'>Probing...</pre>
+<script>
+const o=document.getElementById('out');
+let info='=== FRAME DEVICE PROBE ===\n';
+
+// Basic info
+info+='UA: '+navigator.userAgent+'\n';
+info+='Platform: '+navigator.platform+'\n';
+info+='Cores: '+navigator.hardwareConcurrency+'\n';
+info+='Memory: '+(navigator.deviceMemory||'?')+'GB\n';
+info+='Screen: '+screen.width+'x'+screen.height+' @'+devicePixelRatio+'x\n';
+info+='Touch: '+navigator.maxTouchPoints+' points\n';
+info+='Lang: '+navigator.language+'\n';
+
+// Camera check
+info+='\n=== CAMERAS ===\n';
+if(navigator.mediaDevices){
+  navigator.mediaDevices.enumerateDevices().then(devs=>{
+    devs.forEach(d=>{info+=d.kind+': '+d.label+' ('+d.deviceId.substring(0,8)+')\n'});
+    info+='\n=== SENSORS ===\n';
+    // Gyro check
+    if('DeviceOrientationEvent' in window)info+='DeviceOrientation: YES\n';
+    if('DeviceMotionEvent' in window)info+='DeviceMotion: YES\n';
+    if('Gyroscope' in window)info+='Gyroscope API: YES\n';
+    if('Accelerometer' in window)info+='Accelerometer API: YES\n';
+    if('AmbientLightSensor' in window)info+='AmbientLight: YES\n';
+    if('Magnetometer' in window)info+='Magnetometer: YES\n';
+    // Bluetooth
+    if(navigator.bluetooth)info+='WebBluetooth: YES\n';
+    // USB
+    if(navigator.usb)info+='WebUSB: YES\n';
+    // Gamepad
+    info+='\n=== GAMEPADS ===\n';
+    const gp=navigator.getGamepads();
+    for(let i=0;i<gp.length;i++){
+      if(gp[i])info+='Pad['+i+']: '+gp[i].id+' ('+gp[i].buttons.length+' btns, '+gp[i].axes.length+' axes)\n';
+    }
+    o.textContent=info;
+    // Also send to northGate
+    fetch('http://192.168.4.147:9998/probe',{method:'POST',body:info,mode:'no-cors'}).catch(()=>{});
+  });
+} else {
+  info+='mediaDevices: NOT AVAILABLE\n';
+  o.textContent=info;
+}
+</script></body></html>
