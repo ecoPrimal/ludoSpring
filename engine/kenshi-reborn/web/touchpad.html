@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Gaia Touchpad</title>
+<style>
+* { margin:0; padding:0; touch-action:none; }
+body { 
+  background:#000; color:#0f0; font-family:monospace;
+  height:100vh; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+#pad {
+  flex:1; position:relative;
+  border:2px solid #0f0;
+  background: radial-gradient(circle at center, #001100, #000);
+}
+#info {
+  padding:8px; font-size:12px; color:#0a0;
+  border-top:1px solid #030;
+}
+.touch-dot {
+  position:absolute; width:40px; height:40px;
+  border-radius:50%; border:2px solid #0f0;
+  background:rgba(0,255,0,0.15);
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+#crosshair {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  color:#030; font-size:200px; pointer-events:none;
+}
+.btn { 
+  padding:15px; text-align:center; font-size:16px;
+  border:1px solid #0f0; color:#0f0; background:#001100;
+  cursor:pointer; user-select:none;
+}
+.btn:active { background:#003300; }
+#buttons { display:flex; gap:2px; padding:2px; }
+</style>
+</head>
+<body>
+<div id="pad">
+  <div id="crosshair">+</div>
+</div>
+<div id="buttons">
+  <div class="btn" style="flex:1" id="lclick">LEFT</div>
+  <div class="btn" style="flex:1" id="mclick">MIDDLE</div>
+  <div class="btn" style="flex:1" id="rclick">RIGHT</div>
+</div>
+<div id="info">Gaia Touchpad — drag to move, tap=click | dx:0 dy:0</div>
+
+<script>
+const pad = document.getElementById('pad');
+const info = document.getElementById('info');
+let lastX = 0, lastY = 0, touching = false;
+let dots = [];
+
+function sendEvent(type, data) {
+  // Log locally for now — WebSocket bridge later
+  info.textContent = `${type}: ${JSON.stringify(data)}`;
+}
+
+pad.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  lastX = t.clientX; lastY = t.clientY;
+  touching = true;
+  
+  const dot = document.createElement('div');
+  dot.className = 'touch-dot';
+  dot.style.left = t.clientX + 'px';
+  dot.style.top = t.clientY + 'px';
+  pad.appendChild(dot);
+  dots.push(dot);
+  
+  sendEvent('touch_start', {x: t.clientX, y: t.clientY});
+});
+
+pad.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!touching) return;
+  const t = e.touches[0];
+  const dx = t.clientX - lastX;
+  const dy = t.clientY - lastY;
+  lastX = t.clientX; lastY = t.clientY;
+  
+  // Update dot
+  if (dots.length > 0) {
+    const dot = dots[dots.length-1];
+    dot.style.left = t.clientX + 'px';
+    dot.style.top = t.clientY + 'px';
+  }
+  
+  sendEvent('move', {dx: Math.round(dx), dy: Math.round(dy)});
+});
+
+pad.addEventListener('touchend', e => {
+  e.preventDefault();
+  touching = false;
+  dots.forEach(d => d.remove());
+  dots = [];
+  sendEvent('touch_end', {});
+});
+
+// Two-finger scroll
+let lastY2 = 0;
+pad.addEventListener('touchmove', e => {
+  if (e.touches.length === 2) {
+    const avgY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    if (lastY2) {
+      sendEvent('scroll', {dy: Math.round(avgY - lastY2)});
+    }
+    lastY2 = avgY;
+  }
+});
+
+// Button clicks
+document.getElementById('lclick').addEventListener('touchstart', e => {
+  e.preventDefault(); sendEvent('click', {button: 'left'});
+});
+document.getElementById('mclick').addEventListener('touchstart', e => {
+  e.preventDefault(); sendEvent('click', {button: 'middle'});
+});
+document.getElementById('rclick').addEventListener('touchstart', e => {
+  e.preventDefault(); sendEvent('click', {button: 'right'});
+});
+
+// Prevent zoom
+document.addEventListener('gesturestart', e => e.preventDefault());
+</script>
+</body>
+</html>
