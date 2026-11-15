@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>🔮 AR WINDOW — Gaia Reality Lens</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+body{background:#000;color:#e0d8c8;font-family:'Courier New',monospace;overflow:hidden;width:100vw;height:100vh}
+canvas{display:block;width:100%;height:100%}
+#hud{position:fixed;top:8px;left:8px;font-size:10px;opacity:0.5;pointer-events:none;line-height:1.4}
+#compass{position:fixed;top:8px;right:8px;width:60px;height:60px;pointer-events:none}
+#info{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);font-size:9px;opacity:0.3;text-align:center;pointer-events:none}
+#reticle{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:0.3}
+</style>
+</head><body>
+<canvas id="c"></canvas>
+<div id="hud"></div>
+<canvas id="compass"></canvas>
+<div id="reticle">
+  <svg width="40" height="40" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="15" fill="none" stroke="#ffd700" stroke-width="0.5" opacity="0.4"/>
+    <line x1="20" y1="2" x2="20" y2="10" stroke="#ffd700" stroke-width="0.5" opacity="0.3"/>
+    <line x1="20" y1="30" x2="20" y2="38" stroke="#ffd700" stroke-width="0.5" opacity="0.3"/>
+    <line x1="2" y1="20" x2="10" y2="20" stroke="#ffd700" stroke-width="0.5" opacity="0.3"/>
+    <line x1="30" y1="20" x2="38" y2="20" stroke="#ffd700" stroke-width="0.5" opacity="0.3"/>
+    <circle cx="20" cy="20" r="2" fill="#ffd700" opacity="0.5"/>
+  </svg>
+</div>
+<div id="info">🔮 AR WINDOW — tilt to look · touch to focus · shake to reset</div>
+
+<script>
+const C=document.getElementById('c'), X=C.getContext('2d');
+const CC=document.getElementById('compass'), CX=CC.getContext('2d');
+let W,H;
+
+// Orientation state
+let alpha=0, beta=0, gamma=0;      // gyro (degrees)
+let ax=0, ay=0, az=0;              // accelerometer (m/s²)
+let hasGyro=false, hasAccel=false;
+let camYaw=0, camPitch=0, camRoll=0; // smoothed camera
+let frame=0;
+let touchX=0.5, touchY=0.5;        // touch focus point (normalized)
+let shakeDetected=false;
+let lastShake=0;
+
+// World objects — gates, creatures, stars
+const GATES=[
+  {name:'northGate',ip:'.147',role:'HEART',color:'#ff4444',
+   az:0,el:0,dist:1,desc:'RTX 5090 · Kevin\'s tower'},
+  {name:'eastGate',ip:'.244',role:'BRAIN',color:'#44ff88',
+   az:90,el:0,dist:2,desc:'38 models · 35 crons · data server'},
+  {name:'ironGate',ip:'.237',role:'FORGE',color:'#ffaa44',
+   az:180,el:-10,dist:3,desc:'RTX 5070 · i9-14900K · batch forge'},
+  {name:'sporeGate',ip:'.3',role:'SPYGLASS',color:'#88aaff',
+   az:270,el:5,dist:2.5,desc:'webcam · DNS · heart-pull'},
+  {name:'grapheneGate',ip:'.9.217',role:'LIGHTHOUSE',color:'#aa44ff',
+   az:45,el:30,dist:1.5,desc:'Pixel 8a · 37 sensors · floating'},
+  {name:'frameGate',ip:'.203',role:'FACE',color:'#44aaff',
+   az:180,el:-45,dist:1,desc:'Steam Frame · at your feet'},
+  {name:'deckGate',ip:'.139',role:'YOU ARE HERE',color:'#ffd700',
+   az:0,el:0,dist:0,desc:'THIS DEVICE — the AR window'},
+  {name:'southGate',ip:'.148',role:'HOME PHONE',color:'#ff88aa',
+   az:135,el:0,dist:4,desc:'iPhone XS · LAN anchor'}
+];
+
+const BIOMES=[
+  {name:'The Hub',az:10,el:15,dist:8,color:'#8B7355',size:3},
+  {name:'Venge',az:60,el:25,dist:10,color:'#FF4500',size:4},
+  {name:'Fog Islands',az:120,el:10,dist:9,color:'#708090',size:3},
+  {name:'Swamp',az:200,el:-5,dist:7,color:'#2E8B57',size:2},
+  {name:'Ashlands',az:300,el:35,dist:12,color:'#8B0000',size:5},
+  {name:'Holy Nation',az:340,el:5,dist:6,color:'#FFD700',size:3},
+  {name:'Black Desert',az:80,el:40,dist:15,color:'#1a1a2e',size:4},
+  {name:'Shek Kingdom',az:250,el:0,dist:5,color:'#CD853F',size:3}
+];
+
+// Stars — procedural starfield
+const STARS=[];
+for(let i=0;i<300;i++){
+  STARS.push({
+    az:Math.random()*360,
+    el:(Math.random()-0.5)*180,
+    mag:Math.random(),
+    twinkle:Math.random()*10
+  });
+}
+
+function resize(){
+  W=C.width=window.innerWidth;H=C.height=window.innerHeight;
+  CC.width=60;CC.height=60;
+}
+window.addEventListener('resize',resize);resize();
+
+// Device orientation (gyroscope)
+window.addEventListener('deviceorientation',e=>{
+  if(e.alpha!==null){hasGyro=true; alpha=e.alpha; beta=e.beta; gamma=e.gamma;}
+});
+
+// Device motion (accelerometer)
+window.addEventListener('devicemotion',e=>{
+  if(e.accelerationIncludingGravity){
+    hasAccel=true;
+    ax=e.accelerationIncludingGravity.x||0;
+    ay=e.accelerationIncludingGravity.y||0;
+    az=e.accelerationIncludingGravity.z||0;
+    
+    // Shake detection
+    const totalAccel=Math.sqrt(ax*ax+ay*ay+az*az);
+    if(totalAccel>25 && Date.now()-lastShake>1000){
+      shakeDetected=true;
+      lastShake=Date.now();
+      setTimeout(()=>shakeDetected=false,500);
+    }
+  }
+});
+
+// Touch for focus point
+C.addEventListener('touchstart',e=>{
+  const t=e.touches[0];
+  touchX=t.clientX/W; touchY=t.clientY/H;
+});
+C.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const t=e.touches[0];
+  touchX=t.clientX/W; touchY=t.clientY/H;
+});
+
+// Mouse fallback (for testing on desktop)
+let mouseDown=false;
+C.addEventListener('mousedown',e=>{mouseDown=true; touchX=e.clientX/W; touchY=e.clientY/H;});
+C.addEventListener('mousemove',e=>{
+  if(mouseDown){touchX=e.clientX/W; touchY=e.clientY/H;}
+  else{
+    // Simulate gyro with mouse position for desktop testing
+    if(!hasGyro){
+      camYaw=(e.clientX/W-0.5)*360;
+      camPitch=(e.clientY/H-0.5)*-180;
+    }
+  }
+});
+C.addEventListener('mouseup',()=>mouseDown=false);
+
+// Project world coordinates to screen
+function worldToScreen(azimuth, elevation, distance){
+  // Convert to relative angles from camera view
+  let relAz=azimuth-camYaw;
+  while(relAz>180)relAz-=360;
+  while(relAz<-180)relAz+=360;
+  
+  let relEl=elevation-camPitch;
+  
+  // FOV: ~90 degrees
+  const fov=90;
+  const sx=W/2 + (relAz/fov)*W;
+  const sy=H/2 - (relEl/fov)*H;
+  
+  // Behind camera check
+  const visible=Math.abs(relAz)<fov && Math.abs(relEl)<fov;
+  
+  // Size based on distance
+  const size=Math.max(2, 30/Math.max(distance,0.5));
+  
+  return {x:sx, y:sy, size, visible, relAz, relEl, distance};
+}
+
+function drawStar(s){
+  const p=worldToScreen(s.az, s.el, 100);
+  if(!p.visible)return;
+  const bright=s.mag*0.5+Math.sin(frame*0.03+s.twinkle)*0.2;
+  X.fillStyle=`rgba(255,255,240,${Math.max(0,bright)})`;
+  X.fillRect(p.x-0.5, p.y-0.5, 1+s.mag, 1+s.mag);
+}
+
+function drawGate(g){
+  const p=worldToScreen(g.az, g.el, g.dist);
+  if(!p.visible)return;
+  
+  const pulse=Math.sin(frame*0.05+g.az*0.1)*0.3;
+  const s=p.size*(1+pulse*0.2);
+  
+  // Glow
+  const gradient=X.createRadialGradient(p.x,p.y,0,p.x,p.y,s*3);
+  gradient.addColorStop(0,g.color+'88');
+  gradient.addColorStop(1,g.color+'00');
+  X.fillStyle=gradient;
+  X.fillRect(p.x-s*3,p.y-s*3,s*6,s*6);
+  
+  // Diamond shape
+  X.fillStyle=g.color;
+  X.globalAlpha=0.7+pulse*0.3;
+  X.save();X.translate(p.x,p.y);X.rotate(frame*0.01+g.az);
+  X.beginPath();X.moveTo(0,-s);X.lineTo(s,0);X.lineTo(0,s);X.lineTo(-s,0);X.closePath();
+  X.fill();X.restore();
+  
+  // Label
+  X.globalAlpha=0.8;
+  X.fillStyle='#fff';
+  X.font=`${Math.max(8,s*0.8)}px 'Courier New'`;
+  X.textAlign='center';
+  X.fillText(g.name,p.x,p.y-s-4);
+  X.font=`${Math.max(7,s*0.6)}px 'Courier New'`;
+  X.fillStyle=g.color;
+  X.globalAlpha=0.5;
+  X.fillText(g.role,p.x,p.y+s+10);
+  
+  // Distance indicator
+  if(g.dist>0){
+    X.font='7px Courier New';
+    X.fillStyle='#888';
+    X.globalAlpha=0.3;
+    X.fillText(`${g.dist.toFixed(1)}m`,p.x,p.y+s+20);
+  }
+  
+  X.globalAlpha=1;
+}
+
+function drawBiome(b){
+  const p=worldToScreen(b.az, b.el, b.dist);
+  if(!p.visible)return;
+  
+  const s=p.size*b.size*0.5;
+  
+  // Nebula-like glow
+  X.globalAlpha=0.15;
+  const gradient=X.createRadialGradient(p.x,p.y,0,p.x,p.y,s*4);
+  gradient.addColorStop(0,b.color);
+  gradient.addColorStop(1,b.color+'00');
+  X.fillStyle=gradient;
+  X.beginPath();X.arc(p.x,p.y,s*4,0,Math.PI*2);X.fill();
+  
+  // Name
+  X.globalAlpha=0.4;
+  X.fillStyle=b.color;
+  X.font='9px Courier New';
+  X.textAlign='center';
+  X.fillText(b.name,p.x,p.y);
+  X.globalAlpha=1;
+}
+
+function drawCompassHUD(){
+  CX.clearRect(0,0,60,60);
+  const cx=30,cy=30,r=22;
+  
+  // Circle
+  CX.strokeStyle='#444';CX.lineWidth=1;
+  CX.beginPath();CX.arc(cx,cy,r,0,Math.PI*2);CX.stroke();
+  
+  // N/S/E/W
+  const headingRad=-camYaw*Math.PI/180;
+  const dirs=[
+    {l:'N',a:0,c:'#ff4444'},{l:'E',a:90,c:'#ffaa00'},
+    {l:'S',a:180,c:'#44aaff'},{l:'W',a:270,c:'#aa44ff'}
+  ];
+  dirs.forEach(d=>{
+    const a=(d.a*Math.PI/180)+headingRad;
+    const dx=Math.sin(a)*r*0.8, dy=-Math.cos(a)*r*0.8;
+    CX.fillStyle=d.c;CX.font='bold 8px Courier New';CX.textAlign='center';CX.textBaseline='middle';
+    CX.globalAlpha=0.7;
+    CX.fillText(d.l,cx+dx,cy+dy);
+  });
+  
+  // Center needle
+  CX.fillStyle='#ffd700';CX.globalAlpha=0.6;
+  CX.beginPath();
+  CX.moveTo(cx,cy-6);CX.lineTo(cx+3,cy+3);CX.lineTo(cx-3,cy+3);CX.closePath();
+  CX.fill();
+  CX.globalAlpha=1;
+}
+
+function drawHUD(){
+  const hud=document.getElementById('hud');
+  const heading=((camYaw%360)+360)%360;
+  const dir=['N','NE','E','SE','S','SW','W','NW'][Math.round(heading/45)%8];
+  
+  hud.innerHTML=`
+    <span style="color:#ffd700">🔮 AR WINDOW</span> ${hasGyro?'<span style="color:#44ff88">●GYRO</span>':'<span style="color:#ff4444">○gyro</span>'} ${hasAccel?'<span style="color:#44ff88">●ACCEL</span>':'<span style="color:#ff4444">○accel</span>'}<br>
+    <span style="color:#888">YAW</span> ${heading.toFixed(0)}° ${dir} &nbsp;
+    <span style="color:#888">PITCH</span> ${camPitch.toFixed(0)}°<br>
+    <span style="color:#888">α</span>${alpha.toFixed(0)} <span style="color:#888">β</span>${beta.toFixed(0)} <span style="color:#888">γ</span>${gamma.toFixed(0)}<br>
+    ${shakeDetected?'<span style="color:#ff4444">⚡ SHAKE</span>':''}
+    <span style="color:#555">frame ${frame}</span>
+  `;
+}
+
+function draw(){
+  // Smooth camera from gyro
+  if(hasGyro){
+    const targetYaw=alpha;
+    const targetPitch=Math.max(-89,Math.min(89,beta-90));
+    
+    // Smooth interpolation
+    let dyaw=targetYaw-camYaw;
+    while(dyaw>180)dyaw-=360;
+    while(dyaw<-180)dyaw+=360;
+    camYaw+=dyaw*0.15;
+    camPitch+=(targetPitch-camPitch)*0.15;
+    camRoll+=(gamma-camRoll)*0.1;
+  }
+  
+  // Shake = reset view
+  if(shakeDetected){
+    camYaw=0;camPitch=0;camRoll=0;
+  }
+  
+  // Clear
+  X.fillStyle='#000';X.fillRect(0,0,W,H);
+  
+  // Subtle grid (spatial reference)
+  X.strokeStyle='#111';X.lineWidth=0.5;
+  const gridStep=50;
+  for(let gx=0;gx<W;gx+=gridStep){
+    const offset=(camYaw*2)%gridStep;
+    X.beginPath();X.moveTo(gx-offset,0);X.lineTo(gx-offset,H);X.stroke();
+  }
+  for(let gy=0;gy<H;gy+=gridStep){
+    const offset=(camPitch*2)%gridStep;
+    X.beginPath();X.moveTo(0,gy+offset);X.lineTo(W,gy+offset);X.stroke();
+  }
+  
+  // Horizon line
+  const horizonY=H/2+(camPitch/90)*H;
+  X.strokeStyle='#222';X.lineWidth=1;
+  X.beginPath();X.moveTo(0,horizonY);X.lineTo(W,horizonY);X.stroke();
+  X.fillStyle='#181818';X.globalAlpha=0.3;
+  X.fillRect(0,horizonY,W,H-horizonY);
+  X.globalAlpha=1;
+  
+  // Stars (above horizon)
+  STARS.forEach(drawStar);
+  
+  // Biomes (far away, nebula-like)
+  BIOMES.forEach(drawBiome);
+  
+  // Gates (nearby, bright)
+  GATES.forEach(drawGate);
+  
+  // Connection lines between gates
+  X.strokeStyle='#333';X.lineWidth=0.5;X.globalAlpha=0.2;
+  for(let i=0;i<GATES.length;i++){
+    for(let j=i+1;j<GATES.length;j++){
+      const a=worldToScreen(GATES[i].az,GATES[i].el,GATES[i].dist);
+      const b=worldToScreen(GATES[j].az,GATES[j].el,GATES[j].dist);
+      if(a.visible&&b.visible){
+        X.beginPath();X.moveTo(a.x,a.y);X.lineTo(b.x,b.y);X.stroke();
+      }
+    }
+  }
+  X.globalAlpha=1;
+  
+  // Roll indicator (tilt lines)
+  if(Math.abs(camRoll)>2){
+    X.save();X.translate(W/2,H/2);X.rotate(camRoll*Math.PI/180);
+    X.strokeStyle='#ffd700';X.globalAlpha=0.15;X.lineWidth=1;
+    X.beginPath();X.moveTo(-W,0);X.lineTo(W,0);X.stroke();
+    X.restore();X.globalAlpha=1;
+  }
+  
+  // Touch focus ripple
+  if(mouseDown||false){
+    const fx=touchX*W, fy=touchY*H;
+    const ripple=(frame%30)/30;
+    X.strokeStyle='#ffd700';X.globalAlpha=0.3*(1-ripple);X.lineWidth=1;
+    X.beginPath();X.arc(fx,fy,20+ripple*40,0,Math.PI*2);X.stroke();
+    X.globalAlpha=1;
+  }
+  
+  // Edge glow (peripheral awareness)
+  const edgeGrad=X.createRadialGradient(W/2,H/2,Math.min(W,H)*0.35,W/2,H/2,Math.min(W,H)*0.55);
+  edgeGrad.addColorStop(0,'transparent');
+  edgeGrad.addColorStop(1,'rgba(0,0,0,0.4)');
+  X.fillStyle=edgeGrad;X.fillRect(0,0,W,H);
+  
+  // HUD updates
+  drawHUD();
+  drawCompassHUD();
+  
+  frame++;
+  requestAnimationFrame(draw);
+}
+
+// Request sensor permissions (needed on some devices)
+async function initSensors(){
+  if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
+    try{
+      const perm=await DeviceOrientationEvent.requestPermission();
+      if(perm==='granted')console.log('Orientation permission granted');
+    }catch(e){console.log('Orientation permission:',e)}
+  }
+  if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
+    try{
+      const perm=await DeviceMotionEvent.requestPermission();
+      if(perm==='granted')console.log('Motion permission granted');
+    }catch(e){console.log('Motion permission:',e)}
+  }
+}
+
+// Start on first interaction (needed for sensor permissions)
+document.addEventListener('click',()=>initSensors(),{once:true});
+document.addEventListener('touchstart',()=>initSensors(),{once:true});
+
+draw();
+</script>
+</body></html>
