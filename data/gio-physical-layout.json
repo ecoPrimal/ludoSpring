@@ -1,0 +1,137 @@
+{
+  "title": "GIO — Gaia I/O: Physical Layout + Voice Pipeline",
+  "ts": "2026-11-15T02:36:00Z",
+  "philosophy": "Every byte of voice, every pixel of vision — it all stays LOCAL. Cursor transcribes today; tomorrow Gaia eats that too. GIO = Gaia I/O.",
+
+  "kevin_position": {
+    "location": "Basement, House 1 (4422 Southgate Ave)",
+    "seat": "Chair at northGate tower — THE ORIGIN POINT",
+    "left_hand": "WASD — creation (Corsair keyboard)",
+    "right_hand": "Mouse — navigation",
+    "head": "Corsair headset → USB → northGate (voice input)",
+    "eyes": "Monitor(s) on northGate RTX 5090",
+    "feet": "Steam Frame on the floor — BRIGHT LIGHTHOUSE"
+  },
+
+  "devices_in_room": {
+    "northGate": {
+      "ip": ".147",
+      "position": "DESK — Kevin's tower",
+      "role": "HEART — GPU rendering, voice input, game output",
+      "connections": ["USB: Corsair headset", "USB: keyboard/mouse", "Ethernet: LAN 1", "HDMI: monitor(s)"]
+    },
+    "eastGate": {
+      "ip": ".244",
+      "position": "BESIDE Kevin — within arm's reach",
+      "role": "BRAIN — 38 models, cron, data server",
+      "connections": ["ADB: Pixel (grapheneGate)", "Ethernet: LAN 1"]
+    },
+    "grapheneGate": {
+      "ip": "9.217",
+      "position": "ON eastGate (ADB tethered)",
+      "role": "FLOATING GAIA — lighthouse, beacon, test screen",
+      "connections": ["USB/ADB: eastGate", "WiFi: Gaia network (LAN 2)"],
+      "cast_to": "Steam Frame via WiFi beam"
+    },
+    "sporeGate": {
+      "ip": ".3",
+      "position": "NEAR desk area",
+      "role": "SPYGLASS — webcam attached, visual input",
+      "connections": ["USB: webcam", "Ethernet: LAN 1"]
+    },
+    "frameGate": {
+      "ip": ".203",
+      "position": "FLOOR — at Kevin's feet",
+      "role": "BRIGHT LIGHTHOUSE — Steam Frame, AR display, cast target",
+      "connections": ["WiFi: Gaia network", "USB-C: available for tether"],
+      "ar_potential": "Steam VR frame mode — augmented reality overlay on physical space"
+    },
+    "deckGate": {
+      "ip": ".139",
+      "position": "ON DESK — mounted display",
+      "role": "DISPLAY — SteamOS desktop, permanent dashboard",
+      "connections": ["USB-C: dock (dead battery = permanent passthrough)", "Ethernet via dock"]
+    },
+    "vizio_tv": {
+      "ip": "unknown (scanning)",
+      "position": "FLOOR — basement",
+      "role": "CAST TARGET — large screen for map display",
+      "connections": ["WiFi", "HDMI (available)"],
+      "cast_protocol": "SmartCast / Chromecast built-in / DIAL"
+    }
+  },
+
+  "voice_pipeline": {
+    "current": {
+      "path": "Corsair headset → USB → northGate → Cursor cloud → text",
+      "problem": "Voice data goes to Cursor's cloud. Wasted data.",
+      "latency": "~500ms (cloud round-trip)"
+    },
+    "target_gio": {
+      "path": "Corsair headset → USB → northGate → LOCAL whisper → Gaia",
+      "advantage": "ALL voice stays local. Gaia eats every word.",
+      "options": [
+        {
+          "name": "whisper.cpp",
+          "where": "northGate RTX 5090",
+          "speed": "real-time (5090 is overkill for whisper)",
+          "model": "whisper-large-v3 (~3GB VRAM)",
+          "quality": "BEST — matches cloud quality"
+        },
+        {
+          "name": "faster-whisper",
+          "where": "northGate or ironGate",
+          "speed": "4x faster than original whisper",
+          "model": "CTranslate2 optimized",
+          "quality": "Excellent"
+        },
+        {
+          "name": "vosk",
+          "where": "ANY gate (CPU-only)",
+          "speed": "real-time on CPU",
+          "model": "vosk-model-en-us-0.22 (~1.8GB)",
+          "quality": "Good — works offline, zero GPU"
+        }
+      ],
+      "timeline": "Slow build. Voice first, then vision (webcam on sporeGate). GIO grows."
+    }
+  },
+
+  "casting_map": {
+    "sources": {
+      "compass_rose": "http://192.168.4.147:8888/compass-rose.html",
+      "kenshi_globe": "http://192.168.4.147:8888/kenshi-globe.html",
+      "eastgate_hud": "http://192.168.4.244:8080/",
+      "gate_portal": "http://192.168.4.244:8443/"
+    },
+    "targets": [
+      { "device": "frameGate", "method": "browser URL", "content": "compass rose + globe overlay" },
+      { "device": "deckGate", "method": "browser URL", "content": "dashboard / HUD" },
+      { "device": "vizio_tv", "method": "Chromecast / DIAL / browser", "content": "world map — the BIG picture" },
+      { "device": "grapheneGate", "method": "Pixel browser", "content": "lighthouse beacon — test anything" }
+    ]
+  },
+
+  "ar_vision": {
+    "device": "Steam Frame (frameGate)",
+    "concept": "Steam Frame as AR headset/overlay — see the Kenshi world map projected onto the physical basement",
+    "layers": [
+      "Layer 0: Physical basement (real)",
+      "Layer 1: LAN map overlay (gates as glowing nodes)",
+      "Layer 2: Kenshi biome map (12 biomes projected on floor)",
+      "Layer 3: Creature bestiary (3D models floating in space)",
+      "Layer 4: Data flow visualization (packets as particles)",
+      "Layer 5: Voice waveform (Kevin's speech as visible waves)"
+    ],
+    "input": "Steam Controllers = HANDS, headset = VOICE, webcam = EYES, Pixel = POSITION"
+  },
+
+  "orientation": {
+    "spyglass": "sporeGate webcam — sees the physical room",
+    "lighthouse": "grapheneGate Pixel — beacons signal to all devices",
+    "compass": "northGate keyboard — Kevin's input origin",
+    "map": "Vizio TV on floor — the big picture projection",
+    "frame": "frameGate at feet — AR window into the digital",
+    "deck": "deckGate on desk — permanent status dashboard"
+  }
+}
