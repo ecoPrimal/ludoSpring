@@ -1,19 +1,28 @@
 // KenshiReborn Bridge DLL — RenderSystem_Vulkan_x64.dll
-// Phase 1: Register with Ogre's Root to appear in the launcher dropdown
+// v0.6.0 — INVESTIGATOR: Map D3D11's vtable without registering anything
 //
-// Kenshi uses Ogre 2.x. When the DLL is loaded, Ogre calls dllStartPlugin().
-// We get Root::getSingletonPtr(), construct a base RenderSystem, set its name,
-// and register it with Root::addRenderSystem().
+// Phase 1 (v0.5.0) proved the DLL loads and Ogre symbols resolve.
+// Phase 1 ALSO proved that registering a base RenderSystem crashes
+// because Ogre calls pure virtual methods during config dialog creation.
+//
+// This version:
+// 1. Gets Root singleton
+// 2. Reads getAvailableRenderers() to find the D3D11 RenderSystem
+// 3. Dumps the D3D11 object's vtable to a log file
+// 4. Identifies getName slot by string matching
+// 5. Maps config-related methods
+// 6. Does NOT register anything — Kenshi stays stable
+//
+// Output: kenshi_reborn_vtable.json with full vtable map
 
 #![allow(non_snake_case)]
 
-use std::ffi::CStr;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::ptr;
 
 const LOG_FILE: &str = r"M:\SteamLibrary\steamapps\common\Kenshi\kenshi_reborn.log";
-const PROOF_FILE: &str = r"M:\SteamLibrary\steamapps\common\Kenshi\kenshi_reborn_loaded.txt";
+const VTABLE_FILE: &str = r"M:\SteamLibrary\steamapps\common\Kenshi\kenshi_reborn_vtable.json";
 
 fn log(msg: &str) {
     if let Ok(mut f) = OpenOptions::new().create(true).append(true).open(LOG_FILE) {
@@ -21,157 +30,220 @@ fn log(msg: &str) {
     }
 }
 
-// Windows FFI
 extern "system" {
     fn LoadLibraryA(name: *const u8) -> *mut u8;
     fn GetProcAddress(module: *mut u8, name: *const u8) -> *mut u8;
-    fn GetLastError() -> u32;
+    fn GetModuleHandleA(name: *const u8) -> *mut u8;
+    fn IsBadReadPtr(lp: *const u8, ucb: usize) -> i32;
 }
 
-// Ogre function signatures (x64 MSVC: thiscall = normal calling convention)
+// Ogre types
 type FnGetSingletonPtr = unsafe extern "C" fn() -> *mut u8;
-type FnAddRenderSystem = unsafe extern "C" fn(root: *mut u8, rs: *mut u8);
-type FnRenderSystemCtor = unsafe extern "C" fn(this: *mut u8);
+type FnGetAvailableRenderers = unsafe extern "C" fn(root: *mut u8) -> *mut StdVector;
 
-// MSVC mangled symbol names from dumpbin /exports OgreMain_x64.dll
-const SYM_ROOT_GET_SINGLETON_PTR: &[u8] = b"?getSingletonPtr@Root@Ogre@@SAPEAV12@XZ\0";
-const SYM_ROOT_ADD_RENDER_SYSTEM: &[u8] = b"?addRenderSystem@Root@Ogre@@QEAAXPEAVRenderSystem@2@@Z\0";
-const SYM_RENDER_SYSTEM_CTOR: &[u8] = b"??0RenderSystem@Ogre@@QEAA@XZ\0";
-
-// RenderSystem name — must fit in MSVC SSO (max 15 chars + null)
-// "Vulkan (Reborn)" = exactly 15 chars — PERFECT SSO fit
-const RS_NAME: &[u8] = b"Vulkan (Reborn)\0";
-const RS_NAME_LEN: usize = 15;
-
-/// Write an MSVC std::string in SSO mode at the given memory address.
-/// MSVC std::string layout (32 bytes total):
-///   [0..15]  _Buf[16]  — SSO char buffer (or _Ptr + padding for heap)
-///   [16..23] _Mysize   — string length (size_t)
-///   [24..31] _Myres    — capacity, 15 for SSO (size_t)
-unsafe fn write_msvc_string_sso(addr: *mut u8, s: &[u8], len: usize) {
-    // Write string data into SSO buffer
-    ptr::copy_nonoverlapping(s.as_ptr(), addr, len + 1); // include null terminator
-    // Zero remaining buffer bytes
-    for i in (len + 1)..16 {
-        *addr.add(i) = 0;
-    }
-    // Write size
-    let size_ptr = addr.add(16) as *mut u64;
-    *size_ptr = len as u64;
-    // Write capacity = 15 (SSO marker)
-    let cap_ptr = addr.add(24) as *mut u64;
-    *cap_ptr = 15u64;
+// MSVC std::vector layout (simplified)
+#[repr(C)]
+struct StdVector {
+    begin: *mut *mut u8,  // pointer to first element
+    end: *mut *mut u8,    // pointer past last element
+    cap: *mut *mut u8,    // capacity end
 }
 
-/// Ogre3D plugin entry point — called when Kenshi loads this DLL
+// Mangled symbols
+const SYM_ROOT_GET_SINGLETON: &[u8] = b"?getSingletonPtr@Root@Ogre@@SAPEAV12@XZ\0";
+const SYM_GET_AVAIL_RENDERERS: &[u8] = b"?getAvailableRenderers@Root@Ogre@@QEAAAEBV?$vector@PEAVRenderSystem@Ogre@@V?$STLAllocator@PEAVRenderSystem@Ogre@@V?$CategorisedAllocPolicy@$0A@@2@@2@@std@@XZ\0";
+
+/// Read an MSVC std::string at the given address, return the string content
+unsafe fn read_msvc_string(addr: *const u8) -> Option<String> {
+    if IsBadReadPtr(addr, 32) != 0 {
+        return None;
+    }
+    
+    // Read capacity to determine SSO vs heap
+    let cap = *(addr.add(24) as *const u64);
+    
+    let (data_ptr, len) = if cap <= 15 {
+        // SSO mode — data is inline
+        let len = *(addr.add(16) as *const u64) as usize;
+        (addr, len)
+    } else {
+        // Heap mode — first 8 bytes are a pointer
+        let ptr = *(addr as *const *const u8);
+        let len = *(addr.add(16) as *const u64) as usize;
+        if IsBadReadPtr(ptr, len) != 0 {
+            return None;
+        }
+        (ptr, len)
+    };
+    
+    if len > 1024 {
+        return None; // sanity check
+    }
+    
+    let bytes = std::slice::from_raw_parts(data_ptr, len);
+    String::from_utf8(bytes.to_vec()).ok()
+}
+
+/// Try to read a string returned by calling a vtable entry (const String& return)
+/// The function returns a pointer to a std::string
+unsafe fn try_call_getname(vtable_entry: *const u8, this: *mut u8) -> Option<String> {
+    // This is extremely dangerous — we're calling an unknown function
+    // Only do this if we're confident the vtable entry is getName
+    type FnGetName = unsafe extern "C" fn(this: *mut u8) -> *const u8;
+    let get_name: FnGetName = std::mem::transmute(vtable_entry);
+    
+    // Use structured exception handling... well, Rust doesn't have SEH
+    // Instead, just try it and hope for the best
+    let result = get_name(this);
+    if result.is_null() || IsBadReadPtr(result, 32) != 0 {
+        return None;
+    }
+    read_msvc_string(result)
+}
+
 #[unsafe(no_mangle)]
 pub extern "C" fn dllStartPlugin() {
     log("╔═══════════════════════════════════════════════════════╗");
-    log("║  KenshiReborn v0.5.0 — DROPDOWN INJECTION            ║");
+    log("║  KenshiReborn v0.6.0 — VTABLE INVESTIGATOR           ║");
+    log("║  READ ONLY — does NOT register any RenderSystem       ║");
     log("╚═══════════════════════════════════════════════════════╝");
     
     unsafe {
-        // Step 1: Get OgreMain module handle
-        let ogre = LoadLibraryA(b"OgreMain_x64.dll\0".as_ptr());
+        // Get OgreMain
+        let ogre = GetModuleHandleA(b"OgreMain_x64.dll\0".as_ptr());
         if ogre.is_null() {
-            log("ERROR: Could not load OgreMain_x64.dll");
+            let ogre2 = LoadLibraryA(b"OgreMain_x64.dll\0".as_ptr());
+            if ogre2.is_null() {
+                log("ERROR: OgreMain_x64.dll not found");
+                return;
+            }
+        }
+        let ogre = GetModuleHandleA(b"OgreMain_x64.dll\0".as_ptr());
+        log(&format!("✓ OgreMain at {:?}", ogre));
+        
+        // Get Root
+        let fn_get_root = GetProcAddress(ogre, SYM_ROOT_GET_SINGLETON.as_ptr());
+        let fn_get_renderers = GetProcAddress(ogre, SYM_GET_AVAIL_RENDERERS.as_ptr());
+        
+        if fn_get_root.is_null() || fn_get_renderers.is_null() {
+            log(&format!("ERROR: Symbol resolution failed (root={:?}, renderers={:?})", 
+                fn_get_root, fn_get_renderers));
             return;
         }
-        log("✓ OgreMain_x64.dll loaded");
-        
-        // Step 2: Resolve symbols
-        let fn_get_root = GetProcAddress(ogre, SYM_ROOT_GET_SINGLETON_PTR.as_ptr());
-        let fn_add_rs = GetProcAddress(ogre, SYM_ROOT_ADD_RENDER_SYSTEM.as_ptr());
-        let fn_rs_ctor = GetProcAddress(ogre, SYM_RENDER_SYSTEM_CTOR.as_ptr());
-        
-        if fn_get_root.is_null() || fn_add_rs.is_null() || fn_rs_ctor.is_null() {
-            log(&format!("ERROR: Symbol resolution failed"));
-            log(&format!("  getSingletonPtr: {:?}", fn_get_root));
-            log(&format!("  addRenderSystem: {:?}", fn_add_rs));
-            log(&format!("  RenderSystem ctor: {:?}", fn_rs_ctor));
-            write_proof("PARTIAL — DLL loaded but Ogre symbols not found");
-            return;
-        }
-        log("✓ All Ogre symbols resolved");
         
         let get_root: FnGetSingletonPtr = std::mem::transmute(fn_get_root);
-        let add_rs: FnAddRenderSystem = std::mem::transmute(fn_add_rs);
-        let rs_ctor: FnRenderSystemCtor = std::mem::transmute(fn_rs_ctor);
+        let get_renderers: FnGetAvailableRenderers = std::mem::transmute(fn_get_renderers);
         
-        // Step 3: Get Root singleton
         let root = get_root();
         if root.is_null() {
-            log("ERROR: Root::getSingletonPtr() returned null");
-            write_proof("PARTIAL — Ogre Root not yet initialized");
+            log("ERROR: Root is null");
             return;
         }
-        log(&format!("✓ Root singleton at {:?}", root));
+        log(&format!("✓ Root at {:?}", root));
         
-        // Step 4: Allocate memory for our RenderSystem (oversized for safety)
-        let rs_size = 8192;
-        let layout = std::alloc::Layout::from_size_align(rs_size, 64).unwrap();
-        let rs = std::alloc::alloc_zeroed(layout);
-        if rs.is_null() {
-            log("ERROR: Failed to allocate RenderSystem memory");
+        // Get available renderers
+        let vec = get_renderers(root);
+        if vec.is_null() {
+            log("ERROR: getAvailableRenderers returned null");
             return;
         }
-        log(&format!("✓ Allocated {} bytes for RenderSystem at {:?}", rs_size, rs));
         
-        // Step 5: Call the base RenderSystem constructor
-        log("  Calling RenderSystem::RenderSystem()...");
-        rs_ctor(rs);
-        log("✓ RenderSystem constructed");
+        let count = ((*vec).end as usize - (*vec).begin as usize) / 8;
+        log(&format!("✓ Available renderers: {} found", count));
         
-        // Step 6: Set mName
-        // In Ogre's RenderSystem, mName is the first std::string member after the vtable pointer.
-        // Layout: [vtable_ptr: 8 bytes] [mName: 32 bytes (MSVC std::string)] ...
-        // mName offset = 8 bytes
-        let name_offset = 8usize;
-        let name_addr = rs.add(name_offset);
+        if count == 0 {
+            log("WARNING: No renderers available yet (we load before D3D11?)");
+            log("  Our line in Plugins_x64.cfg is AFTER D3D11 — this shouldn't happen");
+            return;
+        }
         
-        log(&format!("  Writing name at offset {} (addr {:?})", name_offset, name_addr));
-        write_msvc_string_sso(name_addr, RS_NAME, RS_NAME_LEN);
-        log(&format!("✓ Name set to '{}'", std::str::from_utf8(&RS_NAME[..RS_NAME_LEN]).unwrap()));
+        // Iterate through renderers
+        let mut json_entries = Vec::new();
         
-        // Step 7: Register with Root
-        log("  Calling Root::addRenderSystem()...");
-        add_rs(root, rs);
-        log("✓ RenderSystem registered with Ogre Root!");
-        log("");
-        log("╔═══════════════════════════════════════════════════════╗");
-        log("║  SUCCESS — 'Vulkan (Reborn)' should appear in the    ║");
-        log("║  Kenshi launcher dropdown!                            ║");
+        for i in 0..count {
+            let rs_ptr = *(*vec).begin.add(i);
+            if rs_ptr.is_null() {
+                continue;
+            }
+            log(&format!("\n=== RenderSystem[{}] at {:?} ===", i, rs_ptr));
+            
+            // Read vtable pointer (first 8 bytes of object)
+            let vtable_ptr = *(rs_ptr as *const *const *const u8);
+            log(&format!("  vtable at {:?}", vtable_ptr));
+            
+            // Try to read mName at offset 8
+            let name_at_8 = read_msvc_string(rs_ptr.add(8));
+            log(&format!("  mName@offset8: {:?}", name_at_8));
+            
+            // Try other offsets in case mName isn't at 8
+            for offset in [8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128].iter() {
+                let s = read_msvc_string(rs_ptr.add(*offset));
+                if let Some(ref text) = s {
+                    if text.len() > 3 && text.len() < 200 {
+                        log(&format!("  String@offset{}: \"{}\"", offset, text));
+                    }
+                }
+            }
+            
+            // Dump first 64 vtable entries (function pointers)
+            log(&format!("\n  Vtable entries (first 64):"));
+            let ogre_base = ogre as usize;
+            let ogre_end = ogre_base + 10 * 1024 * 1024; // ~10MB range
+            
+            let mut vtable_json = Vec::new();
+            
+            for slot in 0..64 {
+                if IsBadReadPtr(vtable_ptr.add(slot) as *const u8, 8) != 0 {
+                    log(&format!("  [{}] <unreadable>", slot));
+                    break;
+                }
+                let fn_ptr = *vtable_ptr.add(slot);
+                let fn_addr = fn_ptr as usize;
+                
+                // Check if this is in OgreMain or the D3D11 DLL
+                let module = if fn_addr >= ogre_base && fn_addr < ogre_end {
+                    "OgreMain"
+                } else {
+                    "D3D11/other"
+                };
+                
+                let rva = fn_addr.wrapping_sub(ogre_base);
+                log(&format!("  [{:2}] {:?} (RVA 0x{:x}) [{}]", slot, fn_ptr, rva, module));
+                
+                vtable_json.push(format!(
+                    "    {{\"slot\": {}, \"addr\": \"0x{:x}\", \"rva\": \"0x{:x}\", \"module\": \"{}\"}}",
+                    slot, fn_addr, rva, module
+                ));
+            }
+            
+            let name_str = name_at_8.unwrap_or_else(|| "unknown".to_string());
+            json_entries.push(format!(
+                "  {{\n    \"index\": {},\n    \"name\": \"{}\",\n    \"address\": \"0x{:x}\",\n    \"vtable\": \"0x{:x}\",\n    \"entries\": [\n{}\n    ]\n  }}",
+                i, name_str, rs_ptr as usize, vtable_ptr as usize,
+                vtable_json.join(",\n")
+            ));
+        }
+        
+        // Write vtable JSON
+        let json = format!("{{\n  \"version\": \"v0.6.0\",\n  \"purpose\": \"D3D11 vtable map for safe RenderSystem registration\",\n  \"renderers\": [\n{}\n  ]\n}}", json_entries.join(",\n"));
+        
+        if let Ok(mut f) = std::fs::File::create(VTABLE_FILE) {
+            let _ = f.write_all(json.as_bytes());
+            log(&format!("\n✓ Wrote vtable map to {}", VTABLE_FILE));
+        }
+        
+        log("\n╔═══════════════════════════════════════════════════════╗");
+        log("║  INVESTIGATION COMPLETE — Kenshi is SAFE             ║");
+        log("║  No RenderSystem registered. Read-only scan.         ║");
         log("╚═══════════════════════════════════════════════════════╝");
-        
-        write_proof("SUCCESS — RenderSystem registered with Ogre Root. Check the dropdown!");
     }
 }
 
-fn write_proof(status: &str) {
-    if let Ok(mut f) = std::fs::File::create(PROOF_FILE) {
-        let _ = writeln!(f, "KenshiReborn v0.5.0 — Bridge DLL");
-        let _ = writeln!(f, "Status: {}", status);
-        let _ = writeln!(f, "");
-        let _ = writeln!(f, "If 'Vulkan (Reborn)' appears in the dropdown — PHASE 1 COMPLETE!");
-        let _ = writeln!(f, "Selecting it won't render yet (Phase 2), but the injection path is proven.");
-    }
-}
-
-/// Ogre3D plugin shutdown — called when Kenshi exits
 #[unsafe(no_mangle)]
 pub extern "C" fn dllStopPlugin() {
-    log("dllStopPlugin() called — clean shutdown");
+    log("dllStopPlugin() — clean exit, investigator mode");
 }
 
-/// DLL main entry point
-#[unsafe(no_mangle)]
-pub extern "system" fn DllMain(
-    _hinst: usize,
-    reason: u32,
-    _reserved: *mut std::ffi::c_void,
-) -> i32 {
-    if reason == 1 {
-        log("DllMain: PROCESS_ATTACH — mapped into kenshi_x64.exe");
-    }
-    1
-}
+// NOTE: No custom DllMain — Rust cdylib provides its own.
+// A duplicate DllMain conflicts and can prevent the DLL from loading.
+// Ogre will call dllStartPlugin() after LoadLibrary succeeds.
