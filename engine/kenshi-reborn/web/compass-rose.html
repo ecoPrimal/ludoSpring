@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🧭 COMPASS ROSE — Keyboard Periodic Table</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e0d8c8;font-family:'Courier New',monospace;overflow:hidden;width:100vw;height:100vh}
+canvas{display:block;width:100%;height:100%}
+#info{position:fixed;bottom:10px;left:10px;font-size:11px;opacity:0.6;pointer-events:none}
+#element{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;text-align:center;pointer-events:none;opacity:0;transition:opacity 0.3s}
+#mode{position:fixed;top:10px;right:10px;font-size:12px;opacity:0.7;cursor:pointer}
+</style>
+</head><body>
+<canvas id="c"></canvas>
+<div id="info">🧭 COMPASS ROSE — Press any key · Tab=Dvorak · Esc=LISP · Space=breathe</div>
+<div id="element"></div>
+<div id="mode" onclick="cycleMode()">QWERTY ↻</div>
+<script>
+const C=document.getElementById('c'),X=C.getContext('2d');
+let W,H,frame=0,mode='qwerty',activeKey=null,breathPhase=0;
+
+const METALS={Fe:'#8b4513',Cu:'#b87333',Ag:'#c0c0c0',Au:'#ffd700',Pt:'#e5e4e2'};
+const ORGANS={immune:'#ff4444',muscular:'#ff8844',endocrine:'#44aaff',metabolic:'#ffaa00',genetic:'#aa44ff',cognitive:'#44ff88',digestive:'#ff44aa',nervous:'#44ffff',ALL:'#ffffff'};
+
+const QWERTY_ROWS=[
+  {y:0,keys:[
+    {k:'Q',el:'Qr',name:'Quorum',metal:'Fe',organ:'immune',lat:'Quaero',esp:'Kvanto'},
+    {k:'W',el:'Wd',name:'Ward ↑',metal:'Fe',organ:'muscular',lat:'Via',esp:'Vojo'},
+    {k:'E',el:'Es',name:'Ester',metal:'Cu',organ:'endocrine',lat:'Esse',esp:'Esti'},
+    {k:'R',el:'Rx',name:'Redox',metal:'Cu',organ:'metabolic',lat:'Redux',esp:'Redukti'},
+    {k:'T',el:'Th',name:'Thymus',metal:'Ag',organ:'immune',lat:'Thymus',esp:'Timuso'},
+    {k:'Y',el:'Ys',name:'Lysogen',metal:'Ag',organ:'genetic',lat:'Lyso',esp:'Lizogeno'},
+    {k:'U',el:'Un',name:'Union',metal:'Au',organ:'nervous',lat:'Unio',esp:'Unio'},
+    {k:'I',el:'Id',name:'Identity',metal:'Au',organ:'cognitive',lat:'Ego',esp:'Mi'},
+    {k:'O',el:'Om',name:'Organism',metal:'Pt',organ:'digestive',lat:'Orbis',esp:'Organismo'},
+    {k:'P',el:'Pi',name:'Pi π',metal:'Pt',organ:'genetic',lat:'Pi',esp:'Pio'}
+  ]},
+  {y:1,keys:[
+    {k:'A',el:'An',name:'Analog ←',metal:'Fe',organ:'nervous',lat:'Aqua',esp:'Akvo'},
+    {k:'S',el:'Sp',name:'Spore ↓',metal:'Fe',organ:'genetic',lat:'Spora',esp:'Sporo'},
+    {k:'D',el:'Dg',name:'Digital →',metal:'Cu',organ:'cognitive',lat:'Deus',esp:'Dio'},
+    {k:'F',el:'Fg',name:'Forge',metal:'Au',organ:'metabolic',lat:'Fabrica',esp:'Forĝi'},
+    {k:'G',el:'Ga',name:'GAIA',metal:'Pt',organ:'ALL',lat:'Gaia',esp:'Gaja'},
+    {k:'H',el:'Hm',name:'Homunculus',metal:'Au',organ:'cognitive',lat:'Homo',esp:'Homo'},
+    {k:'J',el:'Jr',name:'Journal',metal:'Ag',organ:'cognitive',lat:'Diurnum',esp:'Ĵurnalo'},
+    {k:'K',el:'Kn',name:'Kenshi',metal:'Au',organ:'muscular',lat:'Miles',esp:'Militisto'},
+    {k:'L',el:'Ly',name:'Lysogeny',metal:'Pt',organ:'genetic',lat:'Lumen',esp:'Lumo'},
+    {k:';',el:';;',name:'Pause',metal:'Fe',organ:'nervous',lat:'Finis',esp:'Fino'}
+  ]},
+  {y:2,keys:[
+    {k:'Z',el:'Zk',name:'Zero-Know',metal:'Pt',organ:'immune',lat:'Nihil',esp:'Nulo'},
+    {k:'X',el:'Xn',name:'Exon',metal:'Ag',organ:'genetic',lat:'Extra',esp:'Ekster'},
+    {k:'C',el:'Cr',name:'Coral',metal:'Cu',organ:'digestive',lat:'Corallium',esp:'Koralo'},
+    {k:'V',el:'Vt',name:'Vita',metal:'Au',organ:'ALL',lat:'Vita',esp:'Vivo'},
+    {k:'B',el:'Bm',name:'Biome',metal:'Fe',organ:'genetic',lat:'Bios',esp:'Biomo'},
+    {k:'N',el:'Nt',name:'Neutron',metal:'Cu',organ:'nervous',lat:'Nuntius',esp:'Neŭtrono'},
+    {k:'M',el:'Mb',name:'Membrane',metal:'Ag',organ:'immune',lat:'Membrana',esp:'Membrano'},
+    {k:',',el:'<<',name:'Inhale',metal:'Fe',organ:'digestive',lat:'Spiro',esp:'Enspiri'},
+    {k:'.',el:'>>',name:'Exhale',metal:'Fe',organ:'digestive',lat:'Exhalo',esp:'Elspiri'},
+    {k:'/',el:'//',name:'Divide',metal:'Cu',organ:'metabolic',lat:'Dividere',esp:'Dividi'}
+  ]}
+];
+
+const DVORAK_HOME='AOEUIDHTNS';
+const GATES=[
+  {name:'northGate',ip:'.147',x:-0.7,y:-0.5,color:'#ff4444',role:'HEART'},
+  {name:'eastGate',ip:'.244',x:0.7,y:0,color:'#44ff88',role:'BRAIN'},
+  {name:'ironGate',ip:'.237',x:-0.7,y:0.5,color:'#ffaa44',role:'FORGE'},
+  {name:'grapheneGate',ip:'.9.217',x:0,y:-0.7,color:'#aa44ff',role:'LIGHTHOUSE'},
+  {name:'frameGate',ip:'.203',x:0,y:0.7,color:'#44aaff',role:'FACE'},
+  {name:'deckGate',ip:'.139',x:0.5,y:0.5,color:'#ff44aa',role:'DISPLAY'}
+];
+
+function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight}
+window.addEventListener('resize',resize);resize();
+
+function drawKey(x,y,w,h,key,active){
+  const metal=METALS[key.metal]||'#555';
+  const organ=ORGANS[key.organ]||'#888';
+  const isActive=active||activeKey===key.k;
+  const pulse=isActive?0.3+Math.sin(frame*0.1)*0.2:0;
+  
+  // Key background
+  X.fillStyle=isActive?organ:metal;
+  X.globalAlpha=isActive?0.8:0.15+Math.sin(frame*0.02+key.k.charCodeAt(0)*0.5)*0.05;
+  X.fillRect(x+2,y+2,w-4,h-4);
+  
+  // Key border
+  X.strokeStyle=isActive?'#fff':metal;
+  X.globalAlpha=isActive?1:0.4;
+  X.lineWidth=isActive?2:1;
+  X.strokeRect(x+2,y+2,w-4,h-4);
+  
+  // Glow for active
+  if(isActive){
+    X.shadowColor=organ;
+    X.shadowBlur=20;
+    X.fillStyle=organ;
+    X.globalAlpha=0.2;
+    X.fillRect(x,y,w,h);
+    X.shadowBlur=0;
+  }
+  
+  // Element symbol (top-left)
+  X.globalAlpha=isActive?1:0.7;
+  X.fillStyle=isActive?'#fff':organ;
+  X.font=`bold ${Math.floor(w*0.35)}px 'Courier New'`;
+  X.textAlign='center';
+  X.fillText(key.el,x+w/2,y+h*0.38);
+  
+  // Key letter (small, bottom-left)
+  X.font=`${Math.floor(w*0.18)}px 'Courier New'`;
+  X.globalAlpha=isActive?0.9:0.4;
+  X.fillStyle='#e0d8c8';
+  X.fillText(key.k,x+w*0.2,y+h*0.75);
+  
+  // Metal indicator (bottom-right)
+  X.fillText(key.metal,x+w*0.8,y+h*0.75);
+  
+  // Name on hover/active
+  if(isActive){
+    X.globalAlpha=0.6;
+    X.font=`${Math.floor(w*0.15)}px 'Courier New'`;
+    X.fillText(key.name,x+w/2,y+h*0.9);
+  }
+  
+  X.globalAlpha=1;
+}
+
+function drawCompass(cx,cy,r){
+  const t=frame*0.005;
+  
+  // Compass circle
+  X.strokeStyle='#4a3a2a';
+  X.lineWidth=1;
+  X.globalAlpha=0.3;
+  X.beginPath();X.arc(cx,cy,r,0,Math.PI*2);X.stroke();
+  X.beginPath();X.arc(cx,cy,r*0.6,0,Math.PI*2);X.stroke();
+  
+  // Cardinal directions
+  const dirs=[
+    {label:'N',angle:-Math.PI/2,sub:'House 1',color:'#ff4444'},
+    {label:'S',angle:Math.PI/2,sub:'House 2',color:'#44aaff'},
+    {label:'E',angle:0,sub:'Sunrise',color:'#ffaa00'},
+    {label:'W',angle:Math.PI,sub:'Sunset',color:'#aa44ff'}
+  ];
+  
+  dirs.forEach(d=>{
+    const dx=Math.cos(d.angle)*r,dy=Math.sin(d.angle)*r;
+    X.strokeStyle=d.color;X.globalAlpha=0.5;X.lineWidth=1;
+    X.beginPath();X.moveTo(cx,cy);X.lineTo(cx+dx,cy+dy);X.stroke();
+    X.fillStyle=d.color;X.globalAlpha=0.8;
+    X.font='bold 14px Courier New';X.textAlign='center';
+    X.fillText(d.label,cx+dx*1.1,cy+dy*1.1+5);
+    X.font='9px Courier New';X.globalAlpha=0.4;
+    X.fillText(d.sub,cx+dx*1.1,cy+dy*1.1+18);
+  });
+  
+  // Chirality arrows (CW/CCW)
+  X.strokeStyle='#888';X.globalAlpha=0.2;X.lineWidth=1;
+  X.beginPath();
+  for(let a=0;a<Math.PI*2;a+=0.05){
+    const rr=r*0.4+Math.sin(a*3+t)*r*0.1;
+    const px=cx+Math.cos(a+t)*rr,py=cy+Math.sin(a+t)*rr;
+    a===0?X.moveTo(px,py):X.lineTo(px,py);
+  }
+  X.stroke();
+  
+  // Center diamond — Kevin's chair
+  X.fillStyle='#ffd700';X.globalAlpha=0.6+Math.sin(t*3)*0.2;
+  X.save();X.translate(cx,cy);X.rotate(t);
+  X.beginPath();X.moveTo(0,-8);X.lineTo(8,0);X.lineTo(0,8);X.lineTo(-8,0);X.closePath();
+  X.fill();X.restore();
+  
+  // Gate positions
+  GATES.forEach(g=>{
+    const gx=cx+g.x*r,gy=cy+g.y*r;
+    X.fillStyle=g.color;X.globalAlpha=0.5+Math.sin(t*2+g.x*5)*0.2;
+    X.beginPath();X.arc(gx,gy,4,0,Math.PI*2);X.fill();
+    X.font='8px Courier New';X.textAlign='center';
+    X.fillText(g.name,gx,gy-8);
+  });
+  
+  X.globalAlpha=1;
+}
+
+function drawBreathWave(y,w,h){
+  breathPhase+=0.02;
+  X.strokeStyle='#44ffaa';X.globalAlpha=0.15;X.lineWidth=1;
+  X.beginPath();
+  for(let i=0;i<w;i++){
+    const v=Math.sin(i*0.02+breathPhase)*h*0.3+Math.sin(i*0.005+breathPhase*0.7)*h*0.2;
+    i===0?X.moveTo(i,y+h/2+v):X.lineTo(i,y+h/2+v);
+  }
+  X.stroke();X.globalAlpha=1;
+}
+
+function drawElementPanel(key){
+  if(!key)return;
+  const el=document.getElementById('element');
+  const organ=ORGANS[key.organ]||'#888';
+  el.style.opacity='1';
+  el.style.color=organ;
+  el.innerHTML=`
+    <div style="font-size:36px;font-weight:bold">${key.el}</div>
+    <div style="font-size:16px">${key.name}</div>
+    <div style="font-size:11px;opacity:0.6;margin-top:4px">${key.metal} · ${key.organ}</div>
+    <div style="font-size:10px;opacity:0.5;margin-top:2px">${key.lat||''} / ${key.esp||''}</div>
+  `;
+}
+
+function findKey(k){
+  for(const row of QWERTY_ROWS)
+    for(const key of row.keys)
+      if(key.k===k.toUpperCase()||key.k===k)return key;
+  return null;
+}
+
+function draw(){
+  X.fillStyle='#0a0a0f';X.fillRect(0,0,W,H);
+  
+  // Breath wave background
+  drawBreathWave(0,W,H);
+  
+  // Title
+  X.fillStyle='#e0d8c8';X.globalAlpha=0.6;
+  X.font='bold 16px Courier New';X.textAlign='center';
+  X.fillText(`🧭 COMPASS ROSE — ${mode.toUpperCase()} — Wave ${Math.floor(frame/60)}`,W/2,30);
+  X.font='10px Courier New';X.globalAlpha=0.3;
+  X.fillText('6 Axes of Chirality · Kevin\'s Chair = Origin',W/2,48);
+  X.globalAlpha=1;
+  
+  // Keyboard layout
+  const kw=Math.min(60,W/12);
+  const kh=kw*1.2;
+  const startX=(W-kw*10)/2;
+  const startY=H*0.55;
+  const offsets=[0,kw*0.3,kw*0.6];
+  
+  QWERTY_ROWS.forEach((row,ri)=>{
+    row.keys.forEach((key,ki)=>{
+      drawKey(startX+offsets[ri]+ki*kw,startY+ri*kh,kw,kh,key);
+    });
+  });
+  
+  // WASD compass highlight
+  if(!activeKey){
+    const wasd=['W','A','S','D'];
+    QWERTY_ROWS.forEach((row,ri)=>{
+      row.keys.forEach((key,ki)=>{
+        if(wasd.includes(key.k)){
+          const x=startX+offsets[ri]+ki*kw;
+          const y=startY+ri*kh;
+          X.strokeStyle='#ffd700';X.globalAlpha=0.3+Math.sin(frame*0.05)*0.15;
+          X.lineWidth=2;X.strokeRect(x,y,kw,kh);
+        }
+      });
+    });
+    X.globalAlpha=1;
+  }
+  
+  // Compass rose (top-left area)
+  const compassR=Math.min(W*0.15,H*0.2);
+  drawCompass(W*0.15,H*0.3,compassR);
+  
+  // Dvorak hint (top-right)
+  if(mode==='dvorak'){
+    X.fillStyle='#aa88ff';X.globalAlpha=0.5;
+    X.font='12px Courier New';X.textAlign='right';
+    X.fillText('DVORAK — Breath LEFT, Structure RIGHT',W-20,H*0.15);
+    X.font='10px Courier New';X.globalAlpha=0.3;
+    DVORAK_HOME.split('').forEach((ch,i)=>{
+      const isDvorakVowel='AOEUI'.includes(ch);
+      X.fillStyle=isDvorakVowel?'#ff8844':'#4488ff';
+      X.globalAlpha=0.5;
+      X.fillText(ch,W-20-('AOEUIDHTNS'.length-i)*14,H*0.18);
+    });
+  }
+  
+  // Metallurgical legend (right side)
+  X.textAlign='right';X.font='10px Courier New';
+  const metalY=H*0.55;
+  Object.entries(METALS).forEach(([m,c],i)=>{
+    const stages=['Fe:Ore','Cu:Pig Iron','Ag:Steel','Au:Damascus','Pt:Nuclear'];
+    X.fillStyle=c;X.globalAlpha=0.5;
+    X.fillText(stages[i],W-15,metalY+i*16);
+  });
+  
+  // Latin / Esperanto ticker
+  X.textAlign='center';X.font='10px Courier New';
+  X.fillStyle='#888';X.globalAlpha=0.2;
+  const tickerText='aqua·orbis·esse·unus·ignis · akvo·domo·fajro·gaja·kerno·lumo·mondo';
+  const tickerX=(frame*0.5)%(tickerText.length*7);
+  X.fillText(tickerText,W/2-tickerX+W,H-30);
+  X.fillText(tickerText,W/2-tickerX,H-30);
+  
+  // LISP expression at bottom
+  X.fillStyle='#44ff88';X.globalAlpha=0.15;
+  X.font='11px Courier New';X.textAlign='center';
+  const lisp=activeKey?
+    `(gaja (forĝi (${findKey(activeKey)?.esp||'?'} (kerno ludoSpring))))`:
+    '(gaja (forĝi (akvo (kerno ludoSpring))))';
+  X.fillText(lisp,W/2,H-12);
+  
+  X.globalAlpha=1;
+  frame++;
+  requestAnimationFrame(draw);
+}
+
+document.addEventListener('keydown',e=>{
+  const k=e.key.toUpperCase();
+  if(e.key==='Tab'){e.preventDefault();mode=mode==='qwerty'?'dvorak':'qwerty';return}
+  if(e.key==='Escape'){mode='lisp';return}
+  if(e.key===' '){activeKey=null;document.getElementById('element').style.opacity='0';return}
+  
+  const found=findKey(e.key);
+  if(found){
+    activeKey=found.k;
+    drawElementPanel(found);
+  }
+});
+
+document.addEventListener('keyup',()=>{
+  setTimeout(()=>{activeKey=null;document.getElementById('element').style.opacity='0'},1500);
+});
+
+function cycleMode(){
+  const modes=['qwerty','dvorak','lisp'];
+  mode=modes[(modes.indexOf(mode)+1)%modes.length];
+  document.getElementById('mode').textContent=mode.toUpperCase()+' ↻';
+}
+
+draw();
+</script>
+</body></html>

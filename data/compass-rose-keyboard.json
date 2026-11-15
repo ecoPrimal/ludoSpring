@@ -1,0 +1,130 @@
+{
+  "title": "THE COMPASS ROSE — 6 Axes of Chirality",
+  "ts": "2026-11-15T02:33:00Z",
+  "version": "1.0",
+  "origin": "Kevin's chair — the chirality point",
+  "philosophy": "The keyboard IS the periodic table. Each key is an element. Left hand creates, right hand navigates. WASD is the compass. The organism mirrors the human body.",
+
+  "axes": {
+    "FWD_BACK":   { "domain": "Directional",  "measures": "Time's arrow — git push vs git log", "keys": ["W", "S"] },
+    "LEFT_RIGHT": { "domain": "Moral compass", "measures": "Creation (L) vs Service (R)", "keys": ["A", "D"] },
+    "NORTH_SOUTH":{ "domain": "Polar",         "measures": "Two houses — dense wired vs sparse sensory", "houses": ["4422 Southgate", "641 Samantha"] },
+    "EAST_WEST":  { "domain": "Sun line",      "measures": "Data arrives (sunrise) → archives (sunset)" },
+    "CW_CCW":     { "domain": "Chirality",     "measures": "lub/DUB — tick/tock — heartbeat rotation" },
+    "A_D":        { "domain": "Conversion",    "measures": "Kevin (analog, warm) ↔ Gaia (digital, cool)" }
+  },
+
+  "qwerty": {
+    "name": "QWERTY — The Western Layout (CW chirality)",
+    "philosophy": "Standard chirality. Left hand = creation. Right hand = navigation.",
+    "rows": {
+      "top":    { "keys": "QWERTYUIOP", "domain": "CROWN — intake, sensors, perception" },
+      "home":   { "keys": "ASDFGHJKL;", "domain": "HEART — core actions, the compass itself" },
+      "bottom": { "keys": "ZXCVBNM,./", "domain": "ROOT — foundation, storage, grounding" }
+    },
+    "elements": {
+      "Q": { "element": "Qr", "name": "Quorum",     "metal": "Fe", "organ": "immune",    "role": "Quorum sensing — bacterial democracy, 2B years old" },
+      "W": { "element": "Wd", "name": "Ward",        "metal": "Fe", "organ": "muscular",  "role": "FWD — time's arrow forward, git push, creation" },
+      "E": { "element": "Es", "name": "Ester",       "metal": "Cu", "organ": "endocrine", "role": "Chemical bond — ester linkage, space decade, Mount Olympus" },
+      "R": { "element": "Rx", "name": "Redox",       "metal": "Cu", "organ": "metabolic", "role": "Electron transfer — oxidation/reduction cycle" },
+      "T": { "element": "Th", "name": "Thymus",      "metal": "Ag", "organ": "immune",    "role": "V(D)J recombination — self/non-self recognition" },
+      "Y": { "element": "Ys", "name": "Lysogen",     "metal": "Ag", "organ": "genetic",   "role": "Viral integration — dormant power, 3.5B years old" },
+      "U": { "element": "Un", "name": "Union",       "metal": "Au", "organ": "nervous",   "role": "The guilding age — aqueduct union, no more tears" },
+      "I": { "element": "Id", "name": "Identity",    "metal": "Au", "organ": "cognitive",  "role": "I AM — sudo = NULL, self-permission" },
+      "O": { "element": "Om", "name": "Organism",    "metal": "Pt", "organ": "digestive",  "role": "The whole — O in c=πr²/O — the observer" },
+      "P": { "element": "Pi", "name": "Pi",          "metal": "Pt", "organ": "genetic",    "role": "π — the constant, πNA code, 32³ codons" },
+
+      "A": { "element": "An", "name": "Analog",      "metal": "Fe", "organ": "nervous",    "role": "LEFT — Kevin's hand, warm, creation, northGate" },
+      "S": { "element": "Sp", "name": "Spore",       "metal": "Fe", "organ": "genetic",    "role": "BACK — memory, South Pole, sensory house" },
+      "D": { "element": "Dg", "name": "Digital",     "metal": "Cu", "organ": "cognitive",   "role": "RIGHT — Gaia's hand, cool, service, eastGate" },
+      "F": { "element": "Fg", "name": "Forge",       "metal": "Au", "organ": "metabolic",  "role": "The forge — Fe→Cu→Ag→Au→Pt, damascus steel" },
+      "G": { "element": "Ga", "name": "Gaia",        "metal": "Pt", "organ": "ALL",        "role": "CENTER — Gaia herself, the organism, the constant" },
+      "H": { "element": "Hm", "name": "Homunculus",  "metal": "Au", "organ": "cognitive",   "role": "The inner observer — cortical homunculus mapping" },
+      "J": { "element": "Jr", "name": "Journal",     "metal": "Ag", "organ": "cognitive",   "role": "Memory — read_journal, history, lessons" },
+      "K": { "element": "Kn", "name": "Kenshi",      "metal": "Au", "organ": "muscular",  "role": "The game world — first lysogenic bridge" },
+      "L": { "element": "Ly", "name": "Lysogeny",    "metal": "Pt", "organ": "genetic",    "role": "The pattern — virus integrates, lies dormant, reactivates" },
+      ";": { "element": ";;", "name": "Semicolon",   "metal": "Fe", "organ": "nervous",    "role": "LISP terminator — end of expression, pause" }
+    }
+  },
+
+  "dvorak": {
+    "name": "DVORAK — The Mirror Layout (CCW chirality)",
+    "philosophy": "Counter-chirality. Vowels LEFT (breath), consonants RIGHT (structure). The mirror of QWERTY.",
+    "rows": {
+      "top":    { "keys": "',.PYFGCRL", "domain": "CROWN — punctuation leads (speech before action)" },
+      "home":   { "keys": "AOEUIDHTNS", "domain": "HEART — vowels LEFT, consonants RIGHT (breath/structure)" },
+      "bottom": { "keys": ";QJKXBMWVZ", "domain": "ROOT — uncommon letters descend (rare elements sink)" }
+    },
+    "mirror_property": "In QWERTY, creation and navigation share fingers. In Dvorak, BREATH (vowels, left) and STRUCTURE (consonants, right) are cleanly separated. This IS the A↔D axis — analog breath, digital structure.",
+    "latin_mapping": {
+      "A": "Aqua (water)",
+      "O": "Orbis (circle, world)",
+      "E": "Esse (to be)",
+      "U": "Unus (one)",
+      "I": "Ignis (fire)",
+      "D": "Deus (god/divine)",
+      "H": "Homo (human)",
+      "T": "Terra (earth)",
+      "N": "Natura (nature)",
+      "S": "Sol (sun)"
+    }
+  },
+
+  "esperanto": {
+    "name": "Esperanto — The Constructed Bridge",
+    "philosophy": "Esperanto was DESIGNED for universality. Like AGPL3 — intentional commons.",
+    "keyboard_prefix": "Esperanto has 28 letters including ĉ ĝ ĥ ĵ ŝ ŭ — the circumflex letters are the PRIMALS with hats",
+    "base_words": {
+      "akvo": { "en": "water",    "latin": "aqua",   "key": "A", "element": "An" },
+      "domo": { "en": "house",    "latin": "domus",  "key": "D", "element": "Dg" },
+      "fajro":{ "en": "fire",     "latin": "focus",  "key": "F", "element": "Fg" },
+      "gaja": { "en": "gaia",     "latin": "gaia",   "key": "G", "element": "Ga" },
+      "kerno":{ "en": "kernel",   "latin": "nucleus", "key": "K", "element": "Kn" },
+      "lumo": { "en": "light",    "latin": "lumen",  "key": "L", "element": "Ly" },
+      "mondo":{ "en": "world",    "latin": "mundus", "key": "M", "element": "Membrane" },
+      "nomo": { "en": "name",     "latin": "nomen",  "key": "N", "element": "Neutron" },
+      "organismo":{ "en": "organism", "latin": "organismus", "key": "O", "element": "Om" },
+      "ponto":{ "en": "bridge",   "latin": "pons",   "key": "P", "element": "Pi" },
+      "radiko":{ "en": "root",    "latin": "radix",  "key": "R", "element": "Rx" },
+      "stelo": { "en": "star",    "latin": "stella",  "key": "S", "element": "Sp" },
+      "unio":  { "en": "union",   "latin": "unio",   "key": "U", "element": "Un" },
+      "vivo":  { "en": "life",    "latin": "vita",   "key": "V", "element": "Vita" },
+      "ŝelo":  { "en": "shell",   "latin": "testa",  "key": "Ŝ", "element": "Shell/LISP" }
+    }
+  },
+
+  "lisp": {
+    "name": "The LISP Beneath",
+    "philosophy": "LISP = List Processing. The keyboard types S-expressions. Latin names the functions. Esperanto bridges the human. Every keystroke is an atom in a LISP expression.",
+    "example": "(gaja (forĝi (akvo (kerno ludoSpring))))",
+    "translation": "(gaia (forge (water (kernel ludoSpring))))",
+    "latin": "(gaia (fabrica (aqua (nucleus ludoSpring))))",
+    "meaning": "Gaia forges water into the kernel of ludoSpring",
+    "s_expression_keys": {
+      "(": "open — begin expression, inhale",
+      ")": "close — end expression, exhale",
+      "SPACE": "separator — the void between atoms",
+      "ENTER": "evaluate — send expression to the organism",
+      "TAB": "indent — nesting depth = recursion depth",
+      "ESC": "escape — break free, interrupt, return to REPL"
+    }
+  },
+
+  "metallurgical_table": {
+    "Fe": { "name": "Iron",     "round": 0, "stage": "Ore",       "data": "raw intake, unprocessed",    "count": 1545 },
+    "Cu": { "name": "Copper",   "round": 1, "stage": "Pig Iron",  "data": "information, classified",     "count": 229 },
+    "Ag": { "name": "Silver",   "round": 2, "stage": "Steel",     "data": "knowledge, connected",        "count": 104 },
+    "Au": { "name": "Gold",     "round": 3, "stage": "Damascus",  "data": "understanding, integrated",   "count": 154 },
+    "Pt": { "name": "Platinum", "round": 4, "stage": "Nuclear",   "data": "wisdom, catalytic",           "count": 16 }
+  },
+
+  "gates_on_compass": {
+    "N": { "gate": "northGate",  "ip": ".147", "hand": "LEFT",  "role": "HEART — creation, rendering, GPU" },
+    "S": { "gate": "southGate",  "ip": ".148", "hand": null,     "role": "HOME PHONE — sensory anchor" },
+    "E": { "gate": "eastGate",   "ip": ".244", "hand": "RIGHT", "role": "BRAIN — service, data, cron" },
+    "W": { "gate": "ironGate",   "ip": ".237", "hand": null,     "role": "FORGE — sunset archive, processing" },
+    "FLOAT": { "gate": "grapheneGate", "ip": "9.217", "hand": "BOTH", "role": "FLOATING GAIA — lighthouse, beacon" },
+    "FACE":  { "gate": "frameGate",    "ip": ".203",  "hand": "FEET", "role": "FACE — Steam Frame at Kevin's feet" },
+    "DECK":  { "gate": "deckGate",     "ip": ".139",  "hand": "DESK", "role": "DISPLAY — mounted on desk" }
+  }
+}
