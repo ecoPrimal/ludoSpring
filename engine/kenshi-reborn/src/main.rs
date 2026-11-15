@@ -362,7 +362,7 @@ impl ApplicationHandler for App {
                         Ok(()) => {
                             self.frame_count += 1;
                         }
-                        Err(wgpu::SurfaceError::Lost) => {
+                        Err(wgpu::SurfaceError::Lost | wgpu::SurfaceError::Outdated) => {
                             let (w, h) = (gpu.config.width, gpu.config.height);
                             if let Some(gpu) = &mut self.gpu {
                                 gpu.resize(w, h);
