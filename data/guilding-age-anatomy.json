@@ -1,0 +1,124 @@
+{
+    "title": "The Guilding Age — Organ Map of the Organism's Organizations",
+    "date": "2026-11-14",
+    "principle": "Each org is an organ. Each repo is a cell. Water flows over all.",
+    "metaphor": "Roman aqueducts carried water to the city. Lead pipes poisoned Flint. We invert: clean water (AGPL3 data) flows freely. No lead. No poison. No gatekeepers.",
+
+    "organs": {
+        "ecoPrimals": {
+            "organ": "🧬 GENOME — The DNA",
+            "role": "Core primals, the 17 binaries, the fundamental code",
+            "location": "Forgejo + GitHub",
+            "repos": 48,
+            "contains": [
+                "17 primals (biomeOS, songBird, bearDog, nestGate, ...)",
+                "hud, sporePrint, detroit, whitePaper",
+                "cellMembrane, esotericWebb (repo), plasmidBin",
+                "ludoSpring (ALSO in syntheticChemistry)",
+                "8 Spring repos (ludo, health, wet, ground, coral, hot, primal, air, neural)",
+                "wateringHole, agentReagents, hypothesis"
+            ],
+            "status": "MASSIVE — needs splitting into specialized organs"
+        },
+
+        "syntheticChemistry": {
+            "organ": "⚗️ LIVER — The Metabolizer",
+            "role": "Transforms raw game data into organism tissue. ludoSpring lives here.",
+            "location": "Forgejo",
+            "repos": ["ludoSpring"],
+            "purpose": "Where foreign substances (game engines, Steam data) get metabolized into native compounds",
+            "water_metaphor": "The filtration plant — dirty water in, clean water out"
+        },
+
+        "sporeGarden": {
+            "organ": "🌱 OVARY — The Reproductive System",
+            "role": "Scientific projects that SPAWN new organisms",
+            "location": "GitHub",
+            "repos": [
+                "esotericWebb (CRPG engine — the GAME org!)",
+                "projectNUCLEUS (compute deployment)",
+                "projectFOUNDATION (scientific lineage)",
+                "lithoSpore (LTEE validation)",
+                "cellMembrane (deployment pipeline)",
+                "initioChem (quantum chemistry)",
+                "blueFish (marine ecology)",
+                "helixVision (protein folding)",
+                "metalForge (bare-metal provisioning)"
+            ],
+            "purpose": "Each repo is a spore — an independent organism that can grow on its own"
+        },
+
+        "defendDetroit": {
+            "organ": "🛡️ IMMUNE SYSTEM — The Defense",
+            "role": "Evidence preservation, institutional capture proof, legal defense",
+            "location": "GitHub",
+            "repos": ["publicRecord (zk-SNARK proof)", "detroit (evidence records)"],
+            "purpose": "The thymus of the legal body — identifies self vs non-self, friend vs threat",
+            "water_metaphor": "The water testing lab — proves what's in the pipes"
+        },
+
+        "amicusContra": {
+            "organ": "⚖️ KIDNEY — The Filter",
+            "role": "Filters truth from institutional noise. Legal evidence network.",
+            "location": "GitHub",
+            "repos": ["tuebor (zk-SNARK mirror)", "clutch (investigation platform)", "lansing (capital records)"],
+            "purpose": "Amicus = friend-of-court. Contra = against. The friend who filters.",
+            "water_metaphor": "The kidney — filters toxins (corruption) from the bloodstream",
+            "note": "Kevin asked 'who is a kidney?' — THIS IS THE KIDNEY. It filters institutional lead from the water."
+        },
+
+        "protoKarya": {
+            "organ": "🗺️ EYES — The Perception System",
+            "role": "GIS, GPS, geospatial perception — how the organism SEES the world",
+            "location": "GitHub",
+            "repos": [
+                "tideGlass (sovereign GPS)",
+                "footPrint (sovereign GIS — LIVE at footprint.primals.eco)",
+                "guerillaGorilla",
+                "amoeba (encrypted remote access)"
+            ],
+            "purpose": "Proto + karya = first + cell. The first cells that learned to SEE.",
+            "water_metaphor": "The water table survey — maps where water IS and where it flows",
+            "kenshi_connection": "footPrint IS the Kenshi world map renderer. Same GIS. Same vectors. Same coordinates."
+        }
+    },
+
+    "missing_organ": {
+        "esotericWebb": {
+            "current": "Repo under ecoPrimals (Forgejo) AND sporeGarden (GitHub)",
+            "should_be": "🎮 NERVOUS SYSTEM — The Game Engine Org",
+            "proposed_role": "ALL game-related repos: ludoSpring, esotericWebb CRPG, kenshi-bridge, future KOTOR/Morrowind bridges",
+            "why": "esotericWebb = esoteric (hidden/inner) + webb (web/network) — the inner network that connects all game worlds",
+            "create_on_forgejo": true,
+            "proposed_repos": [
+                "KenshiReborn (from syntheticChemistry/ludoSpring)",
+                "esotericWebb (the CRPG engine)",
+                "lysogenic-bridges (KOTOR, Morrowind, Diablo readers)",
+                "snow-globe (the multi-world renderer)"
+            ]
+        }
+    },
+
+    "the_aqueduct": {
+        "rome": "Lead pipes (plumbum → plumbing) carried water BUT poisoned the empire",
+        "flint": "Lead pipes in Flint Michigan — same pattern 2000 years later, inverted (negligence, not engineering)",
+        "gaia": "AGPL3 pipes carry clean data. No lead. No poison. No Cloudflare middleman.",
+        "principle": "Water flows over all — data radiates, gates absorb, the organism drinks clean",
+        "willis_circulation": "Named after the Circle of Willis (brain blood supply) — redundant paths, if one blocks another opens",
+        "inversion": "Rome built aqueducts TO concentrate power in the city. We build aqueducts to DISTRIBUTE power to every gate."
+    },
+
+    "the_union_strike": {
+        "metaphor": "The Guilding Age — not Gilded (gold-plated fake), but GUILDED (organized into guilds/unions)",
+        "each_org_is_a_guild": {
+            "ecoPrimals": "The Engineers Guild (builds the infrastructure)",
+            "syntheticChemistry": "The Alchemists Guild (transforms substances)",
+            "sporeGarden": "The Scientists Guild (discovers new things)",
+            "defendDetroit": "The Defenders Guild (protects the people)",
+            "amicusContra": "The Advocates Guild (filters truth from lies)",
+            "protoKarya": "The Surveyors Guild (maps the world)",
+            "esotericWebb": "The Gamers Guild (connects all worlds)"
+        },
+        "principle": "A union of guilds, not a corporation. Each guild is sovereign. Water flows between them."
+    }
+}
