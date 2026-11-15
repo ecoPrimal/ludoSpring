@@ -1,0 +1,78 @@
+﻿{
+  "type": "sourDough-fermentation",
+  "project": "esotericWebb/KenshiReborn",
+  "purpose": "Eat Kenshi, build it better in Rust. Offer to Lo-Fi Games as the Kenshi 2 engine.",
+  "model": "sourDough — fermented, not compiled. Each version is a yeast bubble.",
+  
+  "starter": {
+    "origin": "syntheticChemistry/ludoSpring (the lab)",
+    "flour": "Ogre3D vtable analysis + D3D11 RenderSystem reverse engineering",
+    "water": "Rust cdylib + DLL injection via Ogre plugin system",
+    "salt": "MSVC ABI compatibility (x64 vtable layout, SSO strings)"
+  },
+
+  "bubbles": [
+    {
+      "version": "v0.5.0",
+      "name": "First Rise",
+      "state": "proved",
+      "redox": "OXIDATION — DLL loads, Ogre symbols resolve, but crashes on pure virtuals",
+      "lesson": "Cannot register a base RenderSystem — Ogre calls pure virtual methods"
+    },
+    {
+      "version": "v0.6.0",
+      "name": "The Investigator",
+      "state": "proved",
+      "redox": "REDUCTION — step back, observe. Map the D3D11 vtable (64 slots)",
+      "lesson": "getName is slot 1. 16 stubs in 0x617d7fxx range. mName at offset 8 was empty."
+    },
+    {
+      "version": "v0.7.0",
+      "name": "First Siege",
+      "state": "proved-then-burned",
+      "redox": "OXIDATION — clone vtable, patch getName, register. GOT 2 RENDERERS! Then crashed.",
+      "lesson": "addRenderSystem works! But other methods hit D3D11 internal pointers. Need ALL stubs."
+    },
+    {
+      "version": "v0.7.1",
+      "name": "Safe Siege",
+      "state": "rising",
+      "redox": "REDUCTION — stub ALL 64 slots. Only getName returns our string. Log which slots launcher calls.",
+      "lesson": "pending — will learn which methods the launcher actually invokes"
+    },
+    {
+      "version": "v0.8.0",
+      "name": "The Dropdown",
+      "state": "planned",
+      "redox": "OXIDATION — implement the specific methods the launcher needs (from v0.7.1 logs)",
+      "lesson": "pending — 'Vulkan (Reborn)' in dropdown, selectable without crash"
+    },
+    {
+      "version": "v0.9.0",
+      "name": "Config Dialog",
+      "state": "planned",
+      "redox": "OXIDATION — return valid config options (resolution, fullscreen, vsync)",
+      "lesson": "pending — user can configure Vulkan renderer settings"
+    },
+    {
+      "version": "v1.0.0",
+      "name": "First Render",
+      "state": "planned",
+      "redox": "THE BIG OXIDATION — wgpu/Vulkan actually renders a frame",
+      "lesson": "pending — Kenshi renders through our Vulkan backend"
+    }
+  ],
+
+  "redox_principle": {
+    "oxidation": "ADD capability — risk of crash, but gain knowledge",
+    "reduction": "REMOVE risk — step back, observe, stabilize",
+    "cycle": "Each bubble: oxidize (try) → observe → reduce (stabilize) → prove → next bubble",
+    "sourdough": "The starter culture is the Ogre ABI knowledge. Each bubble feeds the next."
+  },
+
+  "chemistry": {
+    "Fe_to_Pt": "Iron (raw Rust code) → refined through redox → Platinum (production engine)",
+    "yeast": "Each DLL version = one yeast generation. It proves or it dies.",
+    "temperature": "1000Hz keyboard typing speed = fermentation heat"
+  }
+}
