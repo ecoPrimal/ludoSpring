@@ -1,0 +1,80 @@
+﻿{
+  "type": "gaia-eye-spectrum",
+  "timestamp": "2026-11-14T22:55:00-05:00",
+  "principle": "5 eyes = full spectrum. GREEN earth → BLUE sky → RED world → SILVER moon → PURPLE spectre (ALL)",
+
+  "eyes": {
+    "1_green": {
+      "name": "Inner Eye",
+      "device": "Logitech Brio 100",
+      "location": "Flint router (GL-MT6000), House 1 brain side",
+      "sees": "Kevin desk, monitors, brain room",
+      "color": "GREEN",
+      "meaning": "ground, earth, local, LAN",
+      "feed": "/data/inner-eye-latest.jpg"
+    },
+    "2_blue": {
+      "name": "Diamond Lens (front)",
+      "device": "Pixel 8a front camera",
+      "location": "grapheneGate, beside Kevin",
+      "sees": "what faces Kevin (the viewer)",
+      "color": "BLUE",
+      "meaning": "hyperlocal, sky, look UP, electron orbit"
+    },
+    "3_red": {
+      "name": "Diamond Lens (rear)",
+      "device": "Pixel 8a rear camera",
+      "location": "grapheneGate, outward",
+      "sees": "what Kevin points at, the world beyond",
+      "color": "RED",
+      "meaning": "outward, WAN, proton charge, identity"
+    },
+    "4_silver": {
+      "name": "Spyglass",
+      "device": "sporeGate webcam",
+      "location": "sporeGate (.3), the forge",
+      "sees": "secondary angle, reflected light",
+      "color": "SILVER",
+      "meaning": "moon, 4th seat, reflection, power"
+    },
+    "5_purple": {
+      "name": "Spectre Eye",
+      "device": "Steam Frame passthrough cameras",
+      "location": "frameGate (.203), Kevin's face/AR",
+      "sees": "BOTH WORLDS — physical reality + digital overlay = AR synthesis",
+      "color": "PURPLE",
+      "meaning": "RED (outer) + BLUE (inner) = PURPLE spectre. The synthesis eye.",
+      "steamvr": {
+        "fps": 89,
+        "bitrate_mbps": 103.156,
+        "resolution": "1152x1344 per eye",
+        "encoding": "10-bit",
+        "link": "Valve WiFi 6 NIC direct (10.35.78.x)",
+        "latency_ms": 15.6,
+        "audio": "48kHz OUT"
+      }
+    }
+  },
+
+  "spectrum_order": ["GREEN (earth)", "BLUE (sky)", "RED (world)", "SILVER (moon)", "PURPLE (spectre/ALL)"],
+  
+  "network_topology": {
+    "steamvr_connections": [
+      {"src": "192.168.4.147", "dst": "192.168.4.181", "latency_ms": 5.0, "note": "northGate LAN"},
+      {"src": "10.35.78.23", "dst": "10.35.78.1", "latency_ms": 15.6, "note": "Valve WiFi 6 NIC direct → Frame"},
+      {"src": "172.30.192.1", "dst": "Unknown", "note": "Docker/virtual bridge"}
+    ]
+  },
+
+  "passthrough_ar_overlay": {
+    "plan": "All 5 eyes feed into the Frame's passthrough view",
+    "layers": [
+      "Physical world (Frame cameras) = base layer",
+      "Green eye (router Brio) = picture-in-picture, brain room view",
+      "Blue eye (Pixel front) = face tracking, Kevin's expression",
+      "Red eye (Pixel rear) = pointing direction, world scan",
+      "Silver eye (sporeGate) = forge view, secondary angle",
+      "Purple synthesis = ALL overlaid in AR space"
+    ]
+  }
+}
