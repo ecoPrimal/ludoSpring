@@ -1,13 +1,10 @@
 // KenshiReborn Bridge DLL — RenderSystem_Vulkan_x64.dll
-// v0.7.6 — EAT THE OLD: Clone D3D11 as scaffold, rename to Vulkan
+// v0.7.7 — NAME HUNT: Find mName in the RS object, overwrite it
 //
-// sourDough log:
-//   v0.7.0-v0.7.4: hand-built fake RS → always crashes after slot 3
-//   v0.7.5: no-op diagnostic (pending test)
-//   v0.7.6: EAT THE OLD — clone the WORKING D3D11 RenderSystem object
-//           Copy its ENTIRE memory layout (vtable, members, pointers)
-//           Replace ONLY the name: "Vulkan (Reborn)"
-//           The old D3D11 becomes the scaffold. The dough rises on bones.
+// v0.7.6 proved: clone D3D11 = no crash, launcher shows 2 entries!
+// But both say "Direct3D 11" because getName() returns a static ref
+// and the launcher reads the name from the object's mName member.
+// We need to FIND that member and OVERWRITE it.
 
 #![allow(non_snake_case, unused)]
 
@@ -20,17 +17,6 @@ const LOG_FILE: &str = r"M:\SteamLibrary\steamapps\common\Kenshi\kenshi_reborn.l
 fn log(msg: &str) {
     if let Ok(mut f) = OpenOptions::new().create(true).append(true).open(LOG_FILE) {
         let _ = writeln!(f, "{}", msg);
-    }
-}
-
-fn log_hex(label: &str, ptr: *const u8, len: usize) {
-    unsafe {
-        let mut hex = String::new();
-        for i in 0..len.min(64) {
-            hex.push_str(&format!("{:02x} ", *ptr.add(i)));
-            if (i + 1) % 16 == 0 { hex.push_str("\n    "); }
-        }
-        log(&format!("  {} @ 0x{:x}:\n    {}", label, ptr as u64, hex));
     }
 }
 
@@ -59,14 +45,14 @@ const SYM_ROOT_GET_SINGLETON: &[u8] = b"?getSingletonPtr@Root@Ogre@@SAPEAV12@XZ\
 const SYM_GET_AVAIL_RENDERERS: &[u8] = b"?getAvailableRenderers@Root@Ogre@@QEAAAEBV?$vector@PEAVRenderSystem@Ogre@@V?$STLAllocator@PEAVRenderSystem@Ogre@@V?$CategorisedAllocPolicy@$0A@@2@@2@@std@@XZ\0";
 const SYM_ADD_RENDER_SYSTEM: &[u8] = b"?addRenderSystem@Root@Ogre@@QEAAXPEAVRenderSystem@2@@Z\0";
 
-// Custom getName that returns OUR name
-static mut OUR_NAME: [u8; 32] = [0u8; 32];
+// Our name as a heap-style MSVC string (matching D3D11's format)
+static mut OUR_NAME_BUF: [u8; 64] = [0u8; 64];  // "Vulkan (Reborn)\0" buffer
+static mut OUR_NAME_STR: [u8; 32] = [0u8; 32];   // MSVC string object pointing to buf
 
 unsafe extern "C" fn custom_get_name(_this: *mut u8) -> *const u8 {
-    OUR_NAME.as_ptr()
+    OUR_NAME_STR.as_ptr()
 }
 
-// Clone vtable with our getName swapped in
 static mut CLONE_VTABLE: [u64; 128] = [0u64; 128];
 
 #[unsafe(no_mangle)]
@@ -74,8 +60,8 @@ pub extern "C" fn dllStartPlugin() {
     let _ = std::fs::File::create(LOG_FILE);
     
     log("╔═══════════════════════════════════════════════════════╗");
-    log("║  KenshiReborn v0.7.6 — EAT THE OLD                  ║");
-    log("║  Clone D3D11 scaffold, rename to Vulkan (Reborn)     ║");
+    log("║  KenshiReborn v0.7.7 — NAME HUNT                    ║");
+    log("║  Find mName in the RS object, write Vulkan (Reborn)  ║");
     log("╚═══════════════════════════════════════════════════════╝");
     
     unsafe {
@@ -99,123 +85,165 @@ pub extern "C" fn dllStartPlugin() {
         
         let vec = get_renderers(root);
         let count = ((*vec).end as usize - (*vec).begin as usize) / 8;
-        log(&format!("  {} existing renderer(s)", count));
+        if count == 0 { log("ERROR: No renderers"); return; }
         
-        if count == 0 {
-            log("ERROR: No existing renderers to clone!"); return;
-        }
-        
-        // ═══ EAT THE OLD: Get the D3D11 RenderSystem pointer ═══
         let d3d11_rs = *(*vec).begin;
-        let d3d11_vtable_ptr = *(d3d11_rs as *const u64) as *const u64;
-        
         log(&format!("  D3D11 RS at 0x{:x}", d3d11_rs as u64));
-        log(&format!("  D3D11 vtable at 0x{:x}", d3d11_vtable_ptr as u64));
         
-        // Dump D3D11 object header for study
-        log_hex("D3D11 RS object", d3d11_rs, 64);
-        
-        // Read D3D11's getName to find the name location
-        // Slot 1 = getName: call it to see what it returns
+        // ═══ GET THE D3D11 NAME ═══
+        let d3d11_vtable = *(d3d11_rs as *const u64) as *const u64;
         let d3d11_get_name: unsafe extern "C" fn(*mut u8) -> *const u8 = 
-            std::mem::transmute(*d3d11_vtable_ptr.add(1));
-        let d3d11_name_ptr = d3d11_get_name(d3d11_rs);
-        log(&format!("  D3D11 getName returned 0x{:x}", d3d11_name_ptr as u64));
-        log_hex("D3D11 name string", d3d11_name_ptr, 48);
+            std::mem::transmute(*d3d11_vtable.add(1));
+        let name_str_ptr = d3d11_get_name(d3d11_rs);
         
-        // The name ptr should be inside the RS object (mName member)
-        let name_offset = d3d11_name_ptr as i64 - d3d11_rs as i64;
-        log(&format!("  Name at offset {} from RS base", name_offset));
+        // Read the string: first 8 bytes = heap pointer (if size > 15)
+        let heap_ptr = *(name_str_ptr as *const u64);
+        let str_size = *(name_str_ptr.add(16) as *const u64);
+        let str_cap = *(name_str_ptr.add(24) as *const u64);
         
-        // ═══ MEASURE the D3D11 RS object size ═══
-        // We'll clone a generous amount — 8KB should cover everything
-        let clone_size: usize = 8192;
+        log(&format!("  D3D11 name: str_obj=0x{:x}, heap=0x{:x}, size={}, cap={}", 
+            name_str_ptr as u64, heap_ptr, str_size, str_cap));
         
-        // ═══ ALLOCATE: proper heap memory for our clone ═══
-        let clone = VirtualAlloc(
-            ptr::null_mut(), 
-            clone_size,
-            MEM_COMMIT | MEM_RESERVE,
-            PAGE_READWRITE
-        );
+        // Read the actual chars
+        let char_ptr = if str_size > 15 { heap_ptr as *const u8 } else { name_str_ptr };
+        let mut name_bytes = Vec::new();
+        for i in 0..str_size.min(100) as usize {
+            let b = *char_ptr.add(i);
+            if b == 0 { break; }
+            name_bytes.push(b);
+        }
+        log(&format!("  D3D11 name text: '{}'", String::from_utf8_lossy(&name_bytes)));
         
-        if clone.is_null() {
-            log("ERROR: VirtualAlloc failed"); return;
+        // ═══ SCAN the RS object for the name string pointer ═══
+        // Search for the string object pointer OR the heap data pointer
+        let scan_size: usize = 4096;
+        let target_addr = name_str_ptr as u64;
+        let target_heap = heap_ptr;
+        
+        log(&format!("  Scanning {} bytes for name pointers...", scan_size));
+        
+        let mut found_offsets = Vec::new();
+        for offset in (0..scan_size).step_by(8) {
+            let val = *(d3d11_rs.add(offset) as *const u64);
+            if val == target_addr {
+                log(&format!("    FOUND str_obj ptr at offset {} (0x{:x})", offset, offset));
+                found_offsets.push((offset, "str_obj"));
+            }
+            if val == target_heap && target_heap != 0 {
+                log(&format!("    FOUND heap ptr at offset {} (0x{:x})", offset, offset));
+                found_offsets.push((offset, "heap"));
+            }
         }
         
-        log(&format!("  Clone allocated at 0x{:x} ({} bytes)", clone as u64, clone_size));
+        // Also scan for embedded SSO-style pattern:
+        // Look for "Dire" (0x65726944) in the object  
+        let dire_pattern: u32 = 0x65726944; // "Dire" in little-endian
+        for offset in 0..scan_size-4 {
+            let val = *(d3d11_rs.add(offset) as *const u32);
+            if val == dire_pattern {
+                log(&format!("    FOUND 'Dire' text at offset {} (0x{:x})", offset, offset));
+                found_offsets.push((offset, "text"));
+            }
+        }
         
-        // ═══ CLONE: byte-for-byte copy of D3D11 RS ═══
+        if found_offsets.is_empty() {
+            log("  WARNING: Name not found in first 4KB — scanning wider...");
+            for offset in (4096..8192).step_by(8) {
+                let val = *(d3d11_rs.add(offset) as *const u64);
+                if val == target_addr || (val == target_heap && target_heap != 0) {
+                    log(&format!("    FOUND ptr at offset {} (0x{:x})", offset, offset));
+                    found_offsets.push((offset, "ptr"));
+                }
+            }
+        }
+        
+        // ═══ CLONE ═══
+        let clone_size: usize = 8192;
+        let clone = VirtualAlloc(ptr::null_mut(), clone_size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+        if clone.is_null() { log("ERROR: VirtualAlloc failed"); return; }
+        
         ptr::copy_nonoverlapping(d3d11_rs, clone, clone_size);
-        log("  Cloned D3D11 RS (8KB byte-for-byte copy)");
+        log(&format!("  Clone at 0x{:x}", clone as u64));
         
-        // ═══ CLONE VTABLE: copy D3D11's vtable, swap getName ═══
-        ptr::copy_nonoverlapping(
-            d3d11_vtable_ptr as *const u8,
-            CLONE_VTABLE.as_mut_ptr() as *mut u8,
-            128 * 8  // 128 slots × 8 bytes
-        );
+        // ═══ SET UP OUR NAME ═══
+        // Use heap-style string matching D3D11's format
+        let our_text = b"Vulkan (Reborn)\0";
+        ptr::copy_nonoverlapping(our_text.as_ptr(), OUR_NAME_BUF.as_mut_ptr(), our_text.len());
         
-        // Swap slot 1 (getName) with our custom version
+        // Build the string object: heap ptr, size, capacity
+        let name_obj = OUR_NAME_STR.as_mut_ptr();
+        *(name_obj as *mut u64) = OUR_NAME_BUF.as_ptr() as u64;  // heap pointer
+        *(name_obj.add(16) as *mut u64) = 15;                     // size
+        *(name_obj.add(24) as *mut u64) = 63;                     // capacity
+        
+        log(&format!("  Our name str_obj at 0x{:x}, buf at 0x{:x}", 
+            OUR_NAME_STR.as_ptr() as u64, OUR_NAME_BUF.as_ptr() as u64));
+        
+        // ═══ OVERWRITE NAME in clone ═══
+        for (offset, kind) in &found_offsets {
+            match *kind {
+                "str_obj" => {
+                    // Replace string object pointer with ours
+                    *(clone.add(*offset) as *mut u64) = OUR_NAME_STR.as_ptr() as u64;
+                    log(&format!("  Overwrote str_obj ptr at clone+{}", offset));
+                },
+                "heap" => {
+                    // Replace heap data pointer with our buffer
+                    *(clone.add(*offset) as *mut u64) = OUR_NAME_BUF.as_ptr() as u64;
+                    log(&format!("  Overwrote heap ptr at clone+{}", offset));
+                },
+                "text" => {
+                    // Overwrite inline text
+                    let dest = clone.add(*offset);
+                    ptr::copy_nonoverlapping(our_text.as_ptr(), dest, our_text.len());
+                    // Zero remaining bytes to be safe
+                    ptr::write_bytes(dest.add(our_text.len()), 0, 16);
+                    log(&format!("  Overwrote inline text at clone+{}", offset));
+                },
+                _ => {
+                    *(clone.add(*offset) as *mut u64) = OUR_NAME_STR.as_ptr() as u64;
+                    log(&format!("  Overwrote ptr at clone+{}", offset));
+                }
+            }
+        }
+        
+        // ═══ CLONE VTABLE, swap getName ═══
+        ptr::copy_nonoverlapping(d3d11_vtable as *const u8, CLONE_VTABLE.as_mut_ptr() as *mut u8, 128 * 8);
         CLONE_VTABLE[1] = custom_get_name as u64;
-        
-        log("  Cloned vtable (128 slots), swapped getName at slot 1");
-        
-        // ═══ WRITE: Set up our clone ═══
-        // Point clone's vtable to our cloned vtable
         *(clone as *mut u64) = CLONE_VTABLE.as_ptr() as u64;
         
-        // Write "Vulkan (Reborn)" as SSO string
-        let name = b"Vulkan (Reborn)";
-        let name_buf = OUR_NAME.as_mut_ptr();
-        ptr::copy_nonoverlapping(name.as_ptr(), name_buf, name.len());
-        *name_buf.add(name.len()) = 0;
-        *(name_buf.add(16) as *mut u64) = name.len() as u64;
-        *(name_buf.add(24) as *mut u64) = 15; // SSO capacity
-        
-        // Also write the name into the clone object at the same offset
-        if name_offset > 0 && name_offset < clone_size as i64 - 32 {
-            let clone_name = clone.add(name_offset as usize);
-            ptr::copy_nonoverlapping(name.as_ptr(), clone_name, name.len());
-            *clone_name.add(name.len()) = 0;
-            *(clone_name.add(16) as *mut u64) = name.len() as u64;
-            *(clone_name.add(24) as *mut u64) = 15;
-            log(&format!("  Wrote 'Vulkan (Reborn)' at clone+{}", name_offset));
-        }
-        
-        log_hex("Clone object header", clone, 64);
-        
-        // ═══ REGISTER the clone ═══
+        // ═══ REGISTER ═══
         add_rs(root, clone);
         
         let vec2 = get_renderers(root);
         let count2 = ((*vec2).end as usize - (*vec2).begin as usize) / 8;
         log(&format!("  Renderers: {} → {}", count, count2));
         
-        // Verify our clone's name
-        let verify_name: unsafe extern "C" fn(*mut u8) -> *const u8 = 
-            std::mem::transmute(CLONE_VTABLE[1]);
-        let our_name = verify_name(clone);
-        
-        // Read the string
-        let mut name_str = Vec::new();
-        let mut i = 0;
-        while *our_name.add(i) != 0 && i < 100 {
-            name_str.push(*our_name.add(i));
-            i += 1;
+        // Verify by calling getName on our clone through the vtable
+        let our_vtable = *(clone as *const u64) as *const u64;
+        let our_get_name: unsafe extern "C" fn(*mut u8) -> *const u8 = 
+            std::mem::transmute(*our_vtable.add(1));
+        let verify_ptr = our_get_name(clone);
+        let vhp = *(verify_ptr as *const u64);
+        let vsz = *(verify_ptr.add(16) as *const u64);
+        let vcp = if vsz > 15 { vhp as *const u8 } else { verify_ptr };
+        let mut vname = Vec::new();
+        for i in 0..vsz.min(50) as usize {
+            let b = *vcp.add(i);
+            if b == 0 { break; }
+            vname.push(b);
         }
-        let name_display = String::from_utf8_lossy(&name_str);
         
         log("");
         log("╔═══════════════════════════════════════════════════════╗");
-        log(&format!("║  ★ THE OLD IS EATEN — '{}' LIVES ★", name_display));
-        log("║  D3D11 scaffold: all internals intact                ║");
-        log("║  Only the name changed. The dough rises on bones.    ║");
+        log(&format!("║  getName() → '{}'", String::from_utf8_lossy(&vname)));
+        log(&format!("║  Name offsets found: {}", found_offsets.len()));
+        log("║  The dough rises — the old was eaten and renamed!    ║");
         log("╚═══════════════════════════════════════════════════════╝");
     }
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn dllStopPlugin() {
-    log("dllStopPlugin() — the old was honored, the new lives");
+    log("dllStopPlugin()");
 }
