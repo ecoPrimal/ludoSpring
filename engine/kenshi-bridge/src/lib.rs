@@ -1,19 +1,25 @@
 // KenshiReborn Bridge DLL — RenderSystem_Vulkan_x64.dll
-// v0.7.0 — REVERSE SIEGE: Clone D3D11 vtable, patch getName, register
+// v0.7.1 — SAFE SIEGE: All vtable slots stubbed except getName
 //
-// The investigator (v0.6.0) mapped all 64 vtable slots.
-// Now we clone, patch, and siege from ALL sides:
-// 1. Clone entire D3D11 vtable (64 slots)
-// 2. Try getName candidates (slots 1, 2, 6, 11) — patch each
-// 3. Build a fake RenderSystem object with our vtable
-// 4. Register with Root::addRenderSystem
-// 5. "Vulkan (Reborn)" appears in the Kenshi launcher dropdown!
+// v0.7.0 PROVED:
+//   - getName is at vtable SLOT 1
+//   - addRenderSystem works — we got 2 renderers!
+//   - But the launcher crashes calling other methods on our fake object
+//
+// v0.7.1 FIX:
+//   - Stub ALL 64 vtable entries with safe no-op functions
+//   - Only slot 1 (getName) returns "Vulkan (Reborn)"
+//   - Slot 0 (destructor) does nothing
+//   - All other slots return 0/null/empty safely
+//   - The launcher should see "Vulkan (Reborn)" in the dropdown
+//     but selecting it won't initialize (that's Phase 3)
 
 #![allow(non_snake_case)]
 
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::ptr;
+use std::sync::atomic::{AtomicPtr, Ordering};
 
 const LOG_FILE: &str = r"M:\SteamLibrary\steamapps\common\Kenshi\kenshi_reborn.log";
 
@@ -24,7 +30,6 @@ fn log(msg: &str) {
 }
 
 extern "system" {
-    fn LoadLibraryA(name: *const u8) -> *mut u8;
     fn GetProcAddress(module: *mut u8, name: *const u8) -> *mut u8;
     fn GetModuleHandleA(name: *const u8) -> *mut u8;
     fn IsBadReadPtr(lp: *const u8, ucb: usize) -> i32;
@@ -41,250 +46,220 @@ struct StdVector {
     cap: *mut *mut u8,
 }
 
-// Mangled Ogre symbols
 const SYM_ROOT_GET_SINGLETON: &[u8] = b"?getSingletonPtr@Root@Ogre@@SAPEAV12@XZ\0";
 const SYM_GET_AVAIL_RENDERERS: &[u8] = b"?getAvailableRenderers@Root@Ogre@@QEAAAEBV?$vector@PEAVRenderSystem@Ogre@@V?$STLAllocator@PEAVRenderSystem@Ogre@@V?$CategorisedAllocPolicy@$0A@@2@@2@@std@@XZ\0";
 const SYM_ADD_RENDER_SYSTEM: &[u8] = b"?addRenderSystem@Root@Ogre@@QEAAXPEAVRenderSystem@2@@Z\0";
 
-// Our name: "Vulkan (Reborn)" as MSVC std::string (SSO mode, 15 chars = fits)
-// Layout: [15 bytes data + null][8 bytes size=15][8 bytes cap=15]
-static mut VULKAN_NAME: [u8; 32] = [0u8; 32];
-static VULKAN_NAME_INIT: std::sync::Once = std::sync::Once::new();
+// ═══════════════════════════════════════════════════════════
+// SAFE VTABLE: 64 stubs + getName
+// ═══════════════════════════════════════════════════════════
 
-unsafe fn init_vulkan_name() -> *const u8 {
-    VULKAN_NAME_INIT.call_once(|| {
-        let name = b"Vulkan (Reborn)";
-        ptr::copy_nonoverlapping(name.as_ptr(), VULKAN_NAME.as_mut_ptr(), 15);
-        VULKAN_NAME[15] = 0;
-        // size = 15
-        *(VULKAN_NAME.as_mut_ptr().add(16) as *mut u64) = 15;
-        // capacity = 15 (SSO)
-        *(VULKAN_NAME.as_mut_ptr().add(24) as *mut u64) = 15;
-    });
+// "Vulkan (Reborn)" as MSVC std::string in SSO mode (15 chars fits)
+// Layout: [char data 0..15][padding to 16][size u64 = 15][capacity u64 = 15]
+static VULKAN_NAME: &[u8; 32] = &{
+    let mut buf = [0u8; 32];
+    buf[0] = b'V'; buf[1] = b'u'; buf[2] = b'l'; buf[3] = b'k';
+    buf[4] = b'a'; buf[5] = b'n'; buf[6] = b' '; buf[7] = b'(';
+    buf[8] = b'R'; buf[9] = b'e'; buf[10] = b'b'; buf[11] = b'o';
+    buf[12] = b'r'; buf[13] = b'n'; buf[14] = b')'; buf[15] = 0;
+    // size = 15 at offset 16 (little-endian u64)
+    buf[16] = 15; buf[17] = 0; buf[18] = 0; buf[19] = 0;
+    buf[20] = 0; buf[21] = 0; buf[22] = 0; buf[23] = 0;
+    // capacity = 15 at offset 24 (little-endian u64)
+    buf[24] = 15; buf[25] = 0; buf[26] = 0; buf[27] = 0;
+    buf[28] = 0; buf[29] = 0; buf[30] = 0; buf[31] = 0;
+    buf
+};
+
+// Slot 0: Destructor — do nothing
+unsafe extern "C" fn stub_destructor(_this: *mut u8, _flags: u32) -> *mut u8 {
+    log("  [vtable] destructor called — no-op");
+    _this
+}
+
+// Slot 1: getName — return "Vulkan (Reborn)"
+unsafe extern "C" fn custom_get_name(_this: *mut u8) -> *const u8 {
     VULKAN_NAME.as_ptr()
 }
 
-// Custom getName — returns pointer to our static string (const String& = pointer in RAX)
-unsafe extern "C" fn custom_get_name(_this: *mut u8) -> *const u8 {
-    init_vulkan_name()
+// Generic stub that returns 0 (works for most bool/int/void returns)
+unsafe extern "C" fn stub_return_zero(_this: *mut u8) -> u64 {
+    0
 }
 
-// Our fake RenderSystem object — big enough to hold D3D11's data
-// D3D11RenderSystem is large (~4KB+), we allocate 8KB to be safe
-static mut FAKE_RS: [u8; 8192] = [0u8; 8192];
-static mut CLONED_VTABLE: [*const u8; 64] = [ptr::null(); 64];
+// Stub that returns null pointer (for methods returning pointers/references)
+unsafe extern "C" fn stub_return_null(_this: *mut u8) -> *mut u8 {
+    ptr::null_mut()
+}
 
-/// Read an MSVC std::string at the given address
-unsafe fn read_msvc_string(addr: *const u8) -> Option<String> {
-    if IsBadReadPtr(addr, 32) != 0 {
-        return None;
-    }
-    let cap = *(addr.add(24) as *const u64);
-    let (data_ptr, len) = if cap <= 15 {
-        let len = *(addr.add(16) as *const u64) as usize;
-        (addr, len)
-    } else {
-        let ptr = *(addr as *const *const u8);
-        let len = *(addr.add(16) as *const u64) as usize;
-        if IsBadReadPtr(ptr, len) != 0 { return None; }
-        (ptr, len)
+// Stub for getConfigOptions — returns pointer to a static empty ConfigOptionMap
+// ConfigOptionMap is std::map<String, ConfigOption> — empty = 0-size node
+// For MSVC std::map, an empty map has _Myhead (sentinel) and _Mysize = 0
+// We fake an empty map: just return a zeroed region
+static EMPTY_CONFIG_MAP: [u8; 64] = [0u8; 64];
+
+unsafe extern "C" fn stub_get_config_options(_this: *mut u8) -> *const u8 {
+    log("  [vtable] getConfigOptions called — returning empty");
+    EMPTY_CONFIG_MAP.as_ptr()
+}
+
+// Stub for methods that take a String& parameter (like setConfigOption)
+unsafe extern "C" fn stub_set_config(_this: *mut u8, _name: *const u8, _value: *const u8) {
+    log("  [vtable] setConfigOption called — ignored");
+}
+
+// Stub for validateConfigOptions
+unsafe extern "C" fn stub_validate(_this: *mut u8) -> *const u8 {
+    log("  [vtable] validateConfigOptions called — returning empty string");
+    // Return pointer to a valid empty MSVC string
+    static EMPTY_STRING: [u8; 32] = [0u8; 32]; // SSO empty: all zeros = len 0, cap 0
+    EMPTY_STRING.as_ptr()
+}
+
+// Track which slots get called so we can learn the launcher's behavior
+static SLOT_CALL_LOG: AtomicPtr<u8> = AtomicPtr::new(ptr::null_mut());
+
+macro_rules! make_logging_stub {
+    ($name:ident, $slot:expr) => {
+        unsafe extern "C" fn $name(_this: *mut u8) -> u64 {
+            log(&format!("  [vtable] slot {} called", $slot));
+            0
+        }
     };
-    if len > 1024 { return None; }
-    let bytes = std::slice::from_raw_parts(data_ptr, len);
-    String::from_utf8(bytes.to_vec()).ok()
 }
+
+// Generate logging stubs for interesting slots
+make_logging_stub!(stub_slot_2, 2);
+make_logging_stub!(stub_slot_3, 3);
+make_logging_stub!(stub_slot_4, 4);
+make_logging_stub!(stub_slot_5, 5);
+make_logging_stub!(stub_slot_6, 6);
+make_logging_stub!(stub_slot_7, 7);
+make_logging_stub!(stub_slot_8, 8);
+make_logging_stub!(stub_slot_9, 9);
+make_logging_stub!(stub_slot_10, 10);
+make_logging_stub!(stub_slot_11, 11);
+make_logging_stub!(stub_slot_12, 12);
+make_logging_stub!(stub_slot_13, 13);
+make_logging_stub!(stub_slot_14, 14);
+make_logging_stub!(stub_slot_15, 15);
+make_logging_stub!(stub_slot_16, 16);
+make_logging_stub!(stub_slot_17, 17);
+make_logging_stub!(stub_slot_18, 18);
+make_logging_stub!(stub_slot_19, 19);
+make_logging_stub!(stub_slot_20, 20);
+
+// Fake RenderSystem object — 8KB zeroed with our vtable pointer at offset 0
+// and "Vulkan (Reborn)" string at offset 8
+static mut FAKE_RS: [u8; 8192] = [0u8; 8192];
+static mut SAFE_VTABLE: [*const u8; 64] = [ptr::null(); 64];
 
 #[unsafe(no_mangle)]
 pub extern "C" fn dllStartPlugin() {
-    // Clear old log
     let _ = std::fs::File::create(LOG_FILE);
     
     log("╔═══════════════════════════════════════════════════════╗");
-    log("║  KenshiReborn v0.7.0 — REVERSE SIEGE                ║");
-    log("║  Clone D3D11 vtable → patch getName → DROPDOWN!      ║");
+    log("║  KenshiReborn v0.7.1 — SAFE SIEGE                   ║");
+    log("║  All vtable stubs + getName = 'Vulkan (Reborn)'     ║");
     log("╚═══════════════════════════════════════════════════════╝");
     
     unsafe {
-        // Get OgreMain
         let ogre = GetModuleHandleA(b"OgreMain_x64.dll\0".as_ptr());
         if ogre.is_null() {
             log("ERROR: OgreMain_x64.dll not found");
             return;
         }
-        log(&format!("✓ OgreMain at {:?}", ogre));
+        log(&format!("  OgreMain at {:?}", ogre));
         
-        // Resolve symbols
         let fn_get_root = GetProcAddress(ogre, SYM_ROOT_GET_SINGLETON.as_ptr());
         let fn_get_renderers = GetProcAddress(ogre, SYM_GET_AVAIL_RENDERERS.as_ptr());
         let fn_add_rs = GetProcAddress(ogre, SYM_ADD_RENDER_SYSTEM.as_ptr());
         
-        if fn_get_root.is_null() || fn_get_renderers.is_null() {
-            log("ERROR: Core symbols not found");
+        if fn_get_root.is_null() || fn_get_renderers.is_null() || fn_add_rs.is_null() {
+            log("ERROR: Symbol resolution failed");
             return;
         }
         
-        let has_add_rs = !fn_add_rs.is_null();
-        log(&format!("✓ Symbols: root={:?} renderers={:?} addRS={:?} ({})", 
-            fn_get_root, fn_get_renderers, fn_add_rs,
-            if has_add_rs { "CAN REGISTER" } else { "NO addRenderSystem — investigate only" }
-        ));
-        
         let get_root: FnGetSingletonPtr = std::mem::transmute(fn_get_root);
         let get_renderers: FnGetAvailableRenderers = std::mem::transmute(fn_get_renderers);
+        let add_rs: FnAddRenderSystem = std::mem::transmute(fn_add_rs);
         
         let root = get_root();
         if root.is_null() {
             log("ERROR: Root is null");
             return;
         }
-        log(&format!("✓ Root at {:?}", root));
         
-        // Get D3D11 RenderSystem
         let vec = get_renderers(root);
         let count = ((*vec).end as usize - (*vec).begin as usize) / 8;
-        log(&format!("✓ {} renderer(s) found", count));
+        log(&format!("  {} existing renderer(s)", count));
         
-        if count == 0 {
-            log("ERROR: No renderers to clone");
-            return;
-        }
-        
-        let d3d11_rs = *(*vec).begin;
-        log(&format!("✓ D3D11 RenderSystem at {:?}", d3d11_rs));
-        
-        // Read the D3D11 vtable
-        let d3d11_vtable = *(d3d11_rs as *const *const *const u8);
-        log(&format!("✓ D3D11 vtable at {:?}", d3d11_vtable));
-        
-        // === SIEGE PHASE 1: Find getName by calling candidates ===
-        log("\n=== SIEGE: Finding getName ===");
-        
-        // getName should return a string containing "Direct3D"
-        // Try the first few slots carefully
-        let mut get_name_slot: Option<usize> = None;
-        
-        // Candidates: slots 1, 2 are most likely (after destructor at 0)
-        // Slot 1 is 720 bytes — could be getName with extra validation
-        // Also scan the mName in the object directly
-        
-        // First, find mName by scanning the D3D11 object for "Direct3D"
-        log("  Scanning D3D11 object for mName string...");
-        for offset in (8..512).step_by(8) {
-            if IsBadReadPtr(d3d11_rs.add(offset), 32) != 0 { continue; }
-            if let Some(s) = read_msvc_string(d3d11_rs.add(offset)) {
-                if s.contains("Direct3D") || s.contains("D3D11") || s.contains("Rendering") {
-                    log(&format!("  ★ Found mName at offset {} = \"{}\"", offset, s));
-                }
-                if !s.is_empty() && s.len() > 3 && s.len() < 200 && s.chars().all(|c| c.is_ascii()) {
-                    log(&format!("  String@offset{}: \"{}\"", offset, &s[..s.len().min(80)]));
-                }
-            }
-        }
-        
-        // Now try calling getName candidates
-        // SAFETY: We wrap in catch_unwind to survive bad calls
-        log("\n  Testing getName candidates...");
-        for candidate_slot in [1usize, 2, 3, 6, 7, 11, 12, 13] {
-            if IsBadReadPtr(d3d11_vtable.add(candidate_slot) as *const u8, 8) != 0 {
-                continue;
-            }
-            let fn_ptr = *d3d11_vtable.add(candidate_slot);
-            
-            // Try calling it as getName(this) -> const String&
-            type FnGetName = unsafe extern "C" fn(this: *mut u8) -> *const u8;
-            let try_fn: FnGetName = std::mem::transmute(fn_ptr);
-            
-            let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                let ret = try_fn(d3d11_rs);
-                if !ret.is_null() && IsBadReadPtr(ret, 32) == 0 {
-                    read_msvc_string(ret)
-                } else {
-                    None
-                }
-            }));
-            
-            match result {
-                Ok(Some(s)) => {
-                    log(&format!("  Slot {} returned: \"{}\"", candidate_slot, &s[..s.len().min(60)]));
-                    if s.contains("Direct3D") || s.contains("D3D11") || s.contains("Rendering") {
-                        log(&format!("  ★★★ SLOT {} IS getName()! ★★★", candidate_slot));
-                        get_name_slot = Some(candidate_slot);
-                        break;
-                    }
-                }
-                Ok(None) => {
-                    log(&format!("  Slot {} returned null/invalid", candidate_slot));
-                }
-                Err(_) => {
-                    log(&format!("  Slot {} CRASHED (caught) — not getName", candidate_slot));
-                }
-            }
-        }
-        
-        // === SIEGE PHASE 2: Clone vtable ===
-        log("\n=== SIEGE: Cloning vtable ===");
+        // ═══ BUILD SAFE VTABLE ═══
+        // Fill ALL 64 slots with safe stubs first
         for i in 0..64 {
-            if IsBadReadPtr(d3d11_vtable.add(i) as *const u8, 8) != 0 {
-                break;
-            }
-            CLONED_VTABLE[i] = *d3d11_vtable.add(i);
-        }
-        log("✓ 64 vtable entries cloned");
-        
-        // Patch getName slot
-        let name_slot = get_name_slot.unwrap_or(1); // default to slot 1
-        log(&format!("  Patching slot {} with custom_get_name", name_slot));
-        CLONED_VTABLE[name_slot] = custom_get_name as *const u8;
-        
-        // === SIEGE PHASE 3: Build fake RenderSystem ===
-        log("\n=== SIEGE: Building fake RenderSystem ===");
-        
-        // Copy the first 1024 bytes of D3D11's object as a template
-        // This gives us all the member variables in their initialized state
-        if IsBadReadPtr(d3d11_rs, 1024) == 0 {
-            ptr::copy_nonoverlapping(d3d11_rs, FAKE_RS.as_mut_ptr(), 1024);
-            log("✓ Copied 1024 bytes of D3D11 object as template");
+            SAFE_VTABLE[i] = stub_return_zero as *const u8;
         }
         
-        // Point to our cloned+patched vtable
+        // Slot 0: safe destructor (returns this, does nothing)
+        SAFE_VTABLE[0] = stub_destructor as *const u8;
+        
+        // Slot 1: getName → "Vulkan (Reborn)" ★
+        SAFE_VTABLE[1] = custom_get_name as *const u8;
+        
+        // Logging stubs for the first 20 slots to see what the launcher calls
+        SAFE_VTABLE[2] = stub_slot_2 as *const u8;
+        SAFE_VTABLE[3] = stub_slot_3 as *const u8;
+        SAFE_VTABLE[4] = stub_slot_4 as *const u8;
+        SAFE_VTABLE[5] = stub_slot_5 as *const u8;
+        SAFE_VTABLE[6] = stub_slot_6 as *const u8;
+        SAFE_VTABLE[7] = stub_slot_7 as *const u8;
+        SAFE_VTABLE[8] = stub_slot_8 as *const u8;
+        SAFE_VTABLE[9] = stub_slot_9 as *const u8;
+        SAFE_VTABLE[10] = stub_slot_10 as *const u8;
+        SAFE_VTABLE[11] = stub_slot_11 as *const u8;
+        SAFE_VTABLE[12] = stub_slot_12 as *const u8;
+        SAFE_VTABLE[13] = stub_slot_13 as *const u8;
+        SAFE_VTABLE[14] = stub_slot_14 as *const u8;
+        SAFE_VTABLE[15] = stub_slot_15 as *const u8;
+        SAFE_VTABLE[16] = stub_slot_16 as *const u8;
+        SAFE_VTABLE[17] = stub_slot_17 as *const u8;
+        SAFE_VTABLE[18] = stub_slot_18 as *const u8;
+        SAFE_VTABLE[19] = stub_slot_19 as *const u8;
+        SAFE_VTABLE[20] = stub_slot_20 as *const u8;
+        
+        log("  Built safe vtable (64 stubs + getName at slot 1)");
+        
+        // ═══ BUILD FAKE RENDERSYSTEM ═══
+        // Zero it all out first (already static zeroed)
         let fake_rs_ptr = FAKE_RS.as_mut_ptr();
-        *(fake_rs_ptr as *mut *const *const u8) = CLONED_VTABLE.as_ptr() as *const *const u8;
         
-        // Write our name into the mName field
-        // From the scan, we'll know the offset. For now, try offset 8 (Ogre default)
-        // Write "Vulkan (Reborn)" as MSVC std::string at offset 8
-        let name_ptr = init_vulkan_name();
-        ptr::copy_nonoverlapping(name_ptr, fake_rs_ptr.add(8), 32);
-        log("✓ Wrote 'Vulkan (Reborn)' into mName@offset8");
+        // Byte 0-7: vtable pointer
+        *(fake_rs_ptr as *mut *const *const u8) = SAFE_VTABLE.as_ptr() as *const *const u8;
         
-        // === SIEGE PHASE 4: Register! ===
-        if has_add_rs {
-            log("\n=== SIEGE: REGISTERING 'Vulkan (Reborn)' ===");
-            let add_rs: FnAddRenderSystem = std::mem::transmute(fn_add_rs);
-            add_rs(root, fake_rs_ptr);
-            log("✓✓✓ REGISTERED! Check the Kenshi dropdown! ✓✓✓");
-        } else {
-            log("\nWARNING: addRenderSystem symbol not found — cannot register");
-            log("  The vtable is cloned and patched but we can't add it");
-        }
+        // Byte 8-39: mName = "Vulkan (Reborn)" as MSVC SSO string
+        ptr::copy_nonoverlapping(VULKAN_NAME.as_ptr(), fake_rs_ptr.add(8), 32);
         
-        // Verify
+        log("  Built fake RenderSystem (zeroed + vtable + mName)");
+        
+        // ═══ REGISTER ═══
+        add_rs(root, fake_rs_ptr);
+        
         let vec2 = get_renderers(root);
         let count2 = ((*vec2).end as usize - (*vec2).begin as usize) / 8;
-        log(&format!("\n✓ Renderers after siege: {} (was {})", count2, count));
+        log(&format!("  Renderers: {} → {} ", count, count2));
         
-        log("\n╔═══════════════════════════════════════════════════════╗");
-        log("║  SIEGE COMPLETE — KenshiReborn v0.7.0                ║");
         if count2 > count {
-            log("║  'Vulkan (Reborn)' should be in the dropdown!        ║");
-        } else {
-            log("║  Registration may not have worked — check log above  ║");
+            log("");
+            log("╔═══════════════════════════════════════════════════════╗");
+            log("║  ★ 'Vulkan (Reborn)' REGISTERED — SAFE SIEGE ★      ║");
+            log("║  All methods stubbed. Dropdown should show it.       ║");
+            log("║  Selecting it will be a no-op (Phase 3 handles that) ║");
+            log("╚═══════════════════════════════════════════════════════╝");
         }
-        log("╚═══════════════════════════════════════════════════════╝");
     }
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn dllStopPlugin() {
-    log("dllStopPlugin() — siege complete, standing down");
+    log("dllStopPlugin() — safe siege standing down");
 }
