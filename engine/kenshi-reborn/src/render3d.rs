@@ -527,10 +527,41 @@ pub fn run_mesh_render(mesh_path: &str) {
 
 pub fn run_bestiary(mesh_dir: &str) {
     println!("╔══════════════════════════════════════════════════════════╗");
-    println!("║  KENSHI REBORN v0.7.0 — BESTIARY IN THE SKY           ║");
-    println!("║  Every creature orbiting in Gaia's snow globe           ║");
+    println!("║  KENSHI REBORN v0.7.0 — WORLD MAP BESTIARY            ║");
+    println!("║  Creatures pinned to biomes · 8×8 world grid           ║");
     println!("║  RTX 5090 · Vulkan · Sovereign engine                  ║");
     println!("╚══════════════════════════════════════════════════════════╝\n");
+
+    // Biome → creature mapping from Kenshi game data
+    // Grid coords: (col, row) on 8×8 map, (0,0)=top-left, (7,7)=bottom-right
+    // World space: X = col * TILE, Z = row * TILE (Y = altitude)
+    struct BiomePin { name: &'static str, gx: f32, gz: f32, creatures: &'static [&'static str], color: [f32;3] }
+    let biomes = vec![
+        BiomePin { name: "Venge",           gx: 4.5, gz: 5.0, creatures: &["Mammal_beak", "land_bat", "bird"],
+            color: [0.8, 0.3, 0.15] },
+        BiomePin { name: "Deadlands",       gx: 3.5, gz: 3.0, creatures: &["brokendrone", "robot_worker"],
+            color: [0.4, 0.4, 0.4] },
+        BiomePin { name: "Great Desert",    gx: 5.0, gz: 1.5, creatures: &["antilop250", "goat", "bull"],
+            color: [0.9, 0.82, 0.5] },
+        BiomePin { name: "Swamp",           gx: 2.5, gz: 5.5, creatures: &["swamp_duck", "frog_gorilla"],
+            color: [0.3, 0.5, 0.2] },
+        BiomePin { name: "Fog Islands",     gx: 1.5, gz: 2.5, creatures: &["flesh_insect"],
+            color: [0.6, 0.7, 0.6] },
+        BiomePin { name: "Gut",             gx: 6.5, gz: 3.5, creatures: &["elephant_turtle", "Crab"],
+            color: [0.65, 0.55, 0.4] },
+        BiomePin { name: "Leviathan Coast", gx: 1.5, gz: 0.0, creatures: &["whale2", "Big-Bones"],
+            color: [0.4, 0.6, 0.8] },
+        BiomePin { name: "Border Zone",     gx: 3.0, gz: 3.5, creatures: &["dog"],
+            color: [0.7, 0.6, 0.45] },
+        BiomePin { name: "Howler Maze",     gx: 5.5, gz: 2.5, creatures: &["skimmer"],
+            color: [0.8, 0.6, 0.3] },
+        BiomePin { name: "Ashlands",        gx: 6.5, gz: 6.5, creatures: &["robot_worker"],
+            color: [0.25, 0.12, 0.12] },
+        BiomePin { name: "Spider Plains",   gx: 0.5, gz: 4.5, creatures: &["cage_beast"],
+            color: [0.55, 0.4, 0.47] },
+        BiomePin { name: "Cannibal Plains", gx: 1.5, gz: 1.0, creatures: &["pack_beast"],
+            color: [0.6, 0.6, 0.6] },
+    ];
 
     let mesh_path = std::path::Path::new(mesh_dir);
     let mut entries: Vec<_> = std::fs::read_dir(mesh_path)
@@ -540,58 +571,73 @@ pub fn run_bestiary(mesh_dir: &str) {
         .collect();
     entries.sort_by_key(|e| std::cmp::Reverse(e.metadata().map(|m| m.len()).unwrap_or(0)));
 
-    // Skip fur/accessory meshes and duplicates, take the unique beasts
     let skip = ["_fur", "fur.", "bags", "luggage", "spikes", "hair", "nohorns", "nospikes",
                  "polySurface", "dog1"];
-    let mut loaded: Vec<(MeshData, [f32; 3], f32)> = Vec::new();
+
+    // Load all meshes into a name→MeshData map
+    let mut mesh_map: std::collections::HashMap<String, MeshData> = std::collections::HashMap::new();
     let mut failed = 0u32;
 
     println!("◆ LOADING BESTIARY from {}\n", mesh_dir);
     for entry in &entries {
         let name = entry.file_name().to_string_lossy().to_string();
         if skip.iter().any(|s| name.contains(s)) { continue; }
-
         let path_str = entry.path().to_string_lossy().to_string();
         match load_mesh(&path_str) {
             Some(m) => {
-                println!("  ✓ {} — {} verts, {} tris",
-                    m.name, m.positions.len(), m.indices.len() / 3);
-                loaded.push((m, [0.0, 0.0, 0.0], 1.0));
+                println!("  ✓ {} — {} verts, {} tris", m.name, m.positions.len(), m.indices.len() / 3);
+                let key = m.name.clone();
+                mesh_map.insert(key, m);
             }
-            None => {
-                println!("  ✗ {} — parse failed", name);
-                failed += 1;
+            None => { println!("  ✗ {} — parse failed", name); failed += 1; }
+        }
+    }
+    println!("\n  Loaded {} unique meshes ({} failed)\n", mesh_map.len(), failed);
+
+    // Place creatures at their biome world-map positions
+    // World tile = 6.0 units, so 8×8 grid → 48×48 world space
+    let tile = 6.0f32;
+    let creature_scale = 1.2f32;
+    let mut placed: Vec<(MeshData, [f32; 3], f32)> = Vec::new();
+
+    println!("◆ PINNING TO WORLD MAP (8×8 grid, {} units/tile)\n", tile);
+    for biome in &biomes {
+        let bx = (biome.gx - 3.5) * tile;  // center the 8×8 grid
+        let bz = (biome.gz - 3.5) * tile;
+        let mut slot = 0;
+        for creature_name in biome.creatures {
+            if let Some(mesh) = mesh_map.remove(*creature_name) {
+                let spread = slot as f32 * 1.5;
+                let offset = [bx + spread, 0.0, bz];
+                println!("  📍 {} → {} at ({:.1}, {:.1})", creature_name, biome.name, bx + spread, bz);
+                placed.push((mesh, offset, creature_scale));
+                slot += 1;
+            } else {
+                println!("  ⚠  {} not found for {}", creature_name, biome.name);
             }
         }
     }
 
-    let count = loaded.len();
-    println!("\n◆ LOADED {} beasts ({} skipped, {} failed)", count, entries.len() - count as usize - failed as usize, failed);
-
-    // Arrange in a sphere constellation — golden angle spacing
-    let orbit_scale = 5.0; // units between creatures
-    let golden_angle = std::f32::consts::PI * (3.0 - 5.0f32.sqrt()); // ~2.4 radians
-    let creature_size = 1.5; // normalized size of each creature
-
-    for (i, (_, offset, scale)) in loaded.iter_mut().enumerate() {
-        let t = i as f32 / count.max(1) as f32;
-        let angle = i as f32 * golden_angle;
-        let r = orbit_scale * (1.0 + t * 2.5); // spiral outward
-        let elev = (t - 0.5) * std::f32::consts::PI * 0.8; // spread vertically
-
-        *offset = [
-            r * angle.cos() * elev.cos(),
-            r * elev.sin() * 1.5,
-            r * angle.sin() * elev.cos(),
-        ];
-        *scale = creature_size;
+    // Any remaining un-pinned meshes go in a "wilds" orbit ring
+    let remaining: Vec<_> = mesh_map.into_iter().collect();
+    if !remaining.is_empty() {
+        println!("\n  {} unplaced creatures → orbiting in the Wilds ring", remaining.len());
+        let wilds_r = 4.5 * tile;
+        let golden = std::f32::consts::PI * (3.0 - 5.0f32.sqrt());
+        for (i, (name, mesh)) in remaining.into_iter().enumerate() {
+            let angle = i as f32 * golden;
+            let offset = [wilds_r * angle.cos(), 2.0, wilds_r * angle.sin()];
+            println!("  🌀 {} → Wilds orbit", name);
+            placed.push((mesh, offset, creature_scale * 0.8));
+        }
     }
 
-    println!("  Constellation: spiral sphere, golden angle = {:.2}°", golden_angle.to_degrees());
-    println!("\n◆ INITIALIZING BESTIARY RENDERER\n");
+    let count = placed.len();
+    println!("\n◆ TOTAL: {} creatures pinned to {} biomes on the world map", count, biomes.len());
+    println!("◆ INITIALIZING WORLD MAP RENDERER\n");
 
     let event_loop = EventLoop::new().expect("event loop");
-    let mut app = App3D::new_bestiary(loaded, count);
+    let mut app = App3D::new_bestiary(placed, count);
     event_loop.run_app(&mut app).expect("run");
 }
 
