@@ -187,8 +187,8 @@ pub extern "C" fn dllStartPlugin() {
     let _ = std::fs::File::create(LOG_FILE);
     
     log("╔═══════════════════════════════════════════════════════╗");
-    log("║  KenshiReborn v0.7.1 — SAFE SIEGE                   ║");
-    log("║  All vtable stubs + getName = 'Vulkan (Reborn)'     ║");
+    log("║  KenshiReborn v0.7.2 — DOUGH RISING                  ║");
+    log("║  Slot 2 = empty ConfigOptionMap, getName works      ║");
     log("╚═══════════════════════════════════════════════════════╝");
     
     unsafe {
