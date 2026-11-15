@@ -7,6 +7,9 @@
 //   --flow    PID flow controller — cost/value/rate management
 //   --render  Open window and render Kenshi world map (default)
 
+mod mesh3d;
+mod render3d;
+
 use std::fs;
 use std::path::Path;
 use std::time::Instant;
@@ -1009,6 +1012,12 @@ fn main() {
 
     if args.iter().any(|a| a == "--flow") {
         run_flow();
+        return;
+    }
+
+    if let Some(idx) = args.iter().position(|a| a == "--mesh") {
+        let mesh_path = args.get(idx + 1).expect("--mesh requires a path argument");
+        render3d::run_mesh_render(mesh_path);
         return;
     }
 
