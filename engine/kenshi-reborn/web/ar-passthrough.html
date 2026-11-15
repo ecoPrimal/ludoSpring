@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>👁️ PASSTHROUGH — Gaia Sees Reality</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+html,body{background:transparent!important;overflow:hidden;width:100vw;height:100vh}
+canvas{display:block;width:100%;height:100%;background:transparent!important}
+#hud{position:fixed;top:6px;left:6px;font-size:10px;color:#0f0;opacity:0.8;pointer-events:none;
+  text-shadow:0 0 4px #0f0,0 0 8px #000;line-height:1.3;font-family:'Courier New',monospace}
+#compass{position:fixed;top:6px;right:6px;width:50px;height:50px;pointer-events:none}
+#signals{position:fixed;bottom:6px;left:6px;font-size:9px;color:#0f0;opacity:0.7;pointer-events:none;
+  text-shadow:0 0 3px #0f0;font-family:'Courier New',monospace}
+</style>
+</head><body>
+<canvas id="c"></canvas>
+<div id="hud"></div>
+<canvas id="compass"></canvas>
+<div id="signals"></div>
+
+<script>
+const C=document.getElementById('c'),X=C.getContext('2d');
+const CC=document.getElementById('compass'),CX=CC.getContext('2d');
+let W,H,frame=0;
+
+// Sensor state
+let alpha=0,beta=0,gamma=0,hasGyro=false;
+let camYaw=0,camPitch=0,camRoll=0;
+
+// LAN signal pulses — ping each gate and visualize
+const GATES=[
+  {name:'northGate',ip:'.147',color:'#ff3333',az:0,el:0,dist:0,ms:0,alive:true,role:'YOU'},
+  {name:'eastGate',ip:'.244',color:'#33ff88',az:90,el:5,dist:2,ms:0,alive:false,role:'BRAIN'},
+  {name:'ironGate',ip:'.237',color:'#ffaa33',az:180,el:-5,dist:3,ms:0,alive:false,role:'FORGE'},
+  {name:'sporeGate',ip:'.3',color:'#3388ff',az:270,el:0,dist:2.5,ms:0,alive:false,role:'SPYGLASS'},
+  {name:'grapheneGate',ip:'.9.217',color:'#aa33ff',az:45,el:30,dist:1.5,ms:0,alive:false,role:'PIXEL'},
+  {name:'frameGate',ip:'.203',color:'#33aaff',az:0,el:-30,dist:0.3,ms:0,alive:true,role:'HERE'},
+  {name:'deckGate',ip:'.139',color:'#ffff33',az:315,el:10,dist:0.5,ms:0,alive:false,role:'DECK'},
+  {name:'southGate',ip:'.148',color:'#ff33aa',az:135,el:0,dist:4,ms:0,alive:false,role:'PHONE'}
+];
+
+// Ping simulation (will be replaced with real pings via fetch)
+let pingFrame=0;
+async function pingGates(){
+  for(const g of GATES){
+    if(g.name==='frameGate'||g.name==='northGate'){g.alive=true;g.ms=1;continue;}
+    try{
+      const t0=performance.now();
+      await fetch(`http://192.168.4${g.ip.startsWith('.')?g.ip:'.'+g.ip}:8080/`,{mode:'no-cors',signal:AbortSignal.timeout(500)});
+      g.ms=Math.round(performance.now()-t0);
+      g.alive=true;
+    }catch{
+      g.alive=false;g.ms=-1;
+    }
+  }
+}
+setInterval(pingGates,5000);
+pingGates();
+
+function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight;CC.width=50;CC.height=50}
+window.addEventListener('resize',resize);resize();
+
+window.addEventListener('deviceorientation',e=>{
+  if(e.alpha!==null){hasGyro=true;alpha=e.alpha;beta=e.beta;gamma=e.gamma}
+});
+
+// Mouse fallback
+C.addEventListener('mousemove',e=>{
+  if(!hasGyro){camYaw=(e.clientX/W-0.5)*360;camPitch=(e.clientY/H-0.5)*-180}
+});
+
+function worldToScreen(az,el,dist){
+  let relAz=az-camYaw;
+  while(relAz>180)relAz-=360;
+  while(relAz<-180)relAz+=360;
+  let relEl=el-camPitch;
+  const fov=90;
+  return{
+    x:W/2+(relAz/fov)*W,
+    y:H/2-(relEl/fov)*H,
+    size:Math.max(3,25/Math.max(dist,0.3)),
+    visible:Math.abs(relAz)<fov&&Math.abs(relEl)<fov
+  };
+}
+
+function drawGate(g){
+  const p=worldToScreen(g.az,g.el,g.dist);
+  if(!p.visible)return;
+  
+  const t=frame*0.03;
+  const pulse=g.alive?0.6+Math.sin(t+g.az)*0.4:0.15;
+  const s=p.size;
+  
+  // Signal ring (pulse outward when alive)
+  if(g.alive){
+    const ringPhase=(frame*0.02+g.az*0.01)%1;
+    X.strokeStyle=g.color;
+    X.globalAlpha=0.4*(1-ringPhase);
+    X.lineWidth=1.5;
+    X.beginPath();X.arc(p.x,p.y,s+ringPhase*30,0,Math.PI*2);X.stroke();
+    X.beginPath();X.arc(p.x,p.y,s+ringPhase*50+10,0,Math.PI*2);X.stroke();
+  }
+  
+  // Diamond marker
+  X.globalAlpha=pulse;
+  X.fillStyle=g.color;
+  X.save();X.translate(p.x,p.y);X.rotate(t);
+  X.beginPath();X.moveTo(0,-s);X.lineTo(s*0.7,0);X.lineTo(0,s);X.lineTo(-s*0.7,0);X.closePath();
+  X.fill();X.restore();
+  
+  // Bright center dot
+  X.globalAlpha=g.alive?0.9:0.3;
+  X.beginPath();X.arc(p.x,p.y,2,0,Math.PI*2);X.fill();
+  
+  // Label — INVERTED (bright on transparent)
+  X.fillStyle='#fff';
+  X.globalAlpha=0.9;
+  X.font='bold 10px Courier New';
+  X.textAlign='center';
+  X.shadowColor=g.color;X.shadowBlur=6;
+  X.fillText(g.name,p.x,p.y-s-6);
+  X.font='8px Courier New';
+  X.fillStyle=g.color;
+  X.fillText(g.alive?`${g.ms}ms`:'✗',p.x,p.y+s+10);
+  X.shadowBlur=0;
+  X.globalAlpha=1;
+}
+
+function drawConnectionLines(){
+  X.strokeStyle='#0f0';X.lineWidth=0.5;
+  for(let i=0;i<GATES.length;i++){
+    if(!GATES[i].alive)continue;
+    for(let j=i+1;j<GATES.length;j++){
+      if(!GATES[j].alive)continue;
+      const a=worldToScreen(GATES[i].az,GATES[i].el,GATES[i].dist);
+      const b=worldToScreen(GATES[j].az,GATES[j].el,GATES[j].dist);
+      if(!a.visible||!b.visible)continue;
+      
+      // Pulsing data flow along the line
+      X.globalAlpha=0.1;
+      X.beginPath();X.moveTo(a.x,a.y);X.lineTo(b.x,b.y);X.stroke();
+      
+      // Moving dot = data packet
+      const t=(frame*0.01+i*0.3+j*0.7)%1;
+      const px=a.x+(b.x-a.x)*t, py=a.y+(b.y-a.y)*t;
+      X.globalAlpha=0.5;
+      X.fillStyle='#0f0';
+      X.beginPath();X.arc(px,py,1.5,0,Math.PI*2);X.fill();
+    }
+  }
+  X.globalAlpha=1;
+}
+
+function drawScanlines(){
+  // Subtle scanlines for AR feel
+  X.fillStyle='rgba(0,255,0,0.02)';
+  for(let y=0;y<H;y+=3){
+    X.fillRect(0,y,W,1);
+  }
+}
+
+function drawReticle(){
+  const cx=W/2,cy=H/2;
+  X.strokeStyle='#0f0';X.lineWidth=0.5;X.globalAlpha=0.3;
+  // Cross
+  X.beginPath();X.moveTo(cx-15,cy);X.lineTo(cx-5,cy);X.stroke();
+  X.beginPath();X.moveTo(cx+5,cy);X.lineTo(cx+15,cy);X.stroke();
+  X.beginPath();X.moveTo(cx,cy-15);X.lineTo(cx,cy-5);X.stroke();
+  X.beginPath();X.moveTo(cx,cy+5);X.lineTo(cx,cy+15);X.stroke();
+  // Circle
+  X.beginPath();X.arc(cx,cy,20,0,Math.PI*2);X.stroke();
+  X.globalAlpha=1;
+}
+
+function drawCompass(){
+  CX.clearRect(0,0,50,50);
+  const cx=25,cy=25,r=18;
+  CX.strokeStyle='#0f0';CX.lineWidth=0.5;CX.globalAlpha=0.4;
+  CX.beginPath();CX.arc(cx,cy,r,0,Math.PI*2);CX.stroke();
+  
+  const headRad=-camYaw*Math.PI/180;
+  [{l:'N',a:0,c:'#f33'},{l:'E',a:90,c:'#ff0'},{l:'S',a:180,c:'#3af'},{l:'W',a:270,c:'#a3f'}].forEach(d=>{
+    const a=(d.a*Math.PI/180)+headRad;
+    CX.fillStyle=d.c;CX.font='bold 7px Courier New';CX.textAlign='center';CX.textBaseline='middle';
+    CX.globalAlpha=0.7;
+    CX.fillText(d.l,cx+Math.sin(a)*r*0.75,cy-Math.cos(a)*r*0.75);
+  });
+  CX.fillStyle='#0f0';CX.globalAlpha=0.6;
+  CX.beginPath();CX.moveTo(cx,cy-5);CX.lineTo(cx+3,cy+2);CX.lineTo(cx-3,cy+2);CX.closePath();CX.fill();
+}
+
+function updateHUD(){
+  const heading=((camYaw%360)+360)%360;
+  const dir=['N','NE','E','SE','S','SW','W','NW'][Math.round(heading/45)%8];
+  const aliveCount=GATES.filter(g=>g.alive).length;
+  document.getElementById('hud').innerHTML=
+    `👁️ PASSTHROUGH ${hasGyro?'●GYRO':'○gyro'}<br>`+
+    `${heading.toFixed(0)}° ${dir} ↕${camPitch.toFixed(0)}°<br>`+
+    `GATES: ${aliveCount}/${GATES.length} ALIVE`;
+}
+
+function updateSignals(){
+  const lines=GATES.map(g=>{
+    const icon=g.alive?'●':'○';
+    const ms=g.alive?`${g.ms}ms`:'DOWN';
+    return `<span style="color:${g.color}">${icon}</span> ${g.name.padEnd(12)} ${ms}`;
+  });
+  document.getElementById('signals').innerHTML=lines.join('<br>');
+}
+
+function draw(){
+  if(hasGyro){
+    let dy=alpha-camYaw;while(dy>180)dy-=360;while(dy<-180)dy+=360;
+    camYaw+=dy*0.15;
+    camPitch+=(Math.max(-89,Math.min(89,beta-90))-camPitch)*0.15;
+    camRoll+=(gamma-camRoll)*0.1;
+  }
+  
+  // TRANSPARENT background — passthrough shows behind
+  X.clearRect(0,0,W,H);
+  
+  // Very subtle scanlines for AR overlay feel
+  drawScanlines();
+  
+  // Connection lines (data flow)
+  drawConnectionLines();
+  
+  // Gate markers
+  GATES.forEach(drawGate);
+  
+  // Center reticle
+  drawReticle();
+  
+  // Compass
+  drawCompass();
+  
+  // HUD text
+  if(frame%10===0){updateHUD();updateSignals();}
+  
+  frame++;
+  requestAnimationFrame(draw);
+}
+
+// Sensor permissions
+async function init(){
+  if(typeof DeviceOrientationEvent?.requestPermission==='function'){
+    try{await DeviceOrientationEvent.requestPermission()}catch{}
+  }
+}
+document.addEventListener('click',init,{once:true});
+document.addEventListener('touchstart',init,{once:true});
+
+draw();
+</script>
+</body></html>
