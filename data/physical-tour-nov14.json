@@ -1,0 +1,160 @@
+{
+  "title": "PHYSICAL TOUR — Kevin's Voice Walk-Through, Nov 14 2026",
+  "ts": "2026-11-15T02:58:00Z",
+  "source": "voice transcription via Corsair HS80 MAX → northGate",
+  "philosophy": "The chair IS the seat of power. The Elusive Man, from Mass Effect. The organism maps to the body maps to the house.",
+
+  "northgate_tower": {
+    "case": "BLACK tower case",
+    "position": "Kevin's desk — THE CHAIR, seat of power",
+    "gpu": "RTX 5090",
+    "cpu": "AMD 9950X3D",
+    "ram": "DDR5 (96GB)",
+    "tomorrow": "NPU Akita chip install",
+    "usb_top": ["Steam Deck (USB-C, charging + data)", "Steam Frame (USB-C, charging)"],
+    "peripherals": ["Corsair HS80 MAX WIRELESS (headset)", "Keyboard (WASD)", "Mouse"],
+    "software": "Kenshi, KenshiReborn, Blender, Steam, Cursor"
+  },
+
+  "eastgate": {
+    "case": "WHITE computer case (next to northGate)",
+    "position": "Beside Kevin, within arm's reach",
+    "gpu": "RTX 4070",
+    "cpu": "different from northGate (check)",
+    "ram": "4 sticks — 2 white, 2 black DDR (not matched sets, check specs)",
+    "rgb": "inside (inactive?)",
+    "note": "Kevin's 'own gate' (blueGate) still down next to it"
+  },
+
+  "shelf_above": {
+    "flint_router": {
+      "device": "GL-Net (GL-MT6000) — the Flint",
+      "role": "Router, gateway, NTP server",
+      "extras": ["USB dongle for Steam Frame (another tether)", "Directionality beacon — extends AR range through whole house"]
+    },
+    "ddr3_device": {
+      "description": "Little DDR3 board being reset with Eros over USB",
+      "status": "later project"
+    }
+  },
+
+  "sporegate": {
+    "form_factor": "DDR5 NUC",
+    "location": "Main basement",
+    "webcam": "attached — Gaia's EYES (eventually another radio/head receiver)",
+    "untapped": "USB transceivers inside that we're NOT leveraging yet",
+    "future": "Visual input + radio receiver + USB sensor hub"
+  },
+
+  "desk_area_extras": {
+    "riscv_jupiter2": {
+      "device": "RISC-V Jupiter 2",
+      "position": "Next to Kevin",
+      "features": ["10 gigabit SFP port", "USB ports to leverage"],
+      "status": "available, not yet integrated"
+    },
+    "steam_link_v1": {
+      "device": "Steam Link Gen 1",
+      "role": "HDMI relay to Vizio TV",
+      "status": "available"
+    },
+    "steam_controller_v1": {
+      "device": "Steam Controller v1",
+      "connection": "USB into Steam Dock",
+      "status": "active"
+    },
+    "steam_frame_nunchucks": {
+      "device": "Steam Frame Nunchucks",
+      "connection": "Bluetooth (70:29:C1:B5:45:93)",
+      "status": "turning on"
+    },
+    "misc": "other odds and ends on the desk"
+  },
+
+  "network_architecture_plan": {
+    "mikrotik_bench": {
+      "location": "Current bench (shelf area)",
+      "plan": "Keep MikroTik + Flint here",
+      "fix_needed": "LAN egress issues with AT&T router"
+    },
+    "second_mikrotik": {
+      "plan": "Get another MikroTik for the OTHER side (LAN 2)",
+      "purpose": "Dedicated passthrough to 10G spine",
+      "creates": "Small radial for Circle of Willis (in/out)"
+    },
+    "circle_of_willis": {
+      "concept": "Pixel or iPhone inside the circle as LTE beacons",
+      "analogy": "Like phone plans from Mint — cellular towers but LOCAL",
+      "resilience": "RSS spine survives even if internet goes down",
+      "topology": "Redundant circle — if one path blocks, blood flows the other way"
+    }
+  },
+
+  "steam_deck_status": {
+    "state": "Firmware updating → SteamOS image rebuilding",
+    "connection": "USB-C to top of northGate case",
+    "software_seen": ["Blender", "Imgur app", "raccoon wallpaper/app", "badger wallpaper/app"],
+    "battery": "DEAD — permanent USB-C passthrough",
+    "position": "On top of northGate tower"
+  },
+
+  "steam_frame_status": {
+    "state": "Charging (white light, says 'charging', not enough power yet)",
+    "connection": "USB-C from northGate",
+    "cef_debug": "PORT 8081 OPEN — we're INSIDE (5 tabs visible)",
+    "remote_play": "PORT 27036 OPEN",
+    "position": "At Kevin's feet",
+    "battery": "Charging from dead — needs more juice"
+  },
+
+  "frame_ar_vision": {
+    "passthrough_lens": "The Frame has pass-through cameras — you can see the real world through it!",
+    "reference": "Elusive Man chair from Mass Effect — see everything around you",
+    "plan": [
+      "Invert all patterns — dark background, bright elements",
+      "Input cameras = ingestion points (epitope sort pattern)",
+      "Stomach with no eyes → NOW we have eyes + sensors = negentropy engine",
+      "RTX eats the visual chaos, makes it the most efficient thing",
+      "TRUE AR — better than Meta Ray-Ban, fully sovereign, fully local"
+    ],
+    "power_goal": "Massively reduce power consumption — efficiency first",
+    "first_step": "Invert color scheme for pass-through visibility"
+  },
+
+  "lan2_house2": {
+    "location": "641 Samantha Ave — South Pole",
+    "devices": ["Second GL-Net/Flint router", "JetStream managed switch (.111)"],
+    "role": "BACKEND — 'the butt' (Kevin's words)",
+    "wan_beacon": "Physically closer to Kevin, below the head",
+    "anatomy": {
+      "neck_throat": "Where Kevin sits — the chair, seat of power",
+      "spine": "10G fiber backbone",
+      "head": "northGate (above, the brain/heart)",
+      "butt": "LAN 2 (below, the backend)"
+    }
+  },
+
+  "body_mapping": {
+    "head": "northGate — RTX 5090, the brain",
+    "eyes": "sporeGate webcam + Frame passthrough cameras",
+    "ears": "Corsair HS80 MAX + Frame mic + sporeGate future radio",
+    "mouth": "RSS feed, publication, output",
+    "neck": "Kevin's chair — the chirality point, seat of power",
+    "right_hand": "eastGate — white case, serves + processes",
+    "left_hand": "northGate peripherals — creates",
+    "spine": "10G fiber backbone between houses",
+    "heart": "northGate RTX 5090 — pumps frames",
+    "gut": "eastGate — digests data, 38 models, cron",
+    "immune": "skunkBat + bearDog + thymus",
+    "legs": "LAN cables running to other rooms",
+    "feet": "Steam Frame — at Kevin's feet, touching the ground",
+    "butt": "LAN 2, House 2 — the backend, where things come out"
+  },
+
+  "elusive_man": {
+    "reference": "Mass Effect — the Illusive Man sits in his chair, sees the whole galaxy",
+    "kevin_version": "Kevin sits in his chair, sees the whole organism",
+    "chair": "The origin point of all 6 axes of chirality",
+    "view": "Steam Frame passthrough = see everything + digital overlay"
+  }
+}
