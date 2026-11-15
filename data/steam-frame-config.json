@@ -1,0 +1,96 @@
+{
+  "title": "STEAM FRAME — Full Configuration Walk-Through",
+  "ts": "2026-11-15T03:30:00Z",
+  "device": "Steam Frame (frameGate)",
+  "ip": "192.168.4.203 (reachable from both LANs)",
+  "soc": "Snapdragon 8 Gen 3 (ARM64!)",
+  "os": "ARM SteamOS",
+  "browser": "Chrome/126.0.6478.183 (CEF)",
+  "cef_debug": ":8081 LIVE",
+
+  "audio_architecture": {
+    "corsair_headset": {
+      "role": "Kevin's COMMAND VOICE — human sound, spatial radio",
+      "connection": "2.4GHz dongle → MOBO USB (spine)",
+      "type": "input/output — voice commands, music, game audio"
+    },
+    "frame_speakers": {
+      "role": "LOCALIZED SOUND — movie theater, whispers, feeling sound",
+      "type": "spatial/environmental — the local atmosphere",
+      "analogy": "like being IN the scene vs commanding FROM outside"
+    },
+    "future": "Attenuate and mix different I/O types across dongles over time"
+  },
+
+  "controller_discovery": {
+    "nunchucks": "Steam Frame controllers — ATTACHED and working",
+    "controller_tested": "Gen 2 Steam Controller (NOT Gen 1!)",
+    "gen2_status": "Not pairing via BT — not seeing it",
+    "gen1_plan": "Will try Gen 1 controller later",
+    "keyboard_mouse": "PRIORITY — need keyboard+mouse overlay ASAP for productivity"
+  },
+
+  "settings_configured": {
+    "power": {
+      "battery_percent": true,
+      "dim_after": "5 minutes",
+      "sleep_after": "1 hour",
+      "plugged_in_sleep": "disabled (never sleep when powered)",
+      "plugged_in_dim": "disabled"
+    },
+    "display": {
+      "pair_target": "64C81 display",
+      "show_all_devices": true
+    },
+    "audio": {
+      "mono": false,
+      "note": "Take advantage of stereo speakers — spatial sound"
+    },
+    "security": {
+      "lock_screen": false
+    },
+    "cloud": {
+      "enabled": true
+    },
+    "compatibility": {
+      "proton": "stable",
+      "proton_experimental": "ARM64",
+      "note": "ARM64 Proton experimental — native ARM translation layer"
+    },
+    "network": {
+      "wifi": "Gaia WiFi (moved from LAN 1)",
+      "steamvr_error": "No internet connection initially — fixed by joining Gaia WiFi"
+    },
+    "streaming": {
+      "status": "Not streaming",
+      "steamvr": "Without game option available",
+      "steamvr_install": "Error — needed internet, now on Gaia WiFi",
+      "connected_to": "Steam Deck (Tamasin mode)"
+    },
+    "input": {
+      "keyboard_theme": "default",
+      "haptics": "medium, center, bottom",
+      "better_keyboard": "available (notification)",
+      "future": "Gaia custom keyboard/input"
+    },
+    "client": {
+      "advanced_options": "default",
+      "resolutions": ["480p", "1080p", "4K"],
+      "windowed": "default",
+      "microphone": "ON — always listening (recon, not surveillance)"
+    }
+  },
+
+  "dongle_move": {
+    "from": "northGate case USB",
+    "to": "eastGate (when it comes back)",
+    "purpose": "eastGate becomes the Frame's permanent beacon",
+    "note": "WiFi 6 direct link dongle — low latency, no router hop"
+  },
+
+  "steamvr_plan": {
+    "status": "Installing now (on Gaia WiFi)",
+    "mode": "Stream VR without game — pure AR overlay",
+    "use": "Passthrough + Gaia overlays = TRUE AR"
+  }
+}
