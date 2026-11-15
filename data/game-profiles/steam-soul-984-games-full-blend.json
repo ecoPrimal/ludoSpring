@@ -1,0 +1,154 @@
+{
+  "title": "STEAM SOUL — 984 Games Eaten Into KenshiReborn Engine DNA",
+  "ts": "2026-11-15T12:15:00Z",
+  "wave": 244,
+  "thesis": "Every game Kevin played teaches KenshiReborn something. 14,941 hours of gameplay = 14,941 hours of engine research. Each genre cluster maps to an engine subsystem. The games ARE the spec.",
+
+  "engine_lessons_from_984_games": {
+
+    "RENDERER — barraCuda + coralReef": {
+      "teachers": [
+        {"game": "Crimson Desert", "hours": 700, "lesson": "Open world LOD at massive scale. Korean MMO-grade character rendering. Hair/cloth sim. 193GB installed = DENSE assets."},
+        {"game": "S.T.A.L.K.E.R. 2", "hours": 471, "lesson": "Unreal Engine 5 renderer: Nanite, Lumen, virtual shadow maps. THIS is the target to BEAT. 193GB of dense world."},
+        {"game": "Black Myth: Wukong", "hours": 136, "lesson": "UE5 at its best — particle effects, boss animations, Chinese architecture rendering. 140GB."},
+        {"game": "Death Stranding 2", "hours": 246, "lesson": "Decima engine. Terrain streaming, weather systems, volumetric clouds. Kojima-level fidelity."},
+        {"game": "Cyberpunk 2077", "hours": 172, "lesson": "REDengine 4. Dense urban rendering, ray-traced reflections, crowd systems. Night City = dense."},
+        {"game": "Horizon Zero Dawn", "hours": 209, "lesson": "Decima engine. Procedural vegetation, machine rendering, LOD at distance."},
+        {"game": "Ghost of Tsushima", "hours": 159, "lesson": "Wind + grass particles, dynamic weather, painterly post-processing. BEAUTY."},
+        {"game": "Half-Life: Alyx", "hours": 68, "lesson": "Source 2 VR. Physics interaction in VR, hand tracking, VR comfort."}
+      ],
+      "total_renderer_research_hours": 2161,
+      "kenshi_reborn_application": "barraCuda WGSL shaders must handle Kenshi's vast desert + cities at Stalker 2 fidelity on RTX 5090. Vulkan f64 physics, Nanite-style mesh streaming, volumetric weather."
+    },
+
+    "PHYSICS — barraCuda GPU compute": {
+      "teachers": [
+        {"game": "Noita (881100)", "hours": 1, "lesson": "EVERY PIXEL IS SIMULATED. Falling sand physics at massive scale. THIS is the physics dream."},
+        {"game": "Satisfactory", "hours": 157, "lesson": "Factory physics — conveyor belts, fluid dynamics, power grids. Interconnected systems."},
+        {"game": "Factorio", "hours": 51, "lesson": "The GOLD STANDARD of optimization. Millions of entities, no lag. ECS architecture."},
+        {"game": "Oxygen Not Included", "hours": 96, "lesson": "Colony sim physics — gas dynamics, liquid flow, heat transfer, germs. DEEP simulation."},
+        {"game": "Space Engineers", "hours": 76, "lesson": "Voxel destruction, vehicle physics, gravity simulation. Full-body physics."},
+        {"game": "Terraria", "hours": 50, "lesson": "Tile-based world physics, liquid flow, projectile physics. 2D but DEEP."}
+      ],
+      "total_physics_research_hours": 431,
+      "kenshi_reborn_application": "Kenshi needs squad combat physics, building stability, weather effects, wound system. GPU-accelerated physics on RTX 5090. Noita-style falling sand for terrain deformation."
+    },
+
+    "AI — squirrel MCP + Ollama tissue models": {
+      "teachers": [
+        {"game": "Baldur's Gate 3", "hours": 246, "lesson": "D&D 5e AI — initiative, reactions, party AI, companion personality. DEEP dialogue trees."},
+        {"game": "Divinity: Original Sin 2", "hours": 469, "lesson": "Larian's AI — elemental combos, environmental awareness, tactical positioning."},
+        {"game": "Pathfinder: Kingmaker", "hours": 478, "lesson": "CRPG party AI, kingdom management AI, alignment-based decisions."},
+        {"game": "Warhammer 40K: Rogue Trader", "hours": 565, "lesson": "40K faction AI — each faction has distinct behavior. Classification system."},
+        {"game": "Kenshi", "hours": 257, "lesson": "FCS AI system — 200+ task types, 70+ event triggers. Squad AI. THIS IS THE TARGET."},
+        {"game": "Disco Elysium", "hours": 71, "lesson": "Skill-based internal dialogue. AI as internal monologue. PERSONALITY SIMULATION."},
+        {"game": "Stardew Valley", "hours": 95, "lesson": "NPC schedule AI — time-based routines, relationship tracking, gift preferences."}
+      ],
+      "total_ai_research_hours": 2181,
+      "kenshi_reborn_application": "Kenshi's FCS AI gets REPLACED by squirrel MCP agents backed by 68 Ollama models. NPCs make real decisions. Emergent behavior. LLM-driven dialogue. Each NPC has a personality model."
+    },
+
+    "WORLD STREAMING — loamSpine + nestGate": {
+      "teachers": [
+        {"game": "Kenshi", "hours": 257, "lesson": "701 zones, seamless streaming. The BASELINE to beat."},
+        {"game": "Elden Ring", "hours": 248, "lesson": "FromSoft's seamless open world. Dense dungeons + vast overworld. Zero loading."},
+        {"game": "Skyrim", "hours": 72, "lesson": "Bethesda's cell-based streaming. Modding-friendly world format."},
+        {"game": "Mount & Blade II", "hours": 131, "lesson": "Campaign map → battle map transition. Two-scale world."},
+        {"game": "Oblivion Remastered", "hours": 292, "lesson": "Unreal Engine streaming of Bethesda's cell-based world. The COMPARISON."}
+      ],
+      "total_streaming_research_hours": 1000,
+      "kenshi_reborn_application": "loamSpine DAG-driven zone streaming. Content-addressed chunks via nestGate CAS. Verifiable world state. Branch/merge world saves via rhizoCrypt."
+    },
+
+    "CARD/DECKBUILDER — immune classifier TCG": {
+      "teachers": [
+        {"game": "Slay the Spire", "hours": 259, "lesson": "Card synergy, energy system, relic combos. PURE deckbuilding."},
+        {"game": "Balatro", "hours": 104, "lesson": "Poker + roguelike. Probability, multipliers, joker combos. MATHEMATICAL beauty."},
+        {"game": "Yu-Gi-Oh", "hours": 48, "lesson": "Chain mechanics, graveyard interaction, meta-game evolution."},
+        {"game": "Warhammer 40K", "hours": 565, "lesson": "Faction cards, unit stats, army composition. THIS IS THE CLASSIFIER."}
+      ],
+      "total_card_research_hours": 976,
+      "kenshi_reborn_application": "The Anderson immune classifier gets a TCG overlay. Each classified entity becomes a card with stats. The Warhammer factions MAP to Anderson spectrum categories. Slay the Spire's energy system = compute budget allocation."
+    },
+
+    "SURVIVAL/CRAFT — the Kenshi CORE": {
+      "teachers": [
+        {"game": "Kenshi", "hours": 257, "lesson": "THE GAME. Base building, squad management, crafting, trading. No hand-holding."},
+        {"game": "Project Zomboid", "hours": 87, "lesson": "Deep survival sim — nutrition, illness, vehicle repair, barricading."},
+        {"game": "Pacific Drive", "hours": 132, "lesson": "Vehicle as home. Repair/upgrade loop. Zone-based exploration with car."},
+        {"game": "DayZ", "hours": 48, "lesson": "PvP survival. Loot economy, player interaction, base raiding."},
+        {"game": "Rust", "hours": 50, "lesson": "Base building PvP. Raid mechanics. Decay system. Social dynamics."},
+        {"game": "Raft", "hours": 478, "lesson": "Build from NOTHING on water. Resource management. Cooperative survival."}
+      ],
+      "total_survival_research_hours": 1052,
+      "kenshi_reborn_application": "Kenshi IS survival/craft. Every hour of these games is direct engine spec. Base building → ECS entities. Squad management → agent orchestration. Crafting → DAG pipelines."
+    },
+
+    "IDLE/OPTIMIZATION — Gaia's heartbeat": {
+      "teachers": [
+        {"game": "NGU IDLE", "hours": 1803, "lesson": "Systems that optimize themselves. Prestige mechanics. Exponential growth."},
+        {"game": "NGU INDUSTRIES", "hours": 500, "lesson": "Factory idle. Production chains. Automation."},
+        {"game": "Trimps", "hours": 292, "lesson": "Incremental with strategy layer. Perks, challenges, portals."}
+      ],
+      "total_idle_research_hours": 2595,
+      "kenshi_reborn_application": "The ORGANISM pattern. biomeOS IS an idle game — 23 mushrooms and 35 crons run themselves. Kenshi's base management can learn from idle game prestige mechanics for colony evolution."
+    },
+
+    "SOULSLIKE — combat system": {
+      "teachers": [
+        {"game": "Nioh 3", "hours": 316, "lesson": "Stance-based combat, ki pulse, yokai abilities. DEEP action combat."},
+        {"game": "Elden Ring", "hours": 248, "lesson": "Open world + soulslike. Build variety, invasions, co-op."},
+        {"game": "Sekiro", "hours": 148, "lesson": "Posture system, deflection, stealth. PRECISION combat."},
+        {"game": "Nioh 2", "hours": 146, "lesson": "Yokai shift, burst counters. More layers than Nioh 1."},
+        {"game": "Black Myth: Wukong", "hours": 136, "lesson": "72 transformations, spell system, boss design."},
+        {"game": "Lies of P", "hours": 46, "lesson": "Mechanical arm customization, Pinocchio's lie system."},
+        {"game": "Dark Souls III", "hours": 83, "lesson": "The foundation. Rolling, stamina, weapon arts."}
+      ],
+      "total_combat_research_hours": 1123,
+      "kenshi_reborn_application": "Kenshi's combat is squad-based and automated. KenshiReborn KEEPS that but adds soulslike precision for player-controlled characters. Stance system from Nioh. Posture from Sekiro. The player can zoom into any squad member and fight soulslike."
+    },
+
+    "TABLETOP DIGITAL — the overlay layer": {
+      "teachers": [
+        {"game": "TaleSpire", "hours": 150, "lesson": "3D virtual tabletop. Map building, token movement, fog of war. D&D DIGITIZED."},
+        {"game": "Warhammer 40K", "hours": 565, "lesson": "Tabletop rules in digital form. Army lists, turn order, morale."}
+      ],
+      "total_tabletop_research_hours": 715,
+      "kenshi_reborn_application": "The GOD EYE view. KenshiReborn's world seen from above IS a tabletop game. TaleSpire's fog of war = Kenshi's fog of war. The Steam Frame displays the tabletop view. Players can interact with the world like a tabletop game."
+    }
+  },
+
+  "total_engine_research": {
+    "renderer_hours": 2161,
+    "physics_hours": 431,
+    "ai_hours": 2181,
+    "world_streaming_hours": 1000,
+    "card_system_hours": 976,
+    "survival_craft_hours": 1052,
+    "idle_automation_hours": 2595,
+    "combat_hours": 1123,
+    "tabletop_hours": 715,
+    "TOTAL": 12234,
+    "note": "12,234 hours of gameplay = 12,234 hours of engine R&D. Kevin didn't just play games. He STUDIED them."
+  },
+
+  "primal_to_game_mapping": {
+    "barraCuda": "renderer + physics (Crimson Desert, Stalker 2, Noita, Satisfactory)",
+    "coralReef": "distributed compute (Factorio optimization, ONI simulation)",
+    "squirrel": "AI agents (BG3, DOS2, Pathfinder, Warhammer 40K, Disco Elysium)",
+    "nestGate": "world storage (Kenshi zones, Elden Ring seamless, Skyrim cells)",
+    "loamSpine": "world streaming (DAG-driven, Elden Ring-style zero loading)",
+    "sweetGrass": "provenance (mod signing, save verification, content attribution)",
+    "rhizoCrypt": "save system (branch/merge saves, DAG history, verifiable state)",
+    "bearDog": "identity + modding (Ed25519 signed mods, player identity)",
+    "petalTongue": "UI/HUD (MyGUI replacement, egui + WASM, TaleSpire overlay)",
+    "skunkBat": "anti-cheat (network defense, tamper detection, VAC replacement)",
+    "songBird": "multiplayer mesh (LAN/WAN transport, peer discovery, voice)",
+    "sourDough": "audio (Wwise replacement, positional audio, procedural soundscapes)",
+    "swarmVine": "gossip protocol (world state sync, player state propagation)",
+    "toadStool": "service discovery (game server browser, mod repository)",
+    "biomeOS": "orchestrator (game server management, instance scaling)",
+    "bingoCube": "matchmaking (player coordination, co-op session management)",
+    "dromedary": "reverse proxy (game server routing, CDN for assets)"
+  }
+}
