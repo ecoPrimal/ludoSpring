@@ -1,0 +1,109 @@
+﻿ **Card 1**
+- NAME: Arataki Itto
+- TYPE: Character
+- FACTION: Holy Nation
+- COST: 3
+- ATTACK / DEFENSE: 2 / 5
+- ABILITY: Once per turn, gain +1/+0 for each Pearl you have spent on your turns.
+- FLAVOR TEXT: "The Arataki Clan's pride is forged in battle and hardship." - Kenshi lore
+- RARITY: Common
+- TAROT CORRESPONDENCE: The Hermit (XV)
+
+**Card 2**
+- NAME: Mekkatorque
+- TYPE: Equipment
+- FACTION: United Cities
+- COST: 5
+- ATTACK / DEFENSE: N/A
+- ABILITY: When you play this card, gain +1/+3 to your character for the rest of the game.
+- FLAVOR TEXT: "A relic from a forgotten age, now restored." - Kenshi lore
+- RARITY: Uncommon
+- TAROT CORRESPONDENCE: The Tower (XVIII)
+
+**Card 3**
+- NAME: Nomad Outrider
+- TYPE: Creature
+- FACTION: Nomad
+- COST: 2
+- ATTACK / DEFENSE: 1 / 4
+- ABILITY: When you play this card, gain +1/+1 to your faction's other creatures.
+- FLAVOR TEXT: "The wind whispers the call of the road." - Kenshi lore
+- RARITY: Common
+- TAROT CORRESPONDENCE: The High Priestess (II)
+
+**Card 4**
+- NAME: Hiver Sniper
+- TYPE: Creature
+- FACTION: Hivers
+- COST: 4
+- ATTACK / DEFENSE: 3 / 2
+- ABILITY: At the end of your turn, if there are no creatures in play from other factions, deal 1 damage to an enemy character.
+- FLAVOR TEXT: "Silent and deadly." - Kenshi lore
+- RARITY: Uncommon
+- TAROT CORRESPONDENCE: The Emperor (IV)
+
+**Card 5**
+- NAME: Skeleton Lord
+- TYPE: Character
+- FACTION: Skeletons
+- COST: 6
+- ATTACK / DEFENSE: 4 / 3
+- ABILITY: At the start of your turn, if you have more than half of your maximum mana, gain +1/+2.
+- FLAVOR TEXT: "The bones are merely a vessel." - Kenshi lore
+- RARITY: Rare
+- TAROT CORRESPONDENCE: The Hierophant (V)
+
+**Card 6**
+- NAME: Tech Hunter Drone
+- TYPE: Equipment
+- FACTION: Tech Hunters
+- COST: 1
+- ATTACK / DEFENSE: N/A
+- ABILITY: When you play this card, reveal the top three cards of your deck. You may discard one to gain +2/+2 for your character until the end of the turn.
+- FLAVOR TEXT: "From scraps, a warrior is born." - Kenshi lore
+- RARITY: Common
+- TAROT CORRESPONDENCE: The Fool (0)
+
+**Card 7**
+- NAME: Shek Marauder
+- TYPE: Creature
+- FACTION: Shek Kingdom
+- COST: 3
+- ATTACK / DEFENSE: 2 / 3
+- ABILITY: When you play this card, deal 1 damage to an enemy creature with less than half its maximum cost.
+- FLAVOR TEXT: "For the glory of the kingdom." - Kenshi lore
+- RARITY: Uncommon
+- TAROT CORRESPONDENCE: The Lovers (VI)
+
+**Card 8**
+- NAME: Event Card - Sandstorm
+- TYPE: Event
+- FACTION: Neutral
+- COST: N/A
+- ATTACK / DEFENSE: N/A
+- ABILITY: Place a marker on each enemy character. Each turn, the markers reduce their defense by 1 until they are removed.
+- FLAVOR TEXT: "The desert's patience is tested." - Kenshi lore
+- RARITY: Rare
+- TAROT CORRESPONDENCE: The Chariot (VII)
+
+**Card 9**
+- NAME: Ancient Warlord
+- TYPE: Character
+- FACTION: Holy Nation
+- COST: 7
+- ATTACK / DEFENSE: 5 / 4
+- ABILITY: At the end of your turn, if you have more than half of your maximum mana, gain +2/+1.
+- FLAVOR TEXT: "The old ways are not forgotten." - Kenshi lore
+- RARITY: Mythic
+- TAROT CORRESPONDENCE: The Star (XVII)
+
+**Card 10**
+- NAME: Tech Hunter Gauntlets
+- TYPE: Equipment
+- FACTION: Tech Hunters
+- COST: 2
+- ATTACK / DEFENSE: N/A
+- ABILITY: When you play this card, gain +3/+1 to your character. If a creature is in play from your faction, it gains double the effect of its next ability.
+- FLAVOR TEXT: "Forged by lightning and ancient circuitry." - Kenshi lore
+- RARITY: Rare
+- TAROT CORRESPONDENCE: The Moon (XIV)
