@@ -8,6 +8,7 @@
 //   --render  Open window and render Kenshi world map (default)
 
 mod mesh3d;
+mod ogre_plugin;
 mod render3d;
 
 use std::fs;
@@ -1012,6 +1013,22 @@ fn main() {
 
     if args.iter().any(|a| a == "--flow") {
         run_flow();
+        return;
+    }
+
+    if args.iter().any(|a| a == "--dropdown") {
+        ogre_plugin::print_dropdown_preview();
+        return;
+    }
+
+    if args.iter().any(|a| a == "--install") {
+        let kenshi_dir = r"M:\SteamLibrary\steamapps\common\Kenshi";
+        println!("◆ INSTALLING KenshiReborn renderer into Kenshi...");
+        let config = ogre_plugin::VulkanRenderSystemConfig::default();
+        ogre_plugin::write_plugins_cfg(kenshi_dir).expect("write plugins cfg");
+        ogre_plugin::write_kenshi_cfg(kenshi_dir, &config).expect("write kenshi cfg");
+        println!("  ✓ KenshiReborn is now in the dropdown!");
+        println!("  Launch Kenshi → select 'Vulkan Rendering Subsystem (KenshiReborn)'");
         return;
     }
 
