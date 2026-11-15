@@ -26,6 +26,19 @@ canvas { display: block; }
     pointer-events: none;
 }
 
+#telemetry {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    font-size: 9px;
+    color: #0ff;
+    text-shadow: 0 0 3px #0ff;
+    pointer-events: none;
+    text-align: right;
+    line-height: 1.4;
+}
+
 #layers {
     position: fixed;
     bottom: 10px;
@@ -33,6 +46,16 @@ canvas { display: block; }
     z-index: 100;
     font-size: 10px;
     text-align: right;
+    pointer-events: none;
+}
+
+#latency-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    z-index: 100;
     pointer-events: none;
 }
 
@@ -46,6 +69,7 @@ canvas { display: block; }
 </head>
 <body>
 <canvas id="globe"></canvas>
+<canvas id="latency-bar"></canvas>
 
 <div id="hud">
     <div>🔮 SNOWGLOBE — GOD VIEW</div>
@@ -61,32 +85,59 @@ canvas { display: block; }
     <div id="stats" style="margin-top:8px"></div>
 </div>
 
+<div id="telemetry">
+    <div style="color:#f0f;font-size:11px">═══ SteamVR NERVE ═══</div>
+    <div id="vr-stats">
+        <span style="color:#ff0">Pair:</span> UBER<br>
+        <span style="color:#ff0">northGate:</span> .147<br>
+        <span style="color:#ff0">Frame:</span> .181 / .203<br>
+        <span style="color:#ff0">Valve WiFi:</span> 10.35.78.x<br>
+    </div>
+    <div style="margin-top:6px;color:#f0f;font-size:11px">═══ LATENCY ═══</div>
+    <div id="lat-stats"></div>
+    <div style="margin-top:6px;color:#f0f;font-size:11px">═══ PIPELINE ═══</div>
+    <div id="pipe-stats"></div>
+    <div style="margin-top:6px;color:#0f0;font-size:11px">═══ ORGANISM ═══</div>
+    <div id="org-stats"></div>
+</div>
+
 <div id="layers">
     <div style="color:#a020f0">■ Frame (INSIDE)</div>
-    <div style="color:#f80">■ Kenshi world</div>
+    <div style="color:#f80">■ Kenshi ⚔️</div>
     <div style="color:#0f0">■ Gaia mesh</div>
+    <div style="color:#0ff">■ SteamVR nerve</div>
+    <div style="color:#f0f">■ Latency waterfall</div>
     <div style="color:#fff">■ Snow particles</div>
 </div>
 
 <script>
 const canvas = document.getElementById('globe');
 const ctx = canvas.getContext('2d');
+const latBar = document.getElementById('latency-bar');
+const lctx = latBar.getContext('2d');
+
 let W, H, cx, cy, radius;
-let frame = 0;
+let frameCount = 0;
 let snow = [];
+let latencyHistory = [];
+let pipelineData = { hmd: 90, usprx: 90, enc: 75, grme: 34 };
+let steamVR = { fps: 0, mbps: 0, latency: 2.3, submitted: 0 };
+let organism = { gates: 7, eyes: 5, crons: 35, mushrooms: 23, heartbeat: 0 };
 
 function resize() {
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
+    latBar.width = W;
+    latBar.height = 40;
     cx = W / 2;
     cy = H / 2;
-    radius = Math.min(W, H) * 0.4;
+    radius = Math.min(W, H) * 0.38;
 }
 resize();
 window.addEventListener('resize', resize);
 
 // Snow particles
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 300; i++) {
     snow.push({
         x: Math.random() * 2 - 1,
         y: Math.random() * 2 - 1,
@@ -98,82 +149,121 @@ for (let i = 0; i < 200; i++) {
 
 // Gate nodes inside the globe
 const gates = [
-    { name: 'eastGate', x: -0.3, y: 0.1, z: 0.2, color: '#0f0', label: 'BRAIN' },
-    { name: 'northGate', x: 0, y: -0.5, z: 0, color: '#ff0', label: 'HEART ★' },
-    { name: 'sporeGate', x: 0.4, y: 0.2, z: -0.1, color: '#c0c0c0', label: 'FORGE' },
-    { name: 'ironGate', x: -0.4, y: 0.3, z: 0.3, color: '#888', label: 'FORGE 2' },
-    { name: 'grapheneGate', x: 0.2, y: -0.2, z: 0.4, color: '#00f', label: 'DIAMOND' },
-    { name: 'frameGate', x: 0, y: 0, z: 0, color: '#a020f0', label: 'FACE 🟣' },
-    { name: 'KENSHI', x: 0.1, y: 0.15, z: -0.3, color: '#f80', label: 'KENSHI ⚔️' },
+    { name: 'eastGate', ip: '.244', x: -0.3, y: 0.1, z: 0.2, color: '#0f0', label: 'BRAIN .244', ping: 0.25 },
+    { name: 'northGate', ip: '.147', x: 0, y: -0.5, z: 0, color: '#ff0', label: 'HEART .147 ★', ping: 0 },
+    { name: 'sporeGate', ip: '.3', x: 0.4, y: 0.2, z: -0.1, color: '#c0c0c0', label: 'FORGE .3', ping: 0.25 },
+    { name: 'ironGate', ip: '.237', x: -0.4, y: 0.3, z: 0.3, color: '#888', label: 'FORGE2 .237', ping: 0.3 },
+    { name: 'grapheneGate', ip: '.9.217', x: 0.2, y: -0.2, z: 0.4, color: '#00f', label: 'DIAMOND Pixel', ping: 82 },
+    { name: 'frameGate', ip: '.203', x: 0, y: 0, z: 0, color: '#a020f0', label: 'FACE .203 🟣', ping: 0.93 },
+    { name: 'graftGate', ip: '.107', x: -0.2, y: -0.1, z: -0.3, color: '#aaa', label: 'GRAFT .107', ping: 0.5 },
+    { name: 'deckGate', ip: '.176', x: 0.3, y: -0.3, z: 0.2, color: '#f44', label: 'DECK .176', ping: 0.4 },
+    { name: 'KENSHI', ip: 'RTX5090', x: 0.1, y: 0.15, z: -0.3, color: '#f80', label: 'KENSHI ⚔️', ping: 0 },
+    { name: 'BLENDER', ip: '5090', x: -0.15, y: -0.35, z: 0.15, color: '#fa0', label: 'BLENDER 🎨', ping: 0 },
 ];
 
-// Kenshi terrain points (inside the globe world)
+// Kenshi terrain
 const terrain = [];
-for (let i = 0; i < 60; i++) {
+for (let i = 0; i < 80; i++) {
     terrain.push({
         x: (Math.random() - 0.5) * 0.8,
         y: 0.3 + Math.random() * 0.15,
         z: (Math.random() - 0.5) * 0.8,
-        h: Math.random() * 0.05
+        h: Math.random() * 0.08,
+        type: Math.random() > 0.7 ? 'building' : 'dune'
     });
 }
 
+// SteamVR nerve path (data flow)
+let nerveParticles = [];
+for (let i = 0; i < 30; i++) {
+    nerveParticles.push({ t: Math.random(), speed: 0.002 + Math.random() * 0.003 });
+}
+
 function project(x, y, z, time) {
-    // Slow rotation — god view looking down
-    const a = time * 0.0003;
+    const a = time * 0.0002;
     const rx = x * Math.cos(a) - z * Math.sin(a);
     const rz = x * Math.sin(a) + z * Math.cos(a);
     const scale = 1 / (1.5 - y * 0.3);
-    return {
-        sx: cx + rx * radius * scale,
-        sy: cy + (y * 0.6 + rz * 0.3) * radius * scale,
-        scale: scale,
-        depth: rz
-    };
+    return { sx: cx + rx * radius * scale, sy: cy + (y * 0.6 + rz * 0.3) * radius * scale, scale, depth: rz };
 }
 
 function draw(time) {
-    frame++;
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    frameCount++;
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';
     ctx.fillRect(0, 0, W, H);
 
-    // Globe outline (glass sphere)
+    // Globe glass
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(100,200,255,0.15)';
-    ctx.lineWidth = 2;
+    const glassGrad = ctx.createRadialGradient(cx - radius*0.3, cy - radius*0.3, 0, cx, cy, radius);
+    glassGrad.addColorStop(0, 'rgba(150,200,255,0.05)');
+    glassGrad.addColorStop(0.8, 'rgba(50,100,200,0.02)');
+    glassGrad.addColorStop(1, 'rgba(100,200,255,0.12)');
+    ctx.fillStyle = glassGrad;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(100,200,255,0.2)';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Inner glow
-    const grd = ctx.createRadialGradient(cx, cy, radius * 0.1, cx, cy, radius);
-    grd.addColorStop(0, 'rgba(20,10,40,0.3)');
-    grd.addColorStop(0.7, 'rgba(5,5,20,0.1)');
-    grd.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grd;
-    ctx.fill();
+    // Glass highlight (reflection arc)
+    ctx.beginPath();
+    ctx.arc(cx - radius*0.25, cy - radius*0.25, radius * 0.7, -0.8, 0.3);
+    ctx.strokeStyle = 'rgba(200,230,255,0.08)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
 
-    // Kenshi terrain (sandy ground inside globe)
+    // Kenshi terrain
     terrain.forEach(t => {
         const p = project(t.x, t.y, t.z, time);
         if (p.depth > -0.5) {
-            ctx.fillStyle = `rgba(180,140,80,${0.3 * p.scale})`;
-            ctx.fillRect(p.sx - 3 * p.scale, p.sy - 1, 6 * p.scale, 2 + t.h * radius * p.scale);
+            if (t.type === 'building') {
+                ctx.fillStyle = `rgba(160,120,60,${0.4 * p.scale})`;
+                ctx.fillRect(p.sx - 2, p.sy - t.h * radius * p.scale, 4 * p.scale, t.h * radius * p.scale);
+            } else {
+                ctx.fillStyle = `rgba(180,140,80,${0.25 * p.scale})`;
+                ctx.fillRect(p.sx - 3 * p.scale, p.sy - 1, 6 * p.scale, 2);
+            }
         }
+    });
+
+    // SteamVR nerve (northGate → Frame path)
+    const ng = project(0, -0.5, 0, time);
+    const fg = project(0, 0, 0, time);
+    
+    // Nerve line
+    ctx.beginPath();
+    ctx.moveTo(ng.sx, ng.sy);
+    ctx.lineTo(fg.sx, fg.sy);
+    ctx.strokeStyle = 'rgba(255,0,255,0.15)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    
+    // Nerve particles flowing
+    nerveParticles.forEach(np => {
+        np.t += np.speed;
+        if (np.t > 1) np.t = 0;
+        const px = ng.sx + (fg.sx - ng.sx) * np.t;
+        const py = ng.sy + (fg.sy - ng.sy) * np.t;
+        const alpha = Math.sin(np.t * Math.PI) * 0.8;
+        ctx.beginPath();
+        ctx.arc(px, py, 2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,100,255,${alpha})`;
+        ctx.fill();
     });
 
     // Gate nodes
     gates.forEach(g => {
         const p = project(g.x, g.y, g.z, time);
-        const r = 4 * p.scale;
-
-        // Pulse
+        const r = (g.name === 'frameGate' ? 6 : 4) * p.scale;
         const pulse = Math.sin(time * 0.003 + g.x * 10) * 0.3 + 0.7;
 
+        // Glow
         ctx.beginPath();
-        ctx.arc(p.sx, p.sy, r * 2, 0, Math.PI * 2);
-        ctx.fillStyle = g.color + '30';
+        ctx.arc(p.sx, p.sy, r * 3, 0, Math.PI * 2);
+        ctx.fillStyle = g.color + '15';
         ctx.fill();
 
+        // Core
         ctx.beginPath();
         ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
         ctx.fillStyle = g.color;
@@ -181,92 +271,147 @@ function draw(time) {
         ctx.fill();
         ctx.globalAlpha = 1;
 
+        // Ping ring (shows latency — bigger ring = higher ping)
+        if (g.ping > 0) {
+            const pingR = Math.min(r * 4, r + g.ping * 0.3);
+            ctx.beginPath();
+            ctx.arc(p.sx, p.sy, pingR, 0, Math.PI * 2);
+            ctx.strokeStyle = g.color + '40';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+        }
+
         ctx.fillStyle = g.color;
-        ctx.font = `${Math.max(8, 10 * p.scale)}px monospace`;
-        ctx.fillText(g.label, p.sx + r + 4, p.sy + 3);
+        ctx.font = `${Math.max(7, 9 * p.scale)}px monospace`;
+        ctx.fillText(g.label, p.sx + r + 3, p.sy + 3);
     });
 
-    // Connection lines (Willis Circulation)
-    ctx.strokeStyle = 'rgba(0,255,0,0.08)';
-    ctx.lineWidth = 1;
+    // Willis Circulation
+    ctx.lineWidth = 0.5;
     for (let i = 0; i < gates.length; i++) {
         for (let j = i + 1; j < gates.length; j++) {
-            const p1 = project(gates[i].x, gates[i].y, gates[i].z, time);
-            const p2 = project(gates[j].x, gates[j].y, gates[j].z, time);
             const dist = Math.sqrt(
                 (gates[i].x - gates[j].x) ** 2 + 
                 (gates[i].y - gates[j].y) ** 2 + 
                 (gates[i].z - gates[j].z) ** 2
             );
-            if (dist < 0.8) {
+            if (dist < 0.7) {
+                const p1 = project(gates[i].x, gates[i].y, gates[i].z, time);
+                const p2 = project(gates[j].x, gates[j].y, gates[j].z, time);
+                const flowPulse = Math.sin(time * 0.002 + i * 3) * 0.5 + 0.5;
                 ctx.beginPath();
                 ctx.moveTo(p1.sx, p1.sy);
                 ctx.lineTo(p2.sx, p2.sy);
+                ctx.strokeStyle = `rgba(0,255,0,${0.05 + flowPulse * 0.05})`;
                 ctx.stroke();
             }
         }
     }
 
-    // Snow particles
+    // Snow
     snow.forEach(s => {
         s.y += s.speed;
-        if (s.y > 0.9) { s.y = -0.9; s.x = Math.random() * 2 - 1; }
-
+        s.x += Math.sin(time * 0.001 + s.z * 5) * 0.0005;
+        if (s.y > 0.9) { s.y = -0.9; s.x = Math.random() * 1.6 - 0.8; }
         const dist = Math.sqrt(s.x * s.x + s.y * s.y + s.z * s.z);
         if (dist < 0.95) {
             const p = project(s.x, s.y, s.z, time);
-            const alpha = Math.max(0, 1 - dist) * 0.6;
+            const alpha = Math.max(0, 1 - dist) * 0.5;
             ctx.fillStyle = `rgba(255,255,255,${alpha})`;
             ctx.fillRect(p.sx, p.sy, s.size * p.scale, s.size * p.scale);
         }
     });
 
-    // Frame (Purple Eye) — highlighted at center
+    // Frame purple ring
     const fp = project(0, 0, 0, time);
     const fPulse = Math.sin(time * 0.005) * 0.3 + 0.7;
     ctx.beginPath();
-    ctx.arc(fp.sx, fp.sy, 15, 0, Math.PI * 2);
+    ctx.arc(fp.sx, fp.sy, 18, 0, Math.PI * 2);
     ctx.strokeStyle = `rgba(160,32,240,${fPulse})`;
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // "GOD VIEW" indicator at top
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    // GOD VIEW text
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
     ctx.font = '10px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('↓ GOD VIEW — LOOKING DOWN INTO THE GLOBE ↓', cx, 30);
+    ctx.fillText('↓ GOD VIEW — LOOKING DOWN INTO THE GLOBE ↓', cx, 25);
     ctx.textAlign = 'left';
 
-    // Base (the desk surface)
+    // Base
     ctx.beginPath();
-    ctx.ellipse(cx, cy + radius * 0.85, radius * 0.5, radius * 0.1, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(60,40,20,0.3)';
+    ctx.ellipse(cx, cy + radius * 0.88, radius * 0.5, radius * 0.08, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(50,30,15,0.4)';
     ctx.fill();
-    ctx.strokeStyle = 'rgba(120,80,40,0.2)';
-    ctx.stroke();
 
-    // Stats
+    // ═══ LATENCY WATERFALL (bottom bar) ═══
+    lctx.fillStyle = 'rgba(0,0,0,0.3)';
+    lctx.fillRect(0, 0, W, 40);
+    
+    // Simulate latency data
+    const simLat = 2.3 + Math.sin(time * 0.005) * 0.5 + Math.random() * 0.3;
+    latencyHistory.push(simLat);
+    if (latencyHistory.length > W) latencyHistory.shift();
+    
+    // Draw waterfall
+    latencyHistory.forEach((lat, i) => {
+        const h = Math.min(38, lat * 8);
+        const hue = lat < 3 ? 120 : lat < 5 ? 60 : 0; // green→yellow→red
+        lctx.fillStyle = `hsla(${hue},100%,50%,0.6)`;
+        lctx.fillRect(i, 40 - h, 1, h);
+    });
+    
+    // Latency labels
+    lctx.fillStyle = '#0ff';
+    lctx.font = '9px monospace';
+    lctx.fillText(`Latency: ${simLat.toFixed(1)}ms | Submit→Dec ${(simLat*0.4).toFixed(1)}ms | Net+Dec ${(simLat*0.6).toFixed(1)}ms`, 4, 10);
+
+    // ═══ UPDATE TELEMETRY ═══
+    steamVR.fps = Math.round(89 + Math.sin(time * 0.002) * 2);
+    steamVR.mbps = Math.round(103 + Math.sin(time * 0.003) * 10);
+    steamVR.latency = simLat;
+    pipelineData.hmd = 90;
+    pipelineData.enc = 75 + Math.round(Math.sin(time * 0.004) * 5);
+    organism.heartbeat = Math.round(180 + Math.sin(time * 0.001) * 20);
+
+    document.getElementById('lat-stats').innerHTML = 
+        `<span style="color:#0f0">${steamVR.latency.toFixed(1)}ms</span> total<br>` +
+        `Submit: <span style="color:#f80">${(simLat*0.15).toFixed(1)}ms</span><br>` +
+        `Enc: <span style="color:#ff0">${(simLat*0.25).toFixed(1)}ms</span><br>` +
+        `Net+Dec: <span style="color:#0ff">${(simLat*0.6).toFixed(1)}ms</span>`;
+
+    document.getElementById('pipe-stats').innerHTML =
+        `HMD: <span style="color:#f00">${pipelineData.hmd}</span> ` +
+        `USPRX: <span style="color:#ff0">${pipelineData.usprx}</span><br>` +
+        `ENC: <span style="color:#a0f">${pipelineData.enc}</span> ` +
+        `GRME: <span style="color:#888">${pipelineData.grme}</span>`;
+
+    document.getElementById('org-stats').innerHTML =
+        `Gates: ${organism.gates} | Eyes: ${organism.eyes}<br>` +
+        `Crons: ${organism.crons} | 🍄: ${organism.mushrooms}<br>` +
+        `♥ ${organism.heartbeat} beats/hr`;
+
     document.getElementById('stats').innerHTML = 
-        `Frame: ${frame}<br>` +
-        `Gates: ${gates.length}<br>` +
+        `Frame: ${frameCount}<br>` +
+        `FPS: ${steamVR.fps} | ${steamVR.mbps}Mbps<br>` +
         `Snow: ${snow.length}<br>` +
-        `Time: ${new Date().toLocaleTimeString()}`;
+        `${new Date().toLocaleTimeString()}`;
 
     requestAnimationFrame(draw);
 }
 
 requestAnimationFrame(draw);
 
-// Fetch live data periodically
+// Fetch live organism data
 setInterval(async () => {
     try {
         const r = await fetch('http://192.168.4.244:8080/data/now.json');
         if (r.ok) {
             const now = await r.json();
-            // Could update gate states from live data
+            if (now.heartbeat) organism.heartbeat = now.heartbeat;
         }
     } catch(e) {}
-}, 30000);
+}, 15000);
 </script>
 </body>
 </html>
