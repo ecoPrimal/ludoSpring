@@ -1,0 +1,84 @@
+{
+  "title": "STEAM HARDWARE TOPOLOGY — Three Objects, Two Tethers",
+  "ts": "2026-11-15T03:02:00Z",
+
+  "steam_deck": {
+    "name": "Steam Deck v1 (deckGate)",
+    "nature": "EPHEMERAL — unplugged = null, plugged = live",
+    "battery": "DEAD — requires USB-C to exist",
+    "connection": "USB-C tether to Steam Dock (single cable = life support)",
+    "features": ["7-inch 1280x800 touch LCD", "6-axis IMU (gyro+accel)", "WiFi", "SteamOS", "CEF browser"],
+    "has_rj45": true,
+    "note": "The Deck IS ephemeral. It blinks in and out of existence based on a single cable."
+  },
+
+  "steam_dock": {
+    "name": "Steam Dock (V2 Link)",
+    "nature": "PERSISTENT — has its own power, keeps Deck alive",
+    "role": "Life support for Deck + network bridge + USB hub",
+    "connection_to_deck": "USB-C (the tether that gives the Deck life)",
+    "has_rj45": true,
+    "rj45_plan": "Plug into Flint (GL-Net router) → direct LAN backbone",
+    "ports": ["USB-C (to Deck)", "RJ45 (to Flint)", "HDMI", "USB-A ports"],
+    "is_v2_link": true
+  },
+
+  "steam_link_v1": {
+    "name": "Steam Link Gen 1",
+    "nature": "PERSISTENT — own power supply, independent node",
+    "role": "PNS test node — peripherals + HDMI relay",
+    "has_rj45": true,
+    "rj45_plan": "Plug into MikroTik → direct LAN backbone",
+    "ports": {
+      "usb": 2,
+      "hdmi": 1,
+      "rj45": 1,
+      "power": "own PSU"
+    },
+    "usb_plan": "Attach peripherals — controllers, sensors, USB devices",
+    "hdmi_plan": "Output to Vizio TV (or other display)",
+    "is_v1_link": true
+  },
+
+  "wiring": {
+    "tether": {
+      "from": "Steam Dock (V2)",
+      "to": "Steam Deck",
+      "cable": "USB-C",
+      "meaning": "This cable IS the Deck's existence. Remove it = death."
+    },
+    "dock_to_lan": {
+      "from": "Steam Dock RJ45",
+      "to": "Flint (GL-Net GL-MT6000 router)",
+      "protocol": "Ethernet → direct to LAN backbone",
+      "gives": "Deck gets wired LAN through the dock"
+    },
+    "link_to_lan": {
+      "from": "Steam Link V1 RJ45",
+      "to": "MikroTik (.2)",
+      "protocol": "Ethernet → LAN L2 bridge",
+      "gives": "Steam Link becomes a wired LAN node with USB + HDMI"
+    }
+  },
+
+  "topology_ascii": [
+    "",
+    "  [Flint/GL-Net .1]              [MikroTik .2]",
+    "       │ RJ45                         │ RJ45",
+    "       │                              │",
+    "  [Steam Dock V2]               [Steam Link V1]",
+    "   USB-C │ HDMI USB-A            USB×2 │ HDMI  │ power",
+    "         │                             │       │",
+    "    [Steam Deck]                  [peripherals] [Vizio TV?]",
+    "     EPHEMERAL                    test sensors   big map",
+    "     (dies without cable)",
+    ""
+  ],
+
+  "two_new_rj45s": {
+    "total_wired_ports_gained": 2,
+    "dock_rj45": "→ Flint (router, direct backbone)",
+    "link_rj45": "→ MikroTik (L2 bridge, LAN 1 backbone)",
+    "effect": "Both Steam devices become WIRED LAN citizens, no WiFi needed"
+  }
+}
