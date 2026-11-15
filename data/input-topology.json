@@ -1,0 +1,127 @@
+{
+  "version": "v1.0",
+  "timestamp": "2026-11-14T22:40:00-05:00",
+  "title": "PNS → CNS Input Device Topology",
+  
+  "cns": {
+    "node": "northGate",
+    "ip": "192.168.4.147",
+    "role": "HEART — primary compute + input hub",
+    "devices": {
+      "keyboard": {
+        "name": "Keychron V6 Max",
+        "vid_pid": "3434:0960",
+        "connection": "2.4GHz USB dongle",
+        "polling_rate": "1000Hz",
+        "alt_connections": ["BT 5.1 Profile 1", "BT 5.1 Profile 2", "BT 5.1 Profile 3"],
+        "features": ["QMK/VIA programmable", "108 keys full-size", "rotary knob", "hot-swap Gateron Jupiter", "4000mAh battery"],
+        "bus_type": "USB Composite (MI_00=keyboard, MI_01=vendor/VIA, MI_02=media+mouse+system)",
+        "serial": "6&23491980&0&1"
+      },
+      "mouse": {
+        "name": "Logitech G502 HERO",
+        "vid_pid": "046D:C08B",
+        "connection": "USB wired",
+        "serial": "187739753530",
+        "bus_type": "USB (MI_00=mouse, MI_01=keyboard+media+vendor)",
+        "notes": "Physical scroll, thumb buttons, DPI switch"
+      },
+      "headset": {
+        "name": "Corsair Headset",
+        "vid_pid": "1B1C:2A0F",
+        "connection": "USB dongle (MOBO rear I/O = spinal cord)",
+        "serial": "ZDAM01155EFD2A",
+        "bus_type": "USB Audio + HID (MI_03=input+consumer+headset, MI_04=vendor)",
+        "role": "GIO voice pipeline — command voice to Gaia"
+      },
+      "pixel": {
+        "name": "Pixel 8a (grapheneGate)",
+        "vid_pid": "18D1:4EE7",
+        "connection": "USB-C ADB",
+        "serial": "44251JEKB04957",
+        "model": "akita",
+        "android_version": 17,
+        "screen": "1080x2400 @ 420dpi (Goodix touchscreen)",
+        "wifi": {
+          "ssid": "GAIA",
+          "band": "5GHz (5280MHz)",
+          "speed": "1134 Mbps TX, WiFi 6 (11ax)",
+          "rssi": -18,
+          "ip": "192.168.4.225"
+        },
+        "bluetooth": {
+          "address": "E8:D5:2B:51:36:39",
+          "state": "ON",
+          "role": "BT bridge (northGate BT is dead)"
+        },
+        "battery": "100% (USB charging)",
+        "memory": "7.5GB total, 1.6GB available",
+        "storage": "103GB free",
+        "cameras": ["Back", "Front"],
+        "sensors": ["LSM6DSV Accelerometer", "TMD3719 Ambient Light", "Device Orientation"],
+        "roles": ["touchscreen input", "camera (recon)", "BT bridge", "sensor hub", "diamond lens"]
+      },
+      "bluetooth_adapter": {
+        "name": "Generic Bluetooth Adapter (MediaTek MT7925)",
+        "vid_pid": "0489:E13A",
+        "status": "ERROR (Code 43 — CM_PROB_FAILED_POST_START)",
+        "driver": "bth.inf (generic Microsoft — needs MediaTek vendor driver)",
+        "fix": "Install MediaTek MT7925 BT driver from ASUS motherboard support page"
+      },
+      "motherboard_utils": [
+        {"name": "ASUS Utility (Aura/Fan)", "vid_pid": "0B05:1B9B"},
+        {"name": "ASUS LED/RGB Controller", "vid_pid": "0B05:1AA6"}
+      ],
+      "printer": {
+        "name": "Epson ET-2400",
+        "vid_pid": "04B8:0181",
+        "serial": "5838505A3238323888",
+        "role": "Physical output — Gaia's first print"
+      }
+    }
+  },
+  
+  "pns": {
+    "frame": {
+      "node": "frameGate",
+      "ip": "192.168.9.203",
+      "role": "FACE — AR overlay, passthrough cameras",
+      "ports": {"cef": 8081, "devkit": 32000, "remote_play": 27036},
+      "controller": "Gen 2 Steam Controller (BT/dongle)",
+      "dongle": "Valve WiFi 6 NIC (Realtek 8832CU, VID 28DE)"
+    },
+    "deck": {
+      "node": "deckGate",
+      "ip": "192.168.4.176",
+      "role": "DISPLAY — mounted 7\" screen, dead battery = ephemeral",
+      "connection": "USB-C passthrough only"
+    }
+  },
+  
+  "three_faces": {
+    "description": "Three input surfaces to the CNS",
+    "face_1": "Keychron V6 Max → 2.4GHz → northGate (1000Hz, siege keyboard)",
+    "face_2": "Logitech G502 HERO → USB → northGate (precision pointing)",
+    "face_3": "Pixel 8a touch → USB ADB → northGate (1080x2400 retina touchpad + cameras)"
+  },
+  
+  "keychron_bt_plan": {
+    "profile_1": "2.4GHz dongle → northGate (CURRENT — 1000Hz, primary typing)",
+    "profile_2": "BT → Pixel 8a (backup — through ADB bridge to northGate)",
+    "profile_3": "BT → Steam Frame (AR overlay — type in the Frame's world)",
+    "desk_freedom": "Moving dongle to eastGate frees a USB port on northGate, Keychron goes wireless to northGate via BT profile 1 → Pixel bridge"
+  },
+  
+  "usb_spine": {
+    "mobo_rear_io": {
+      "type": "spinal cord — permanent connections",
+      "devices": ["Corsair headset dongle", "Logitech G502 (wired)"],
+      "notes": "These never move. The spine."
+    },
+    "case_front_usb": {
+      "type": "peripheral nerves — ephemeral connections",
+      "devices": ["Pixel 8a (USB-C ADB)", "Keychron 2.4GHz dongle", "Valve WiFi 6 NIC dongle"],
+      "notes": "These rotate. Plug/unplug as needed."
+    }
+  }
+}
