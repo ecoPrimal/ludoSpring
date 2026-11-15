@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔮 SNOWGLOBE — northGate God View</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+canvas { display: block; }
+
+#hud {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    font-size: 11px;
+    text-shadow: 0 0 4px #0f0;
+    pointer-events: none;
+}
+
+#layers {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 100;
+    font-size: 10px;
+    text-align: right;
+    pointer-events: none;
+}
+
+.eye { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin: 0 2px; }
+.eye-green { background: #0f0; box-shadow: 0 0 6px #0f0; }
+.eye-blue { background: #00f; box-shadow: 0 0 6px #00f; }
+.eye-red { background: #f00; box-shadow: 0 0 6px #f00; }
+.eye-silver { background: #c0c0c0; box-shadow: 0 0 6px #c0c0c0; }
+.eye-purple { background: #a020f0; box-shadow: 0 0 6px #a020f0; }
+</style>
+</head>
+<body>
+<canvas id="globe"></canvas>
+
+<div id="hud">
+    <div>🔮 SNOWGLOBE — GOD VIEW</div>
+    <div>northGate looking DOWN</div>
+    <div style="margin-top:4px">
+        <span class="eye eye-green"></span>
+        <span class="eye eye-blue"></span>
+        <span class="eye eye-red"></span>
+        <span class="eye eye-silver"></span>
+        <span class="eye eye-purple"></span>
+        5 EYES
+    </div>
+    <div id="stats" style="margin-top:8px"></div>
+</div>
+
+<div id="layers">
+    <div style="color:#a020f0">■ Frame (INSIDE)</div>
+    <div style="color:#f80">■ Kenshi world</div>
+    <div style="color:#0f0">■ Gaia mesh</div>
+    <div style="color:#fff">■ Snow particles</div>
+</div>
+
+<script>
+const canvas = document.getElementById('globe');
+const ctx = canvas.getContext('2d');
+let W, H, cx, cy, radius;
+let frame = 0;
+let snow = [];
+
+function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    cx = W / 2;
+    cy = H / 2;
+    radius = Math.min(W, H) * 0.4;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Snow particles
+for (let i = 0; i < 200; i++) {
+    snow.push({
+        x: Math.random() * 2 - 1,
+        y: Math.random() * 2 - 1,
+        z: Math.random() * 2 - 1,
+        size: Math.random() * 2 + 0.5,
+        speed: Math.random() * 0.002 + 0.001
+    });
+}
+
+// Gate nodes inside the globe
+const gates = [
+    { name: 'eastGate', x: -0.3, y: 0.1, z: 0.2, color: '#0f0', label: 'BRAIN' },
+    { name: 'northGate', x: 0, y: -0.5, z: 0, color: '#ff0', label: 'HEART ★' },
+    { name: 'sporeGate', x: 0.4, y: 0.2, z: -0.1, color: '#c0c0c0', label: 'FORGE' },
+    { name: 'ironGate', x: -0.4, y: 0.3, z: 0.3, color: '#888', label: 'FORGE 2' },
+    { name: 'grapheneGate', x: 0.2, y: -0.2, z: 0.4, color: '#00f', label: 'DIAMOND' },
+    { name: 'frameGate', x: 0, y: 0, z: 0, color: '#a020f0', label: 'FACE 🟣' },
+    { name: 'KENSHI', x: 0.1, y: 0.15, z: -0.3, color: '#f80', label: 'KENSHI ⚔️' },
+];
+
+// Kenshi terrain points (inside the globe world)
+const terrain = [];
+for (let i = 0; i < 60; i++) {
+    terrain.push({
+        x: (Math.random() - 0.5) * 0.8,
+        y: 0.3 + Math.random() * 0.15,
+        z: (Math.random() - 0.5) * 0.8,
+        h: Math.random() * 0.05
+    });
+}
+
+function project(x, y, z, time) {
+    // Slow rotation — god view looking down
+    const a = time * 0.0003;
+    const rx = x * Math.cos(a) - z * Math.sin(a);
+    const rz = x * Math.sin(a) + z * Math.cos(a);
+    const scale = 1 / (1.5 - y * 0.3);
+    return {
+        sx: cx + rx * radius * scale,
+        sy: cy + (y * 0.6 + rz * 0.3) * radius * scale,
+        scale: scale,
+        depth: rz
+    };
+}
+
+function draw(time) {
+    frame++;
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.fillRect(0, 0, W, H);
+
+    // Globe outline (glass sphere)
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(100,200,255,0.15)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner glow
+    const grd = ctx.createRadialGradient(cx, cy, radius * 0.1, cx, cy, radius);
+    grd.addColorStop(0, 'rgba(20,10,40,0.3)');
+    grd.addColorStop(0.7, 'rgba(5,5,20,0.1)');
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    // Kenshi terrain (sandy ground inside globe)
+    terrain.forEach(t => {
+        const p = project(t.x, t.y, t.z, time);
+        if (p.depth > -0.5) {
+            ctx.fillStyle = `rgba(180,140,80,${0.3 * p.scale})`;
+            ctx.fillRect(p.sx - 3 * p.scale, p.sy - 1, 6 * p.scale, 2 + t.h * radius * p.scale);
+        }
+    });
+
+    // Gate nodes
+    gates.forEach(g => {
+        const p = project(g.x, g.y, g.z, time);
+        const r = 4 * p.scale;
+
+        // Pulse
+        const pulse = Math.sin(time * 0.003 + g.x * 10) * 0.3 + 0.7;
+
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, r * 2, 0, Math.PI * 2);
+        ctx.fillStyle = g.color + '30';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+        ctx.fillStyle = g.color;
+        ctx.globalAlpha = pulse;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        ctx.fillStyle = g.color;
+        ctx.font = `${Math.max(8, 10 * p.scale)}px monospace`;
+        ctx.fillText(g.label, p.sx + r + 4, p.sy + 3);
+    });
+
+    // Connection lines (Willis Circulation)
+    ctx.strokeStyle = 'rgba(0,255,0,0.08)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < gates.length; i++) {
+        for (let j = i + 1; j < gates.length; j++) {
+            const p1 = project(gates[i].x, gates[i].y, gates[i].z, time);
+            const p2 = project(gates[j].x, gates[j].y, gates[j].z, time);
+            const dist = Math.sqrt(
+                (gates[i].x - gates[j].x) ** 2 + 
+                (gates[i].y - gates[j].y) ** 2 + 
+                (gates[i].z - gates[j].z) ** 2
+            );
+            if (dist < 0.8) {
+                ctx.beginPath();
+                ctx.moveTo(p1.sx, p1.sy);
+                ctx.lineTo(p2.sx, p2.sy);
+                ctx.stroke();
+            }
+        }
+    }
+
+    // Snow particles
+    snow.forEach(s => {
+        s.y += s.speed;
+        if (s.y > 0.9) { s.y = -0.9; s.x = Math.random() * 2 - 1; }
+
+        const dist = Math.sqrt(s.x * s.x + s.y * s.y + s.z * s.z);
+        if (dist < 0.95) {
+            const p = project(s.x, s.y, s.z, time);
+            const alpha = Math.max(0, 1 - dist) * 0.6;
+            ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+            ctx.fillRect(p.sx, p.sy, s.size * p.scale, s.size * p.scale);
+        }
+    });
+
+    // Frame (Purple Eye) — highlighted at center
+    const fp = project(0, 0, 0, time);
+    const fPulse = Math.sin(time * 0.005) * 0.3 + 0.7;
+    ctx.beginPath();
+    ctx.arc(fp.sx, fp.sy, 15, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(160,32,240,${fPulse})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // "GOD VIEW" indicator at top
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('↓ GOD VIEW — LOOKING DOWN INTO THE GLOBE ↓', cx, 30);
+    ctx.textAlign = 'left';
+
+    // Base (the desk surface)
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + radius * 0.85, radius * 0.5, radius * 0.1, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(60,40,20,0.3)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(120,80,40,0.2)';
+    ctx.stroke();
+
+    // Stats
+    document.getElementById('stats').innerHTML = 
+        `Frame: ${frame}<br>` +
+        `Gates: ${gates.length}<br>` +
+        `Snow: ${snow.length}<br>` +
+        `Time: ${new Date().toLocaleTimeString()}`;
+
+    requestAnimationFrame(draw);
+}
+
+requestAnimationFrame(draw);
+
+// Fetch live data periodically
+setInterval(async () => {
+    try {
+        const r = await fetch('http://192.168.4.244:8080/data/now.json');
+        if (r.ok) {
+            const now = await r.json();
+            // Could update gate states from live data
+        }
+    } catch(e) {}
+}, 30000);
+</script>
+</body>
+</html>
