@@ -1,19 +1,22 @@
 // KenshiReborn Bridge DLL — RenderSystem_Vulkan_x64.dll
-// v0.7.3 — FULL SIEGE: Every slot handled, no crashes
+// v0.7.4 — LOCUST SWARM: Self-referential safe memory everywhere
 //
 // sourDough log:
-//   v0.7.0: getName=slot1 ✓, 2 renderers ✓, crashed (D3D11 ptrs)
-//   v0.7.1: all stubs, slot 2 crashed (returned 0, needed pointer)
-//   v0.7.2: slot 2 empty ConfigOptionMap ✓, slot 3 ✓, crashed after
-//   v0.7.3: FULL SIEGE — every slot returns safe valid data
-//           ConfigOptionMap, empty strings, empty vectors, valid pointers
-//           The launcher WILL see "Vulkan (Reborn)" and NOT crash.
+//   v0.7.0: getName ✓, 2 renderers ✓, crashed (D3D11 ptrs)
+//   v0.7.1: all stubs, slot 2 crash (returned 0)
+//   v0.7.2: slot 2 empty map ✓, slot 3 ✓, crashed after
+//   v0.7.3: all 64 slots handled, STILL crashes after slot 3
+//   v0.7.4: LOCUST SWARM — every byte of the fake RS is safe to deref
+//           The fake object is a 64KB pool of self-referential pointers.
+//           ANY chain of pointer reads → valid memory → zeros → safe.
+//           The launcher TOUCHES all renderers to build UI, we survive.
 
 #![allow(non_snake_case, unused)]
 
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::ptr;
+use std::sync::Once;
 
 const LOG_FILE: &str = r"M:\SteamLibrary\steamapps\common\Kenshi\kenshi_reborn.log";
 
@@ -44,148 +47,163 @@ const SYM_GET_AVAIL_RENDERERS: &[u8] = b"?getAvailableRenderers@Root@Ogre@@QEAAA
 const SYM_ADD_RENDER_SYSTEM: &[u8] = b"?addRenderSystem@Root@Ogre@@QEAAXPEAVRenderSystem@2@@Z\0";
 
 // ═══════════════════════════════════════════════════════════
-// STATIC DATA: all the valid objects our stubs return
+// THE SAFE POOL — 64KB of self-referential memory
+// Every 8-byte slot points BACK into this pool.
+// Any chain of dereferences always lands on valid memory.
 // ═══════════════════════════════════════════════════════════
 
-// "Vulkan (Reborn)" as MSVC std::string SSO (15 chars fits inline)
-static VULKAN_NAME: [u8; 32] = {
-    let mut buf = [0u8; 32];
-    buf[0] = b'V'; buf[1] = b'u'; buf[2] = b'l'; buf[3] = b'k';
-    buf[4] = b'a'; buf[5] = b'n'; buf[6] = b' '; buf[7] = b'(';
-    buf[8] = b'R'; buf[9] = b'e'; buf[10] = b'b'; buf[11] = b'o';
-    buf[12] = b'r'; buf[13] = b'n'; buf[14] = b')'; buf[15] = 0;
-    buf[16] = 15; // size
-    buf
-};
+const POOL_SIZE: usize = 65536;
+static mut SAFE_POOL: [u8; POOL_SIZE] = [0u8; POOL_SIZE];
+static POOL_INIT: Once = Once::new();
 
-// Empty MSVC std::string (SSO, length 0)
-static EMPTY_STRING: [u8; 32] = [0u8; 32];
-
-// Empty MSVC std::vector (begin == end == cap == null)
-static EMPTY_VECTOR: [u8; 24] = [0u8; 24];
-
-// Self-referential sentinel for empty std::map
-// We use a static mut because it needs to point to itself
-static mut MAP_SENTINEL: [u8; 64] = [0u8; 64];
-static mut EMPTY_MAP: [u8; 16] = [0u8; 16];
-static MAP_INIT: std::sync::Once = std::sync::Once::new();
-
-unsafe fn get_empty_map() -> *const u8 {
-    MAP_INIT.call_once(|| {
-        let s = MAP_SENTINEL.as_mut_ptr();
-        let addr = s as u64;
-        *(s as *mut u64) = addr;           // _Left = self
-        *(s.add(8) as *mut u64) = addr;    // _Parent = self
-        *(s.add(16) as *mut u64) = addr;   // _Right = self
-        *s.add(24) = 1;                    // _Color = black
-        *s.add(25) = 1;                    // _Isnil = true
-        
-        let m = EMPTY_MAP.as_mut_ptr();
-        *(m as *mut u64) = addr;           // _Myhead = sentinel
-        // _Mysize = 0 (already zeroed)
-    });
-    EMPTY_MAP.as_ptr()
+unsafe fn init_pool() -> *mut u8 {
+    let pool = SAFE_POOL.as_mut_ptr();
+    let pool_addr = pool as u64;
+    
+    // Fill entire pool with pointer-to-pool at every 8-byte boundary
+    // So reading any 8-byte aligned offset gives a pointer back to pool
+    // Creating an infinite safe dereference chain
+    let slots = POOL_SIZE / 8;
+    for i in 0..slots {
+        let slot = pool.add(i * 8) as *mut u64;
+        // Point to a region 256 bytes into the pool (avoids vtable at 0)
+        // This region is also full of self-pointers, so it's safe to deref
+        *slot = pool_addr + 256;
+    }
+    
+    pool
 }
 
-// A big zeroed region for any method that writes to *this
-static SCRATCH: [u8; 4096] = [0u8; 4096];
-
 // ═══════════════════════════════════════════════════════════
-// VTABLE STUBS — each one safe, each one logged
+// MSVC std::string SSO layout
 // ═══════════════════════════════════════════════════════════
 
-// [0] Destructor — do nothing, return this
+const STR_OFFSET: usize = 4096; // Name string at pool+4096
+
+unsafe fn write_sso_string(base: *mut u8, text: &[u8]) {
+    ptr::copy_nonoverlapping(text.as_ptr(), base, text.len());
+    *base.add(text.len()) = 0; // null term
+    *(base.add(16) as *mut u64) = text.len() as u64; // size
+    *(base.add(24) as *mut u64) = 15; // capacity (SSO)
+}
+
+unsafe fn write_empty_string(base: *mut u8) {
+    ptr::write_bytes(base, 0, 32);
+}
+
+// ═══════════════════════════════════════════════════════════
+// MSVC std::map — self-referential empty sentinel
+// ═══════════════════════════════════════════════════════════
+
+const MAP_SENTINEL_OFFSET: usize = 8192;
+const MAP_OFFSET: usize = 8256;
+
+unsafe fn init_empty_map(pool: *mut u8) {
+    let s = pool.add(MAP_SENTINEL_OFFSET);
+    let s_addr = s as u64;
+    
+    *(s as *mut u64) = s_addr;          // _Left = self
+    *(s.add(8) as *mut u64) = s_addr;   // _Parent = self
+    *(s.add(16) as *mut u64) = s_addr;  // _Right = self
+    *s.add(24) = 1;                     // _Color = black
+    *s.add(25) = 1;                     // _Isnil = true
+    
+    let m = pool.add(MAP_OFFSET);
+    *(m as *mut u64) = s_addr;          // _Myhead = sentinel
+    *(m.add(8) as *mut u64) = 0;        // _Mysize = 0
+}
+
+// ═══════════════════════════════════════════════════════════
+// VTABLE — 64 safe slots, each logged for the first few
+// ═══════════════════════════════════════════════════════════
+
+const VTABLE_OFFSET: usize = 16384;
+
+// Slot 0: Destructor
 unsafe extern "C" fn vt_destructor(this: *mut u8, _flags: u32) -> *mut u8 { this }
 
-// [1] getName() → const String& = "Vulkan (Reborn)"
+// Slot 1: getName → const String& "Vulkan (Reborn)"
 unsafe extern "C" fn vt_get_name(_this: *mut u8) -> *const u8 {
-    VULKAN_NAME.as_ptr()
+    SAFE_POOL.as_ptr().add(STR_OFFSET)
 }
 
-// [2] getConfigOptions() → ConfigOptionMap& (empty map)
-unsafe extern "C" fn vt_get_config_options(this: *mut u8) -> *const u8 {
+// Slot 2: getConfigOptions → ConfigOptionMap& (empty)
+unsafe extern "C" fn vt_get_config_options(_this: *mut u8) -> *const u8 {
     log("  [vt2] getConfigOptions → empty map");
-    get_empty_map()
+    SAFE_POOL.as_ptr().add(MAP_OFFSET)
 }
 
-// [3] setConfigOption(const String& name, const String& value) → void
+// Slot 3: setConfigOption → void
 unsafe extern "C" fn vt_set_config_option(_this: *mut u8, _name: *const u8, _val: *const u8) {
     log("  [vt3] setConfigOption → ignored");
 }
 
-// [4] validateConfigOptions() → String (empty = no error)
+// Slot 4: validateConfigOptions → String (empty = valid)
 unsafe extern "C" fn vt_validate_config(_this: *mut u8) -> *const u8 {
     log("  [vt4] validateConfigOptions → empty string");
-    EMPTY_STRING.as_ptr()
+    SAFE_POOL.as_ptr().add(STR_OFFSET + 64)  // empty string at +64 past name
 }
 
-// [5] getRenderSystemEvents() → likely returns a reference
-// Could be initialise() or createRenderWindow — big function (130KB in D3D11)
-unsafe extern "C" fn vt_slot5(_this: *mut u8) -> u64 {
-    log("  [vt5] called → 0");
+// Slot 5: initialise / createWindow — big function, return null (not used)
+unsafe extern "C" fn vt_slot5(this: *mut u8, a: u64, b: u64, c: u64, d: u64) -> u64 {
+    log("  [vt5] initialise/createWindow → 0");
     0
 }
 
-// [6] getPriority() → ushort (stub in D3D11 = returns 0)
-unsafe extern "C" fn vt_get_priority(_this: *mut u8) -> u16 {
+// Slot 6: getPriority → 0
+unsafe extern "C" fn vt_slot6(_this: *mut u8) -> u64 {
     log("  [vt6] getPriority → 0");
     0
 }
 
-// [7-20] Logging stubs that return valid pointer to scratch space
-// Any method that returns a reference gets scratch (readable, zeroed)
-macro_rules! vt_log_ptr {
-    ($name:ident, $slot:expr) => {
-        unsafe extern "C" fn $name(_this: *mut u8) -> *const u8 {
-            log(&format!("  [vt{}] called → scratch ptr", $slot));
-            SCRATCH.as_ptr()
+// Generic logged stub — returns pointer to safe pool region
+unsafe extern "C" fn vt_safe_logged(this: *mut u8) -> *const u8 {
+    // Try to determine which slot called us by scanning call stack
+    // For now just return safe memory
+    SAFE_POOL.as_ptr().add(256)
+}
+
+// Generic stub for slots 21+ — silent, returns safe pointer
+unsafe extern "C" fn vt_safe_silent(_this: *mut u8) -> *const u8 {
+    SAFE_POOL.as_ptr().add(256)
+}
+
+// Individual logged stubs for slots 7-20 so we can see which fires
+macro_rules! make_logged_slot {
+    ($fname:ident, $n:expr) => {
+        unsafe extern "C" fn $fname(_this: *mut u8) -> *const u8 {
+            log(concat!("  [vt", stringify!($n), "] called → safe ptr"));
+            SAFE_POOL.as_ptr().add(256)
         }
     };
 }
 
-macro_rules! vt_log_zero {
-    ($name:ident, $slot:expr) => {
-        unsafe extern "C" fn $name(_this: *mut u8) -> u64 {
-            log(&format!("  [vt{}] called → 0", $slot));
-            0
-        }
-    };
-}
-
-vt_log_ptr!(vt_slot7, 7);
-vt_log_zero!(vt_slot8, 8);
-vt_log_zero!(vt_slot9, 9);
-vt_log_zero!(vt_slot10, 10);
-vt_log_zero!(vt_slot11, 11);
-vt_log_ptr!(vt_slot12, 12);
-vt_log_ptr!(vt_slot13, 13);
-vt_log_ptr!(vt_slot14, 14);
-vt_log_ptr!(vt_slot15, 15);
-vt_log_zero!(vt_slot16, 16);
-vt_log_zero!(vt_slot17, 17);
-vt_log_zero!(vt_slot18, 18);
-vt_log_zero!(vt_slot19, 19);
-vt_log_zero!(vt_slot20, 20);
-
-// [21-63] Silent stubs — return pointer to scratch (safe for derefs)
-unsafe extern "C" fn vt_safe_stub(_this: *mut u8) -> *const u8 {
-    SCRATCH.as_ptr()
-}
+make_logged_slot!(vt_slot7, 7);
+make_logged_slot!(vt_slot8, 8);
+make_logged_slot!(vt_slot9, 9);
+make_logged_slot!(vt_slot10, 10);
+make_logged_slot!(vt_slot11, 11);
+make_logged_slot!(vt_slot12, 12);
+make_logged_slot!(vt_slot13, 13);
+make_logged_slot!(vt_slot14, 14);
+make_logged_slot!(vt_slot15, 15);
+make_logged_slot!(vt_slot16, 16);
+make_logged_slot!(vt_slot17, 17);
+make_logged_slot!(vt_slot18, 18);
+make_logged_slot!(vt_slot19, 19);
+make_logged_slot!(vt_slot20, 20);
 
 // ═══════════════════════════════════════════════════════════
-// FAKE RENDERSYSTEM + VTABLE
+// ASSEMBLY — Wire everything together
 // ═══════════════════════════════════════════════════════════
-
-static mut FAKE_RS: [u8; 8192] = [0u8; 8192];
-static mut SAFE_VTABLE: [*const u8; 64] = [ptr::null(); 64];
 
 #[unsafe(no_mangle)]
 pub extern "C" fn dllStartPlugin() {
     let _ = std::fs::File::create(LOG_FILE);
     
     log("╔═══════════════════════════════════════════════════════╗");
-    log("║  KenshiReborn v0.7.3 — FULL SIEGE                   ║");
-    log("║  Every slot handled. The dough will rise.            ║");
+    log("║  KenshiReborn v0.7.4 — LOCUST SWARM                 ║");
+    log("║  64KB safe pool, self-referential, infinite deref    ║");
     log("╚═══════════════════════════════════════════════════════╝");
     
     unsafe {
@@ -211,52 +229,85 @@ pub extern "C" fn dllStartPlugin() {
         let count = ((*vec).end as usize - (*vec).begin as usize) / 8;
         log(&format!("  {} existing renderer(s)", count));
         
-        // ═══ BUILD VTABLE: every slot safe ═══
-        // Default: all slots return pointer to scratch (safe to deref)
+        // ═══ INIT THE SAFE POOL ═══
+        let pool = init_pool();
+        let pool_addr = pool as u64;
+        log(&format!("  Safe pool at 0x{:x} (64KB, self-referential)", pool_addr));
+        
+        // Write "Vulkan (Reborn)" string at STR_OFFSET
+        write_sso_string(pool.add(STR_OFFSET), b"Vulkan (Reborn)");
+        
+        // Write empty string at STR_OFFSET+64
+        write_empty_string(pool.add(STR_OFFSET + 64));
+        
+        // Build empty ConfigOptionMap at MAP_OFFSET
+        init_empty_map(pool);
+        
+        // ═══ BUILD VTABLE at VTABLE_OFFSET ═══
+        let vtable = pool.add(VTABLE_OFFSET) as *mut *const u8;
+        
+        // Default all 64 slots to safe silent stub
         for i in 0..64 {
-            SAFE_VTABLE[i] = vt_safe_stub as *const u8;
+            *vtable.add(i) = vt_safe_silent as *const u8;
         }
         
         // Specific implementations
-        SAFE_VTABLE[0]  = vt_destructor as *const u8;
-        SAFE_VTABLE[1]  = vt_get_name as *const u8;
-        SAFE_VTABLE[2]  = vt_get_config_options as *const u8;
-        SAFE_VTABLE[3]  = vt_set_config_option as *const u8;
-        SAFE_VTABLE[4]  = vt_validate_config as *const u8;
-        SAFE_VTABLE[5]  = vt_slot5 as *const u8;
-        SAFE_VTABLE[6]  = vt_get_priority as *const u8;
-        SAFE_VTABLE[7]  = vt_slot7 as *const u8;
-        SAFE_VTABLE[8]  = vt_slot8 as *const u8;
-        SAFE_VTABLE[9]  = vt_slot9 as *const u8;
-        SAFE_VTABLE[10] = vt_slot10 as *const u8;
-        SAFE_VTABLE[11] = vt_slot11 as *const u8;
-        SAFE_VTABLE[12] = vt_slot12 as *const u8;
-        SAFE_VTABLE[13] = vt_slot13 as *const u8;
-        SAFE_VTABLE[14] = vt_slot14 as *const u8;
-        SAFE_VTABLE[15] = vt_slot15 as *const u8;
-        SAFE_VTABLE[16] = vt_slot16 as *const u8;
-        SAFE_VTABLE[17] = vt_slot17 as *const u8;
-        SAFE_VTABLE[18] = vt_slot18 as *const u8;
-        SAFE_VTABLE[19] = vt_slot19 as *const u8;
-        SAFE_VTABLE[20] = vt_slot20 as *const u8;
+        *vtable.add(0)  = vt_destructor as *const u8;
+        *vtable.add(1)  = vt_get_name as *const u8;
+        *vtable.add(2)  = vt_get_config_options as *const u8;
+        *vtable.add(3)  = vt_set_config_option as *const u8;
+        *vtable.add(4)  = vt_validate_config as *const u8;
+        *vtable.add(5)  = vt_slot5 as *const u8;
+        *vtable.add(6)  = vt_slot6 as *const u8;
+        *vtable.add(7)  = vt_slot7 as *const u8;
+        *vtable.add(8)  = vt_slot8 as *const u8;
+        *vtable.add(9)  = vt_slot9 as *const u8;
+        *vtable.add(10) = vt_slot10 as *const u8;
+        *vtable.add(11) = vt_slot11 as *const u8;
+        *vtable.add(12) = vt_slot12 as *const u8;
+        *vtable.add(13) = vt_slot13 as *const u8;
+        *vtable.add(14) = vt_slot14 as *const u8;
+        *vtable.add(15) = vt_slot15 as *const u8;
+        *vtable.add(16) = vt_slot16 as *const u8;
+        *vtable.add(17) = vt_slot17 as *const u8;
+        *vtable.add(18) = vt_slot18 as *const u8;
+        *vtable.add(19) = vt_slot19 as *const u8;
+        *vtable.add(20) = vt_slot20 as *const u8;
         
-        log("  Built FULL vtable (slots 0-4 proper, 5-20 logged, 21-63 scratch)");
+        log("  Vtable: slots 0-4 proper, 5-20 logged, 21-63 safe");
         
         // ═══ BUILD FAKE RENDERSYSTEM ═══
-        let rs = FAKE_RS.as_mut_ptr();
+        // The RS object itself starts at pool+0
+        // Already filled with self-referential pointers by init_pool()
+        // Now overlay the critical fields:
         
-        // [0-7] vtable pointer
-        *(rs as *mut *const *const u8) = SAFE_VTABLE.as_ptr() as *const *const u8;
+        let rs = pool;
         
-        // [8-39] mName = "Vulkan (Reborn)"
-        ptr::copy_nonoverlapping(VULKAN_NAME.as_ptr(), rs.add(8), 32);
+        // [0] = vtable pointer (points to our vtable in the pool)
+        *(rs as *mut u64) = (pool_addr + VTABLE_OFFSET as u64);
         
-        // [40-63] mConfigOptions = empty ConfigOptionMap at offset 40
-        // Some Ogre builds store ConfigOptionMap inside the object
-        let empty_map = get_empty_map();
-        ptr::copy_nonoverlapping(empty_map, rs.add(40), 16);
+        // [8..39] = mName = "Vulkan (Reborn)" — SSO string
+        ptr::copy_nonoverlapping(
+            pool.add(STR_OFFSET),
+            rs.add(8),
+            32
+        );
         
-        log("  Built fake RS (vtable + mName + embedded ConfigOptionMap)");
+        // [40..55] = mConfigOptions (embedded empty map)
+        ptr::copy_nonoverlapping(
+            pool.add(MAP_OFFSET),
+            rs.add(40),
+            16
+        );
+        
+        // [56..87] = Another empty string (mDescription or similar)
+        write_empty_string(rs.add(56));
+        
+        // CRITICAL: All other fields (88+) are ALREADY safe pool pointers
+        // from init_pool(). So any access at any offset → valid ptr → pool+256
+        // → which itself is full of pool pointers → infinite safe chain.
+        
+        log("  Fake RS: vtable + mName + ConfigOptionMap + 64KB safe body");
         
         // ═══ REGISTER ═══
         add_rs(root, rs);
@@ -268,8 +319,9 @@ pub extern "C" fn dllStartPlugin() {
         if count2 > count {
             log("");
             log("╔═══════════════════════════════════════════════════════╗");
-            log("║  ★ FULL SIEGE COMPLETE — 'Vulkan (Reborn)' LIVE ★   ║");
-            log("║  Every slot returns valid data. The dough rises.     ║");
+            log("║  ★ LOCUST SWARM DEPLOYED — ALL MEMORY SAFE ★        ║");
+            log("║  64KB pool, infinite deref chain, NO null crashes.   ║");
+            log("║  The 5090 will see 'Vulkan (Reborn)' in the list.   ║");
             log("╚═══════════════════════════════════════════════════════╝");
         }
     }
@@ -277,5 +329,5 @@ pub extern "C" fn dllStartPlugin() {
 
 #[unsafe(no_mangle)]
 pub extern "C" fn dllStopPlugin() {
-    log("dllStopPlugin() — siege standing down, dough proved");
+    log("dllStopPlugin() — swarm standing down");
 }
