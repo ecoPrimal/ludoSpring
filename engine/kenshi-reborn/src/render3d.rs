@@ -149,7 +149,7 @@ struct Gpu3D {
 }
 
 impl Gpu3D {
-    fn new(window: Arc<Window>, mesh: &MeshData) -> Self {
+    fn new(window: Arc<Window>, meshes: &[(MeshData, [f32; 3], f32)]) -> Self {
         let size = window.inner_size();
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::VULKAN | wgpu::Backends::DX12,
@@ -190,47 +190,64 @@ impl Gpu3D {
         };
         surface.configure(&device, &config);
 
-        // Compute mesh bounding box for camera
-        let mut min = [f32::MAX; 3];
-        let mut max = [f32::MIN; 3];
-        for p in &mesh.positions {
-            for i in 0..3 { min[i] = min[i].min(p[i]); max[i] = max[i].max(p[i]); }
+        // Merge all meshes into one mega-buffer, each offset to its constellation position
+        let mut vertices: Vec<Vertex3D> = Vec::new();
+        let mut indices: Vec<u32> = Vec::new();
+        let mut total_center = [0.0f32; 3];
+        let mut scene_radius: f32 = 0.0;
+
+        for (mesh, offset, scale) in meshes {
+            let base_vert = vertices.len() as u32;
+            // Compute per-mesh bounding box for normalization
+            let mut mmin = [f32::MAX; 3];
+            let mut mmax = [f32::MIN; 3];
+            for p in &mesh.positions {
+                for i in 0..3 { mmin[i] = mmin[i].min(p[i]); mmax[i] = mmax[i].max(p[i]); }
+            }
+            let mcenter = [(mmin[0]+mmax[0])/2.0, (mmin[1]+mmax[1])/2.0, (mmin[2]+mmax[2])/2.0];
+            let mradius = sub3(mmax, mmin).iter().map(|d| d*d).sum::<f32>().sqrt() / 2.0;
+            let s = if mradius > 0.001 { scale / mradius } else { 1.0 };
+
+            for (i, p) in mesh.positions.iter().enumerate() {
+                let n = if i < mesh.normals.len() { mesh.normals[i] } else { [0.0, 1.0, 0.0] };
+                vertices.push(Vertex3D {
+                    position: [
+                        (p[0] - mcenter[0]) * s + offset[0],
+                        (p[1] - mcenter[1]) * s + offset[1],
+                        (p[2] - mcenter[2]) * s + offset[2],
+                    ],
+                    normal: n,
+                });
+                let dist = ((offset[0]*offset[0]) + (offset[1]*offset[1]) + (offset[2]*offset[2])).sqrt() + scale;
+                if dist > scene_radius { scene_radius = dist; }
+            }
+            for idx in &mesh.indices {
+                indices.push(base_vert + idx);
+            }
         }
-        let center = [(min[0]+max[0])/2.0, (min[1]+max[1])/2.0, (min[2]+max[2])/2.0];
-        let radius = sub3(max, min).iter().map(|d| d*d).sum::<f32>().sqrt() / 2.0;
-        println!("  Bounds: [{:.1},{:.1},{:.1}] → [{:.1},{:.1},{:.1}], radius={:.1}",
-            min[0], min[1], min[2], max[0], max[1], max[2], radius);
+        let center = total_center;
+        let radius = if scene_radius > 0.1 { scene_radius } else { 10.0 };
+        println!("  Bestiary scene: {} meshes, {} total verts, {} total tris, radius={:.1}",
+            meshes.len(), vertices.len(), indices.len() / 3, radius);
 
-        // Vertex buffer — mesh + gate node octahedrons orbiting as snow globe
-        let mut vertices: Vec<Vertex3D> = mesh.positions.iter().enumerate().map(|(i, p)| {
-            let n = if i < mesh.normals.len() { mesh.normals[i] } else { [0.0, 1.0, 0.0] };
-            Vertex3D { position: *p, normal: n }
-        }).collect();
-        let mut indices = mesh.indices.clone();
-        let mesh_verts = vertices.len() as u32;
-        let mesh_indices = indices.len();
-
-        // Gate nodes — octahedrons orbiting at 2× radius
-        // Each gate: 6 verts (±X, ±Y, ±Z) + 8 triangles
-        // Normal flag: x>90 signals gate to shader, y/z encode RGB color
+        // Gate nodes — octahedrons at the edge of the constellation
+        let gate_orbit = radius * 1.1;
+        let node_size = radius * 0.015;
         struct GateNode { angle: f32, elev: f32, r: f32, g: f32 }
         let gates = vec![
             GateNode { angle: 0.0,    elev: 0.2,  r: 0.0, g: 8.0 },  // northGate — green
-            GateNode { angle: 1.57,   elev: 0.0,  r: 8.0, g: 4.0 },  // eastGate — orange
-            GateNode { angle: 3.14,   elev: -0.1, r: 4.0, g: 8.0 },  // ironGate — lime
-            GateNode { angle: 4.71,   elev: 0.1,  r: 2.0, g: 6.0 },  // sporeGate — teal
-            GateNode { angle: 0.8,    elev: 0.5,  r: 8.0, g: 0.0 },  // grapheneGate — red
-            GateNode { angle: 2.4,    elev: -0.4, r: 3.0, g: 3.0 },  // graftGate — dim
+            GateNode { angle: 1.05,   elev: 0.0,  r: 8.0, g: 4.0 },  // eastGate — orange
+            GateNode { angle: 2.09,   elev: -0.1, r: 4.0, g: 8.0 },  // ironGate — lime
+            GateNode { angle: 3.14,   elev: 0.1,  r: 2.0, g: 6.0 },  // sporeGate — teal
+            GateNode { angle: 4.19,   elev: 0.3,  r: 8.0, g: 0.0 },  // grapheneGate — red
+            GateNode { angle: 5.24,   elev: -0.2, r: 3.0, g: 3.0 },  // graftGate — dim
         ];
-        let orb_r = radius * 2.2;
-        let node_size = radius * 0.08;
         for g in &gates {
-            let cx = center[0] + orb_r * g.angle.cos() * g.elev.cos();
-            let cy = center[1] + orb_r * g.elev.sin();
-            let cz = center[2] + orb_r * g.angle.sin() * g.elev.cos();
+            let cx = gate_orbit * g.angle.cos() * g.elev.cos();
+            let cy = gate_orbit * g.elev.sin();
+            let cz = gate_orbit * g.angle.sin() * g.elev.cos();
             let s = node_size;
             let base = vertices.len() as u32;
-            // Gate color encoded in normal: x=99 (flag), y=R*10, z=G*10
             let gn = [99.0, g.r, g.g];
             vertices.push(Vertex3D { position: [cx+s, cy, cz], normal: gn });
             vertices.push(Vertex3D { position: [cx-s, cy, cz], normal: gn });
@@ -238,13 +255,11 @@ impl Gpu3D {
             vertices.push(Vertex3D { position: [cx, cy-s, cz], normal: gn });
             vertices.push(Vertex3D { position: [cx, cy, cz+s], normal: gn });
             vertices.push(Vertex3D { position: [cx, cy, cz-s], normal: gn });
-            // 8 faces of octahedron
             for &[a,b,c] in &[[0,2,4],[2,1,4],[1,3,4],[3,0,4],[2,0,5],[1,2,5],[3,1,5],[0,3,5u32]] {
                 indices.push(base+a); indices.push(base+b); indices.push(base+c);
             }
         }
-        println!("  Snow globe: {} gate nodes ({} extra verts, {} extra tris)",
-            gates.len(), vertices.len() - mesh_verts as usize, (indices.len() - mesh_indices) / 3);
+        println!("  + {} gate nodes orbiting at {:.1}", gates.len(), gate_orbit);
 
         let vertex_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("vertex"),
@@ -336,7 +351,7 @@ impl Gpu3D {
 
         let depth_view = Self::create_depth(&device, config.width, config.height);
 
-        println!("  Uploaded: {} verts + {} indices to GPU", vertices.len(), mesh.indices.len());
+        println!("  Uploaded: {} verts + {} indices to GPU", vertices.len(), indices.len());
 
         Self {
             surface, device, queue, config, pipeline,
@@ -433,29 +448,35 @@ impl Gpu3D {
 pub struct App3D {
     gpu: Option<Gpu3D>,
     window: Option<Arc<Window>>,
-    mesh: MeshData,
+    meshes: Vec<(MeshData, [f32; 3], f32)>,
+    title: String,
     frame_count: u64,
     start: Instant,
 }
 
 impl App3D {
-    pub fn new(mesh: MeshData) -> Self {
-        Self { gpu: None, window: None, mesh, frame_count: 0, start: Instant::now() }
+    pub fn new_single(mesh: MeshData) -> Self {
+        let title = format!("KenshiReborn v0.7.0 — {} — Snow Globe · RTX 5090", mesh.name);
+        let meshes = vec![(mesh, [0.0, 0.0, 0.0], 1.0)];
+        Self { gpu: None, window: None, meshes, title, frame_count: 0, start: Instant::now() }
+    }
+    pub fn new_bestiary(meshes: Vec<(MeshData, [f32; 3], f32)>, count: usize) -> Self {
+        let title = format!("KenshiReborn v0.7.0 — BESTIARY × {} — Snow Globe · RTX 5090", count);
+        Self { gpu: None, window: None, meshes, title, frame_count: 0, start: Instant::now() }
     }
 }
 
 impl ApplicationHandler for App3D {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         if self.window.is_some() { return; }
-        let title = format!("KenshiReborn v0.6.0 — {} — Snow Globe · 6 Gates · RTX 5090", self.mesh.name);
         let attrs = Window::default_attributes()
-            .with_title(&title)
+            .with_title(&self.title)
             .with_inner_size(winit::dpi::LogicalSize::new(1280u32, 720u32));
         let window = Arc::new(event_loop.create_window(attrs).expect("window"));
-        let gpu = Gpu3D::new(window.clone(), &self.mesh);
+        let gpu = Gpu3D::new(window.clone(), &self.meshes);
         println!("  Pipeline: 3D render with depth + lighting");
-        println!("  Camera: auto-orbit around mesh center");
-        println!("  STATUS: ██████████ 3D RENDERING LIVE\n");
+        println!("  Camera: auto-orbit around bestiary constellation");
+        println!("  STATUS: ██████████ BESTIARY RENDERING LIVE\n");
         self.gpu = Some(gpu);
         self.window = Some(window);
     }
@@ -489,18 +510,88 @@ impl ApplicationHandler for App3D {
 
 pub fn run_mesh_render(mesh_path: &str) {
     println!("╔══════════════════════════════════════════════════════════╗");
-    println!("║  KENSHI REBORN v0.4.0 — WOOD AGE                      ║");
+    println!("║  KENSHI REBORN v0.7.0 — WOOD AGE                      ║");
     println!("║  3D Mesh Renderer · Vulkan · RTX 5090                  ║");
     println!("║  The first Kenshi mesh rendered by a sovereign engine   ║");
     println!("╚══════════════════════════════════════════════════════════╝\n");
 
     println!("◆ LOADING MESH: {}", mesh_path);
-    let mesh = load_mesh(mesh_path).expect("Failed to load mesh");
+    let mesh = load_mesh(mesh_path).unwrap_or_else(|| panic!("Failed to load mesh: {}", mesh_path));
     println!("  ✓ {} vertices, {} triangles\n", mesh.positions.len(), mesh.indices.len() / 3);
 
     println!("◆ INITIALIZING 3D RENDERER");
     let event_loop = EventLoop::new().expect("event loop");
-    let mut app = App3D::new(mesh);
+    let mut app = App3D::new_single(mesh);
+    event_loop.run_app(&mut app).expect("run");
+}
+
+pub fn run_bestiary(mesh_dir: &str) {
+    println!("╔══════════════════════════════════════════════════════════╗");
+    println!("║  KENSHI REBORN v0.7.0 — BESTIARY IN THE SKY           ║");
+    println!("║  Every creature orbiting in Gaia's snow globe           ║");
+    println!("║  RTX 5090 · Vulkan · Sovereign engine                  ║");
+    println!("╚══════════════════════════════════════════════════════════╝\n");
+
+    let mesh_path = std::path::Path::new(mesh_dir);
+    let mut entries: Vec<_> = std::fs::read_dir(mesh_path)
+        .expect("read mesh dir")
+        .filter_map(|e| e.ok())
+        .filter(|e| e.path().extension().map_or(false, |x| x == "mesh"))
+        .collect();
+    entries.sort_by_key(|e| std::cmp::Reverse(e.metadata().map(|m| m.len()).unwrap_or(0)));
+
+    // Skip fur/accessory meshes and duplicates, take the unique beasts
+    let skip = ["_fur", "fur.", "bags", "luggage", "spikes", "hair", "nohorns", "nospikes",
+                 "polySurface", "dog1"];
+    let mut loaded: Vec<(MeshData, [f32; 3], f32)> = Vec::new();
+    let mut failed = 0u32;
+
+    println!("◆ LOADING BESTIARY from {}\n", mesh_dir);
+    for entry in &entries {
+        let name = entry.file_name().to_string_lossy().to_string();
+        if skip.iter().any(|s| name.contains(s)) { continue; }
+
+        let path_str = entry.path().to_string_lossy().to_string();
+        match load_mesh(&path_str) {
+            Some(m) => {
+                println!("  ✓ {} — {} verts, {} tris",
+                    m.name, m.positions.len(), m.indices.len() / 3);
+                loaded.push((m, [0.0, 0.0, 0.0], 1.0));
+            }
+            None => {
+                println!("  ✗ {} — parse failed", name);
+                failed += 1;
+            }
+        }
+    }
+
+    let count = loaded.len();
+    println!("\n◆ LOADED {} beasts ({} skipped, {} failed)", count, entries.len() - count as usize - failed as usize, failed);
+
+    // Arrange in a sphere constellation — golden angle spacing
+    let orbit_scale = 5.0; // units between creatures
+    let golden_angle = std::f32::consts::PI * (3.0 - 5.0f32.sqrt()); // ~2.4 radians
+    let creature_size = 1.5; // normalized size of each creature
+
+    for (i, (_, offset, scale)) in loaded.iter_mut().enumerate() {
+        let t = i as f32 / count.max(1) as f32;
+        let angle = i as f32 * golden_angle;
+        let r = orbit_scale * (1.0 + t * 2.5); // spiral outward
+        let elev = (t - 0.5) * std::f32::consts::PI * 0.8; // spread vertically
+
+        *offset = [
+            r * angle.cos() * elev.cos(),
+            r * elev.sin() * 1.5,
+            r * angle.sin() * elev.cos(),
+        ];
+        *scale = creature_size;
+    }
+
+    println!("  Constellation: spiral sphere, golden angle = {:.2}°", golden_angle.to_degrees());
+    println!("\n◆ INITIALIZING BESTIARY RENDERER\n");
+
+    let event_loop = EventLoop::new().expect("event loop");
+    let mut app = App3D::new_bestiary(loaded, count);
     event_loop.run_app(&mut app).expect("run");
 }
 

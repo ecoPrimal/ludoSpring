@@ -1038,6 +1038,16 @@ fn main() {
         return;
     }
 
+    if args.iter().any(|a| a == "--bestiary") {
+        let default_dir = r"M:\SteamLibrary\steamapps\common\Kenshi\data\animal\meshes";
+        let dir = args.iter().position(|a| a == "--bestiary")
+            .and_then(|i| args.get(i + 1))
+            .map(|s| s.as_str())
+            .unwrap_or(default_dir);
+        render3d::run_bestiary(dir);
+        return;
+    }
+
     println!("╔══════════════════════════════════════════════════════════╗");
     println!("║  KENSHI REBORN v0.3.0 — Wave 258                      ║");
     println!("║  Sovereign Engine · Built by Gaia · primals.eco        ║");
