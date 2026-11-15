@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🫧 sourDough Bubble HUD</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: transparent;
+  font-family: 'Courier New', monospace;
+  color: #0f0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.hud {
+  position: fixed;
+  top: 10px; right: 10px;
+  width: 320px;
+  background: rgba(0,0,0,0.75);
+  border: 1px solid #0f0;
+  border-radius: 8px;
+  padding: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.title {
+  font-size: 14px;
+  color: #0f0;
+  text-align: center;
+  border-bottom: 1px solid #030;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+.bubble {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 11px;
+  border-bottom: 1px solid #010;
+}
+.bubble.active { color: #0ff; }
+.bubble.proved { color: #0a0; }
+.bubble.burned { color: #f60; }
+.bubble.planned { color: #444; }
+
+.bubble-icon { width: 20px; text-align: center; margin-right: 6px; }
+.bubble-ver { width: 50px; }
+.bubble-name { flex: 1; }
+.bubble-state { width: 70px; text-align: right; font-size: 10px; }
+
+.eyes {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #030;
+}
+.eye-row {
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+  font-size: 11px;
+}
+.eye-dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+.eye-name { flex: 1; }
+.eye-status { width: 50px; text-align: right; }
+
+.gates {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #030;
+  font-size: 10px;
+}
+.gate-row { display: flex; padding: 1px 0; }
+.gate-name { width: 80px; }
+.gate-ip { width: 80px; color: #0a0; }
+.gate-ping { flex: 1; text-align: right; }
+
+.tcg {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #530;
+  text-align: center;
+  font-size: 12px;
+  color: #fa0;
+}
+
+.pulse { animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+</style>
+</head>
+<body>
+
+<div class="hud">
+  <div class="title">🫧 sourDough — esotericWebb/KenshiReborn</div>
+  
+  <div class="bubble proved">
+    <span class="bubble-icon">✓</span>
+    <span class="bubble-ver">v0.5.0</span>
+    <span class="bubble-name">First Rise</span>
+    <span class="bubble-state">PROVED</span>
+  </div>
+  <div class="bubble proved">
+    <span class="bubble-icon">✓</span>
+    <span class="bubble-ver">v0.6.0</span>
+    <span class="bubble-name">Investigator</span>
+    <span class="bubble-state">PROVED</span>
+  </div>
+  <div class="bubble burned">
+    <span class="bubble-icon">🔥</span>
+    <span class="bubble-ver">v0.7.0</span>
+    <span class="bubble-name">First Siege</span>
+    <span class="bubble-state">BURNED</span>
+  </div>
+  <div class="bubble active pulse">
+    <span class="bubble-icon">🫧</span>
+    <span class="bubble-ver">v0.7.1</span>
+    <span class="bubble-name">Safe Siege</span>
+    <span class="bubble-state" id="current-state">RISING</span>
+  </div>
+  <div class="bubble planned">
+    <span class="bubble-icon">○</span>
+    <span class="bubble-ver">v0.8.0</span>
+    <span class="bubble-name">The Dropdown</span>
+    <span class="bubble-state">PLANNED</span>
+  </div>
+  <div class="bubble planned">
+    <span class="bubble-icon">○</span>
+    <span class="bubble-ver">v1.0.0</span>
+    <span class="bubble-name">First Render</span>
+    <span class="bubble-state">PLANNED</span>
+  </div>
+
+  <div class="eyes">
+    <div class="eye-row">
+      <div class="eye-dot" style="background:#0f0"></div>
+      <span class="eye-name">Green Eye (Brio)</span>
+      <span class="eye-status" id="eye-green">—</span>
+    </div>
+    <div class="eye-row">
+      <div class="eye-dot" style="background:#00f"></div>
+      <span class="eye-name">Blue Eye (Pixel front)</span>
+      <span class="eye-status" id="eye-blue">—</span>
+    </div>
+    <div class="eye-row">
+      <div class="eye-dot" style="background:#f00"></div>
+      <span class="eye-name">Red Eye (Pixel rear)</span>
+      <span class="eye-status" id="eye-red">—</span>
+    </div>
+    <div class="eye-row">
+      <div class="eye-dot" style="background:#c0c0c0"></div>
+      <span class="eye-name">Silver Eye (sporeGate)</span>
+      <span class="eye-status" id="eye-silver">—</span>
+    </div>
+    <div class="eye-row">
+      <div class="eye-dot" style="background:#a020f0"></div>
+      <span class="eye-name">Purple Eye (Frame)</span>
+      <span class="eye-status" id="eye-purple" style="color:#a020f0">HERE</span>
+    </div>
+  </div>
+
+  <div class="gates" id="gates"></div>
+
+  <div class="tcg">🃏 KENSHI: Sands of Reckoning — 10 cards forged</div>
+</div>
+
+<script>
+const gates = [
+  {name:'northGate', ip:'192.168.4.147', role:'HEART'},
+  {name:'eastGate', ip:'192.168.4.244', role:'BRAIN'},
+  {name:'frameGate', ip:'192.168.4.203', role:'FACE'},
+  {name:'sporeGate', ip:'192.168.4.3', role:'FORGE'},
+  {name:'ironGate', ip:'192.168.4.237', role:'FORGE2'},
+  {name:'graphene', ip:'192.168.4.225', role:'LENS'},
+];
+
+const gatesDiv = document.getElementById('gates');
+
+async function pingGates() {
+  for (const g of gates) {
+    const start = Date.now();
+    try {
+      await fetch(`http://${g.ip}:8080/data/now.json`, {mode:'no-cors', signal: AbortSignal.timeout(2000)});
+      const ms = Date.now() - start;
+      updateGate(g, ms);
+    } catch(e) {
+      updateGate(g, -1);
+    }
+  }
+}
+
+function updateGate(g, ms) {
+  let row = document.getElementById('gate-'+g.name);
+  if (!row) {
+    row = document.createElement('div');
+    row.className = 'gate-row';
+    row.id = 'gate-'+g.name;
+    gatesDiv.appendChild(row);
+  }
+  const status = ms >= 0 ? `${ms}ms` : 'DOWN';
+  const color = ms >= 0 ? (ms < 50 ? '#0f0' : ms < 200 ? '#ff0' : '#f90') : '#f00';
+  row.innerHTML = `<span class="gate-name">${g.name}</span><span class="gate-ip">${g.ip}</span><span class="gate-ping" style="color:${color}">${status}</span>`;
+}
+
+// Pulse the bubble state
+let tick = 0;
+setInterval(() => {
+  tick++;
+  const states = ['RISING', 'RISING.', 'RISING..', 'RISING...'];
+  document.getElementById('current-state').textContent = states[tick % 4];
+}, 500);
+
+// Ping gates every 5 seconds
+pingGates();
+setInterval(pingGates, 5000);
+</script>
+</body>
+</html>
