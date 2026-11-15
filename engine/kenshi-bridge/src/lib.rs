@@ -1,18 +1,13 @@
 // KenshiReborn Bridge DLL — RenderSystem_Vulkan_x64.dll
-// v0.7.1 — SAFE SIEGE: All vtable slots stubbed except getName
+// v0.7.2 — DOUGH RISING: Fix slot 2 (getConfigOptions)
 //
-// v0.7.0 PROVED:
-//   - getName is at vtable SLOT 1
-//   - addRenderSystem works — we got 2 renderers!
-//   - But the launcher crashes calling other methods on our fake object
-//
-// v0.7.1 FIX:
-//   - Stub ALL 64 vtable entries with safe no-op functions
-//   - Only slot 1 (getName) returns "Vulkan (Reborn)"
-//   - Slot 0 (destructor) does nothing
-//   - All other slots return 0/null/empty safely
-//   - The launcher should see "Vulkan (Reborn)" in the dropdown
-//     but selecting it won't initialize (that's Phase 3)
+// sourDough fermentation log:
+//   v0.7.0: getName=slot1, addRS works, but crashes (stale D3D11 ptrs)
+//   v0.7.1: All stubs, registered 2 renderers, slot 2 called → crash
+//           Slot 2 returned 0 but Ogre dereferences it as ConfigOptionMap&
+//   v0.7.2: Slot 2 returns valid empty ConfigOptionMap (MSVC std::map)
+//           Slot 4 returns valid empty String (validateConfigOptions)
+//           Log ALL slot calls to map the launcher's full call sequence
 
 #![allow(non_snake_case)]
 
@@ -87,37 +82,70 @@ unsafe extern "C" fn stub_return_zero(_this: *mut u8) -> u64 {
     0
 }
 
-// Stub that returns null pointer (for methods returning pointers/references)
-unsafe extern "C" fn stub_return_null(_this: *mut u8) -> *mut u8 {
-    ptr::null_mut()
+// ═══════════════════════════════════════════════════════════
+// MSVC std::map<String, ConfigOption> layout (empty map)
+// An MSVC std::map has: _Myhead (sentinel node ptr), _Mysize (0)
+// The sentinel node is a _Tree_node with: _Left, _Parent, _Right, _Color, _Isnil
+// For an EMPTY map: _Myhead points to sentinel, sentinel._Left = sentinel._Right = sentinel
+//                   sentinel._Isnil = true, _Mysize = 0
+// ═══════════════════════════════════════════════════════════
+
+// Sentinel node for empty std::map (must be self-referential)
+// _Tree_node layout (MSVC x64): [_Left:8][_Parent:8][_Right:8][_Color:1][_Isnil:1][pad:6][_Myval:...]
+// For sentinel: _Left = self, _Parent = self, _Right = self, _Color = 1 (black), _Isnil = 1
+static mut MAP_SENTINEL: [u8; 64] = [0u8; 64];
+static MAP_SENTINEL_INIT: std::sync::Once = std::sync::Once::new();
+
+// The std::map object itself: [_Myhead:8 (ptr to sentinel)][_Mysize:8 (= 0)]
+static mut EMPTY_MAP: [u8; 16] = [0u8; 16];
+static MAP_INIT: std::sync::Once = std::sync::Once::new();
+
+unsafe fn init_empty_map() -> *const u8 {
+    MAP_INIT.call_once(|| {
+        // Initialize sentinel to point to itself
+        let sentinel_ptr = MAP_SENTINEL.as_mut_ptr();
+        let sentinel_addr = sentinel_ptr as u64;
+        
+        // _Left = self (offset 0)
+        *(sentinel_ptr as *mut u64) = sentinel_addr;
+        // _Parent = self (offset 8)
+        *(sentinel_ptr.add(8) as *mut u64) = sentinel_addr;
+        // _Right = self (offset 16)
+        *(sentinel_ptr.add(16) as *mut u64) = sentinel_addr;
+        // _Color = 1 (black) at offset 24
+        *sentinel_ptr.add(24) = 1;
+        // _Isnil = 1 (true) at offset 25
+        *sentinel_ptr.add(25) = 1;
+        
+        // Initialize the map object
+        let map_ptr = EMPTY_MAP.as_mut_ptr();
+        // _Myhead = pointer to sentinel (offset 0)
+        *(map_ptr as *mut u64) = sentinel_addr;
+        // _Mysize = 0 (offset 8) — already zeroed
+    });
+    EMPTY_MAP.as_ptr()
 }
 
-// Stub for getConfigOptions — returns pointer to a static empty ConfigOptionMap
-// ConfigOptionMap is std::map<String, ConfigOption> — empty = 0-size node
-// For MSVC std::map, an empty map has _Myhead (sentinel) and _Mysize = 0
-// We fake an empty map: just return a zeroed region
-static EMPTY_CONFIG_MAP: [u8; 64] = [0u8; 64];
-
+// Slot 2: getConfigOptions() -> ConfigOptionMap&
+// Returns reference (pointer) to our static empty map
 unsafe extern "C" fn stub_get_config_options(_this: *mut u8) -> *const u8 {
-    log("  [vtable] getConfigOptions called — returning empty");
-    EMPTY_CONFIG_MAP.as_ptr()
+    log("  [vtable] slot 2: getConfigOptions → empty map");
+    init_empty_map()
 }
 
-// Stub for methods that take a String& parameter (like setConfigOption)
+// Slot 3: setConfigOption(name, value) -> void
 unsafe extern "C" fn stub_set_config(_this: *mut u8, _name: *const u8, _value: *const u8) {
-    log("  [vtable] setConfigOption called — ignored");
+    log("  [vtable] slot 3: setConfigOption → ignored");
 }
 
-// Stub for validateConfigOptions
+// Slot 4: validateConfigOptions() -> String
+// Returns pointer to a valid empty MSVC std::string
+static EMPTY_STRING: [u8; 32] = [0u8; 32];
+
 unsafe extern "C" fn stub_validate(_this: *mut u8) -> *const u8 {
-    log("  [vtable] validateConfigOptions called — returning empty string");
-    // Return pointer to a valid empty MSVC string
-    static EMPTY_STRING: [u8; 32] = [0u8; 32]; // SSO empty: all zeros = len 0, cap 0
+    log("  [vtable] slot 4: validateConfigOptions → empty string");
     EMPTY_STRING.as_ptr()
 }
-
-// Track which slots get called so we can learn the launcher's behavior
-static SLOT_CALL_LOG: AtomicPtr<u8> = AtomicPtr::new(ptr::null_mut());
 
 macro_rules! make_logging_stub {
     ($name:ident, $slot:expr) => {
@@ -206,10 +234,10 @@ pub extern "C" fn dllStartPlugin() {
         // Slot 1: getName → "Vulkan (Reborn)" ★
         SAFE_VTABLE[1] = custom_get_name as *const u8;
         
-        // Logging stubs for the first 20 slots to see what the launcher calls
-        SAFE_VTABLE[2] = stub_slot_2 as *const u8;
-        SAFE_VTABLE[3] = stub_slot_3 as *const u8;
-        SAFE_VTABLE[4] = stub_slot_4 as *const u8;
+        // Proper implementations for slots 2-4 (launcher needs these)
+        SAFE_VTABLE[2] = stub_get_config_options as *const u8; // getConfigOptions → empty map
+        SAFE_VTABLE[3] = stub_set_config as *const u8;         // setConfigOption → ignore
+        SAFE_VTABLE[4] = stub_validate as *const u8;           // validateConfigOptions → empty string
         SAFE_VTABLE[5] = stub_slot_5 as *const u8;
         SAFE_VTABLE[6] = stub_slot_6 as *const u8;
         SAFE_VTABLE[7] = stub_slot_7 as *const u8;
