@@ -34,15 +34,28 @@ fn vs_main(in: VertexInput) -> VertexOutput {
     var out: VertexOutput;
     out.clip_pos = u.mvp * vec4(in.position, 1.0);
     out.world_normal = (u.model * vec4(in.normal, 0.0)).xyz;
-    // Kenshi desert palette — warm sandstone with normal-based variation
-    let n_abs = abs(normalize(in.normal));
-    out.color = vec3(0.65 + n_abs.x * 0.2, 0.50 + n_abs.y * 0.15, 0.35 + n_abs.z * 0.1);
+
+    // Gate nodes glow (normal.x > 90 = gate marker flag)
+    let is_gate = in.normal.x > 90.0;
+    if is_gate {
+        // Gate color encoded in normal: y = R*10, z = G*10
+        out.color = vec3(in.normal.y / 10.0, in.normal.z / 10.0, 0.3);
+    } else {
+        // Kenshi desert palette — warm sandstone
+        let n_abs = abs(normalize(in.normal));
+        out.color = vec3(0.65 + n_abs.x * 0.2, 0.50 + n_abs.y * 0.15, 0.35 + n_abs.z * 0.1);
+    }
     return out;
 }
 
 @fragment
 fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     let n = normalize(in.world_normal);
+    // Gate nodes: emit light (no shading)
+    let is_emissive = length(in.world_normal) < 0.01;
+    if is_emissive {
+        return vec4(in.color * 1.5, 1.0);
+    }
     // Three-light rig: key + fill + rim
     let key_dir = normalize(u.light_dir.xyz);
     let fill_dir = normalize(vec3(-0.3, 0.8, -0.5));
@@ -50,8 +63,9 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     let fill = max(dot(n, fill_dir), 0.0) * 0.25;
     let ambient = 0.3;
     let rim = pow(1.0 - max(dot(n, normalize(vec3(0.0, 0.3, 1.0))), 0.0), 2.5) * 0.2;
-    let lit = in.color * (ambient + key + fill) + vec3(rim * 0.8, rim * 0.6, rim * 0.4);
-    return vec4(lit, 1.0);
+    let base = in.color * (ambient + key + fill) + vec3(rim * 0.8, rim * 0.6, rim * 0.4);
+    // Subtle geodesic glow on the background
+    return vec4(base, 1.0);
 }
 "#;
 
@@ -187,11 +201,50 @@ impl Gpu3D {
         println!("  Bounds: [{:.1},{:.1},{:.1}] → [{:.1},{:.1},{:.1}], radius={:.1}",
             min[0], min[1], min[2], max[0], max[1], max[2], radius);
 
-        // Vertex buffer
-        let vertices: Vec<Vertex3D> = mesh.positions.iter().enumerate().map(|(i, p)| {
+        // Vertex buffer — mesh + gate node octahedrons orbiting as snow globe
+        let mut vertices: Vec<Vertex3D> = mesh.positions.iter().enumerate().map(|(i, p)| {
             let n = if i < mesh.normals.len() { mesh.normals[i] } else { [0.0, 1.0, 0.0] };
             Vertex3D { position: *p, normal: n }
         }).collect();
+        let mut indices = mesh.indices.clone();
+        let mesh_verts = vertices.len() as u32;
+        let mesh_indices = indices.len();
+
+        // Gate nodes — octahedrons orbiting at 2× radius
+        // Each gate: 6 verts (±X, ±Y, ±Z) + 8 triangles
+        // Normal flag: x>90 signals gate to shader, y/z encode RGB color
+        struct GateNode { angle: f32, elev: f32, r: f32, g: f32 }
+        let gates = vec![
+            GateNode { angle: 0.0,    elev: 0.2,  r: 0.0, g: 8.0 },  // northGate — green
+            GateNode { angle: 1.57,   elev: 0.0,  r: 8.0, g: 4.0 },  // eastGate — orange
+            GateNode { angle: 3.14,   elev: -0.1, r: 4.0, g: 8.0 },  // ironGate — lime
+            GateNode { angle: 4.71,   elev: 0.1,  r: 2.0, g: 6.0 },  // sporeGate — teal
+            GateNode { angle: 0.8,    elev: 0.5,  r: 8.0, g: 0.0 },  // grapheneGate — red
+            GateNode { angle: 2.4,    elev: -0.4, r: 3.0, g: 3.0 },  // graftGate — dim
+        ];
+        let orb_r = radius * 2.2;
+        let node_size = radius * 0.08;
+        for g in &gates {
+            let cx = center[0] + orb_r * g.angle.cos() * g.elev.cos();
+            let cy = center[1] + orb_r * g.elev.sin();
+            let cz = center[2] + orb_r * g.angle.sin() * g.elev.cos();
+            let s = node_size;
+            let base = vertices.len() as u32;
+            // Gate color encoded in normal: x=99 (flag), y=R*10, z=G*10
+            let gn = [99.0, g.r, g.g];
+            vertices.push(Vertex3D { position: [cx+s, cy, cz], normal: gn });
+            vertices.push(Vertex3D { position: [cx-s, cy, cz], normal: gn });
+            vertices.push(Vertex3D { position: [cx, cy+s, cz], normal: gn });
+            vertices.push(Vertex3D { position: [cx, cy-s, cz], normal: gn });
+            vertices.push(Vertex3D { position: [cx, cy, cz+s], normal: gn });
+            vertices.push(Vertex3D { position: [cx, cy, cz-s], normal: gn });
+            // 8 faces of octahedron
+            for &[a,b,c] in &[[0,2,4],[2,1,4],[1,3,4],[3,0,4],[2,0,5],[1,2,5],[3,1,5],[0,3,5u32]] {
+                indices.push(base+a); indices.push(base+b); indices.push(base+c);
+            }
+        }
+        println!("  Snow globe: {} gate nodes ({} extra verts, {} extra tris)",
+            gates.len(), vertices.len() - mesh_verts as usize, (indices.len() - mesh_indices) / 3);
 
         let vertex_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("vertex"),
@@ -201,7 +254,7 @@ impl Gpu3D {
 
         let index_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("index"),
-            contents: bytemuck::cast_slice(&mesh.indices),
+            contents: bytemuck::cast_slice(&indices),
             usage: wgpu::BufferUsages::INDEX,
         });
 
@@ -288,7 +341,7 @@ impl Gpu3D {
         Self {
             surface, device, queue, config, pipeline,
             vertex_buf, index_buf, uniform_buf, bind_group, depth_view,
-            index_count: mesh.indices.len() as u32,
+            index_count: indices.len() as u32,
             mesh_center: center, mesh_radius: radius,
             start_time: Instant::now(), gpu_name,
         }
@@ -394,7 +447,7 @@ impl App3D {
 impl ApplicationHandler for App3D {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         if self.window.is_some() { return; }
-        let title = format!("KenshiReborn v0.4.0 — {} — RTX 5090 · Vulkan", self.mesh.name);
+        let title = format!("KenshiReborn v0.6.0 — {} — Snow Globe · 6 Gates · RTX 5090", self.mesh.name);
         let attrs = Window::default_attributes()
             .with_title(&title)
             .with_inner_size(winit::dpi::LogicalSize::new(1280u32, 720u32));
@@ -419,12 +472,12 @@ impl ApplicationHandler for App3D {
                 if let Some(g) = &self.gpu {
                     match g.render() {
                         Ok(()) => self.frame_count += 1,
-                        Err(wgpu::SurfaceError::Lost) => {
+                        Err(wgpu::SurfaceError::Lost | wgpu::SurfaceError::Outdated) => {
                             let (w,h) = (g.config.width, g.config.height);
                             if let Some(g) = &mut self.gpu { g.resize(w,h); }
                         }
                         Err(wgpu::SurfaceError::OutOfMemory) => event_loop.exit(),
-                        Err(e) => eprintln!("err: {:?}", e),
+                        Err(e) => eprintln!("render: {:?}", e),
                     }
                 }
                 if let Some(w) = &self.window { w.request_redraw(); }
