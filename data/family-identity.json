@@ -1,0 +1,31 @@
+﻿{
+    "kevin":  {
+                  "devices":  [
+                                  "northGate (.147)",
+                                  "southGate/iPhone (.148)",
+                                  "deckGate (.176)",
+                                  "frameGate (.203)"
+                              ],
+                  "steam":  {
+                                "games":  97,
+                                "account":  "gw_kevinmok",
+                                "id":  "76561198002558137",
+                                "persona":  "Tamison"
+                            }
+              },
+    "steam_family":  {
+                         "status":  "NOT YET CREATED",
+                         "remote_play":  "northGate streams to Frame/Deck/Link/Phone via :27036",
+                         "plan":  "Create family, add Gaia account, share 97 games across all gates"
+                     },
+    "gaia":  {
+                 "devices":  [
+                                 "eastGate (.244)",
+                                 "grapheneGate/Pixel (.225)",
+                                 "sporeGate (.3)"
+                             ],
+                 "android_id":  "d6a4a1058180dd7",
+                 "pixel_serial":  "44251JEKB04957",
+                 "forgejo":  "syntheticChemistry"
+             }
+}
